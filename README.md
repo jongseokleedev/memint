@@ -1,4 +1,4 @@
-<img src="memint/src/assets/docs/Thumbnail.png" />
+<img src="client/src/assets/docs/Thumbnail.png" />
 
 ## 1. 팀 소개
 
@@ -11,7 +11,7 @@
 ## 2. 프로젝트 소개
 
 
-<img src="memint/src/assets/docs/logo.png">
+<img src="client/src/assets/docs/logo.png">
 
 # MEMINT
 
@@ -53,7 +53,7 @@ MEMINT는 **Date 2 Earn** 서비스 입니다.
 
 기존 Web2 데이팅앱과의 **차별점은 토큰 생태계 참여자들에 의해, 즉 토큰의 수요와 공급에 의해 토큰의 가치가 변한다는 것**입니다. 토큰 이코노미를 통해 생태계 내 구성원들의 행동에 즉각적이고 적절한 보상을 줄 수 있습니다.
 
-<img src="memint/src/assets/docs/tokenflow.png" />
+<img src="client/src/assets/docs/tokenflow.png" />
 
 - 토큰 채굴 시나리오
   - 미팅에 참여했음을 인증했을 경우 (GPS를 통해 인증)
@@ -95,19 +95,19 @@ MEMINT는 **Date 2 Earn** 서비스 입니다.
 
 ## Software Used
 
-<img src="memint/src/assets/docs/stack.png" />
+<img src="client/src/assets/docs/stack.png" />
 
 ###
 
 ## DB Schema Diagram
 
-![Untitled](memint/src/assets/docs/DBdiagram.png)
+![Untitled](client/src/assets/docs/DBdiagram.png)
 
 ## 3. 팀 소개
 
 
 
-<img src="memint/src/assets/docs/hyejeong.png" width="200" height="200" />
+<img src="client/src/assets/docs/hyejeong.png" width="200" height="200" />
 
 ### **임혜정**
 
@@ -125,7 +125,7 @@ MEMINT는 **Date 2 Earn** 서비스 입니다.
   - 디자인 및 레이아웃 구성
   - 프레젠테이션 기획, 발표
 
-<img src="memint/src/assets/docs/jongsuk.png" width="200" height="200" />
+<img src="client/src/assets/docs/jongsuk.png" width="200" height="200" />
 
 ### 이종석
 
@@ -142,7 +142,7 @@ MEMINT는 **Date 2 Earn** 서비스 입니다.
   - 백엔드 구현 : User, Wallet
   - Web3
 
-<img src="memint/src/assets/docs/sunghyun.png" width="200" height="200" />
+<img src="client/src/assets/docs/sunghyun.png" width="200" height="200" />
 
 ### 김성현
 
@@ -157,7 +157,7 @@ MEMINT는 **Date 2 Earn** 서비스 입니다.
   - 백엔드 구현
     - web3 기능구현
 
-<img src="memint/src/assets/docs/eunmin.png" width="200" height="200" />
+<img src="client/src/assets/docs/eunmin.png" width="200" height="200" />
 
 ### 조은민
 
