@@ -1,11 +1,20 @@
 import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, View, StyleSheet, Alert} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  StyleSheet,
+  Alert,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import BasicButton from '../../components/common/BasicButton';
 import MyMeetingList from '../../components/myPageComponent/MyMeetingList';
 import ParticipatedMeetingList from '../../components/myPageComponent/ParticipatedMeetingList';
 import MyProfile from '../../components/myPageComponent/MyProfle';
 import useUser from '../../utils/hooks/UseUser';
 import WalletButton from '../../components/common/WalletButton';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function MyPage({navigation}) {
   const user = useUser();
@@ -15,12 +24,24 @@ function MyPage({navigation}) {
   const selecteMenuHandler = index => {
     setMeetingRoom(index);
   };
+  const handleNavigate = () => {
+    navigation.navigate('MyLikesRooms');
+  };
   return (
     <SafeAreaView style={styles.view}>
       <ScrollView>
         {/* 유저 프로필 */}
         <MyProfile User={user} navigation={navigation} />
         <View style={styles.mymeetings}>
+          {/*찜한 미팅방*/}
+          <View style={styles.mylikes}>
+            <TouchableOpacity
+              style={styles.mylikesButton}
+              onPress={handleNavigate}>
+              <Icon name="star" size={15} />
+              <Text style={styles.mylikesText}> 찜한 미팅방</Text>
+            </TouchableOpacity>
+          </View>
           {/* 탭 선택 버튼 */}
           <View style={styles.meetingButton}>
             {room.map((ele, index, key) => {
@@ -60,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   meetingButton: {
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -69,6 +90,18 @@ const styles = StyleSheet.create({
   mymeetings: {
     marginBottom: 50,
     marginTop: 20,
+  },
+  mylikes: {
+    marginRight: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  mylikesButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mylikesText: {
+    textDecorationLine: 'underline',
   },
 });
 export default MyPage;

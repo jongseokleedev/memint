@@ -26,6 +26,7 @@ import crown from '../../assets/icons/crown.png';
 import GradientButton from '../../components/common/GradientButton';
 import WalletButton from '../../components/common/WalletButton';
 import LinearGradient from 'react-native-linear-gradient';
+import MeetingLikes from '../../components/meetingComponents/MeetingLikes';
 
 function MeetingDetail({route}) {
   const userInfo = useUser();
@@ -155,6 +156,7 @@ function MeetingDetail({route}) {
                   ? data.title.slice(12)
                   : data.title.slice(11)}
               </Text>
+              <MeetingLikes meetingId={data.id} />
             </View>
             <View style={styles.hostInfo}>
               <View style={styles.hostImageWithCrown}>

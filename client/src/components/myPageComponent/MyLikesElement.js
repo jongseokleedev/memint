@@ -2,9 +2,9 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import {handleBirth, handleDateInFormat} from '../../utils/common/Functions';
-import MeetingLikes from './MeetingLikes';
+import MeetingLikes from '../meetingComponents/MeetingLikes';
 
-function MeetingElement({item}) {
+function MyLikesElement({item}) {
   const navigation = useNavigation();
   const handleNavigate = () => {
     navigation.navigate('MeetingDetail', {data: item});
@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MeetingElement;
+export default MyLikesElement;

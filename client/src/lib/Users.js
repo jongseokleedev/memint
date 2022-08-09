@@ -26,6 +26,7 @@ export function createUser({userId, nickName, gender, birth, picture}) {
     visibleUser: [],
     createdroomId: [],
     joinedroomId: [],
+    likesroomId: [],
   });
 }
 
@@ -80,9 +81,10 @@ export function updateTokenAmount(userId, balance) {
   });
 }
 
-//Update cretedroomId, joinedroomId
+//Update cretedroomId, joinedroomId, likesroomId
 //userId, 'createdroomId', meetingId
 //userId, 'joinedroomId', meetingId
+//userId, 'likesroomId', meetingId
 export function updateUserMeetingIn(id, field, value) {
   return usersCollection
     .doc(id)

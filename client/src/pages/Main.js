@@ -21,6 +21,7 @@ import AlarmDetail from './AlarmPage/AlarmDetail';
 import WalletOffchainMain from './WalletPage/WalletOffchainMain';
 import WalletOffchainRecieve from './WalletPage/WalletOffchainRecieve';
 import WalletOnchainMain from './WalletPage/WalletOnchainMain';
+import MyLikesRooms from './MyPage/MyLikesRooms';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -101,6 +102,11 @@ const MyPageScreen = () => {
       <Stack.Screen
         name="EditMyInfo"
         component={EditMyInfo}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MyLikesRooms"
+        component={MyLikesRooms}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

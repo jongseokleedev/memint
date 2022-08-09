@@ -131,6 +131,7 @@ function App() {
         drinkCapa: userProperty[0].drinkCapa,
         drinkStyle: userProperty[0].drinkStyle,
         visibleUser: userDetail.visibleUser,
+        likesroomId: userDetail.likesroomId,
       });
     } catch (e) {
       console.log(e);
