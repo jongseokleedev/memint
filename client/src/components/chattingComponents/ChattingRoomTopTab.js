@@ -1,9 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useToast} from '../../utils/hooks/useToast';
 import firestore from '@react-native-firebase/firestore';
-import useUser from '../../utils/hooks/UseUser';
 
 function ChattingRoomTopTab({data}) {
   const meetingRef = useMemo(() => {
@@ -22,12 +20,12 @@ function ChattingRoomTopTab({data}) {
   }, [meetingRef]);
 
   useEffect(() => {
-    if (roomData.status === 'open') setRoomStatus('모집중');
-    else if (roomData.status === 'full') setRoomStatus('모집완료');
-    else if (roomData.status === 'fixed') setRoomStatus('확정');
-    else if (roomData.status === 'confirmed') setRoomStatus('현장확인');
-    else if (roomData.status === 'end') setRoomStatus('미팅종료');
-  }, [roomData]);
+    if (roomStatus === 'open') setRoomStatus('모집중');
+    else if (roomStatus === 'full') setRoomStatus('모집완료');
+    else if (roomStatus === 'fixed') setRoomStatus('확정');
+    else if (roomStatus === 'confirmed') setRoomStatus('현장확인');
+    else if (roomStatus === 'end') setRoomStatus('미팅종료');
+  }, [roomStatus]);
 
   // console.log(data);
 
@@ -75,8 +73,8 @@ const styles = StyleSheet.create({
     // backgroundColor: '',
   },
   status: {
-    height: 20,
-    width: 40,
+    paddingVertical: 3,
+    paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'black',

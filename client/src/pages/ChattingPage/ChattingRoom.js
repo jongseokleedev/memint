@@ -40,7 +40,7 @@ function ChattingRoom({route}) {
   const {showToast} = useToast();
 
   // 추후 추가해야할 data
-  const [isFixed, setIsFixed] = useState('');
+
   const userRef = useMemo(() => firestore().collection('User'), []);
   const [userDetail, setUserDetail] = useState('');
   const ex = useUser();
@@ -109,11 +109,6 @@ function ChattingRoom({route}) {
       bounciness: 0,
     }).start();
 
-    setIsFixed(
-      route.params.data.members.reduce((acc, cur) => {
-        return {...acc, ...cur};
-      }),
-    );
     users;
 
     // console.log(userDetail);
@@ -141,7 +136,6 @@ function ChattingRoom({route}) {
           meetingEnd={meetingEnd}
           setProposeModalVisible={setProposeModalVisible}
           setModalVisible={setModalVisible}
-          isFixed={isFixed}
           data={route.params.data}
         />
         <ChatText
@@ -157,7 +151,6 @@ function ChattingRoom({route}) {
               chatInfo={route.params.data}
               setModalVisible={setModalVisible}
               setMeetingEnd={setMeetingEnd}
-              isFixed={isFixed}
               userDetail={userDetail}
             />
           </Animated.View>
@@ -167,9 +160,7 @@ function ChattingRoom({route}) {
           body={
             <>
               <Text style={{marginTop: 7}}>
-                {user === route.params.data.hostId
-                  ? '미팅 개최를 확정하시겠습니까?'
-                  : '미팅 참가를 확정하시겠습니까?'}
+                '미팅 참가를 확정하시겠습니까?'
               </Text>
               <View style={{alignItems: 'flex-start'}}>
                 {/* 리덕스에서 받아오는 meeting 정보로 업데이트할 것  */}
@@ -185,7 +176,7 @@ function ChattingRoom({route}) {
                   {route.params.data.meetDate
                     .toDate()
                     .toLocaleString()
-                    .slice(13)}
+                    .slice(12, 19)}
                 </Text>
                 <Text style={{marginTop: 7}}>
                   🏖 장소: {route.params.data.region}
@@ -198,11 +189,10 @@ function ChattingRoom({route}) {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           setIsConfirmed={setIsConfirmed}
-          setSpendingModalVisible={setSpendingModalVisible}
           isHost={isHost}
           id={route.params.data.id}
         />
-        <SpendingModal
+        {/* <SpendingModal
           spendingModalVisible={spendingModalVisible}
           setSpendingModalVisible={setSpendingModalVisible}
           txType="미팅 확정"
@@ -213,7 +203,7 @@ function ChattingRoom({route}) {
 
             showToast('basic', '미팅이 확정되었습니다.');
           }}
-        />
+        /> */}
       </View>
     </KeyboardAvoidingView>
   );

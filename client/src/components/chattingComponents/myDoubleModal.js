@@ -25,7 +25,7 @@ function MyDoubleModal({
   nButtonText,
   modalVisible,
   setModalVisible,
-  setSpendingModalVisible,
+
   isHost,
   id,
 }) {
@@ -51,7 +51,6 @@ function MyDoubleModal({
                   isHost
                     ? () => {
                         setModalVisible(false);
-                        setSpendingModalVisible(true);
                       }
                     : () => {
                         changeJoinerState(id, user, setModalVisible).then(

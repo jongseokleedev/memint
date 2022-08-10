@@ -1,13 +1,12 @@
 import React, {useEffect, useState, useMemo} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import BasicButton from '../common/BasicButton';
+import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+
 import firestore from '@react-native-firebase/firestore';
 import loveChain from '../../assets/icons/lovechain.png';
+import useUser from '../../utils/hooks/UseUser';
 const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
 
-function RoomInfo({chatInfo, isFixed, userDetail}) {
-  const [confirmed, setConfirmed] = useState(false);
-  const [nickNames, setNickNames] = useState('');
+function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   const [states, setStates] = useState('');
   const [people, setPeople] = useState('');
 
@@ -32,8 +31,6 @@ function RoomInfo({chatInfo, isFixed, userDetail}) {
   );
 
   useEffect(() => {
-    // setMember(Object.values(isFixed));
-    console.log(chatInfo);
     getIsFixed;
     const ids = Object.keys(userDetail);
 
@@ -58,11 +55,16 @@ function RoomInfo({chatInfo, isFixed, userDetail}) {
             key={idx}
             isHost={el[2] === chatInfo.hostId}
             id={el[2]}
+            setModalVisible={setModalVisible}
           />
         );
       }),
     );
-  }, [isFixed, getIsFixed, chatInfo, states]);
+
+    return () => {
+      getIsFixed;
+    };
+  }, [chatInfo, states]);
 
   return (
     <View style={styles.container}>
@@ -74,7 +76,8 @@ function RoomInfo({chatInfo, isFixed, userDetail}) {
   );
 }
 
-function Joiner({nickName, state, img, isHost, id}) {
+function Joiner({nickName, state, img, isHost, id, setModalVisible}) {
+  const user = useUser();
   return (
     <View style={styles.person}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -90,7 +93,7 @@ function Joiner({nickName, state, img, isHost, id}) {
         )}
         <Text style={styles.personName}>{nickName}</Text>
       </View>
-      <View
+      <Pressable
         style={
           state === 'accepted'
             ? {...styles.isConfirmed, backgroundColor: 'lightgray'}
@@ -98,9 +101,16 @@ function Joiner({nickName, state, img, isHost, id}) {
                 ...styles.isConfirmed,
                 backgroundColor: '#609afa',
               }
+        }
+        onPress={
+          id === user.id && state === 'accepted'
+            ? () => {
+                setModalVisible(true);
+              }
+            : null
         }>
         <Text style={{color: 'white'}}>확정</Text>
-      </View>
+      </Pressable>
     </View>
   );
 }

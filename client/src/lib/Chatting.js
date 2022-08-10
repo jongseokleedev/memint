@@ -19,6 +19,13 @@ export const changeJoinerState = async (meetingId, user, setModalVisible) => {
         members: result,
       }),
         setModalVisible(false);
+      if (
+        result.filter(el => {
+          return Object.values(el)[0] === 'accepted';
+        }).length === 0
+      ) {
+        changeMeetingState(meetingId);
+      }
       return 'runModal';
     });
 };
