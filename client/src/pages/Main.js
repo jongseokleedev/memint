@@ -95,11 +95,6 @@ const MyPageScreen = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="EditMeetingInfo"
-        component={EditMeetingInfo}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
         name="EditMyInfo"
         component={EditMyInfo}
         options={{headerShown: false}}

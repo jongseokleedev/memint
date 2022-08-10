@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: 'center',
     color: '#787878',
-    marginTop: 80
+    marginTop: 80,
   },
 });
 export default MyLikesRooms;

@@ -41,6 +41,10 @@ import {getOnchainTokenLog} from './lib/OnchainTokenLog';
 import useOnchainActions from './utils/hooks/UseOnchainActions';
 import FeedbackChoicePage from './pages/ChattingPage/FeedbackChoicePage';
 import FeedbackSendPage from './pages/ChattingPage/FeedbackSendPage';
+import MeetingSet from './pages/ChattingPage/MeetingSet';
+import EditMeetingInfo from './pages/MyPage/EditMeetingInfo';
+import MeetingMemberOut from './pages/ChattingPage/MeetingMemberOut';
+import Report from './pages/ChattingPage/Report';
 
 const Stack = createNativeStackNavigator();
 const store = createStore(rootReducer);
@@ -274,6 +278,23 @@ function App() {
             <Stack.Screen
               name="FeedbackSendPage"
               component={FeedbackSendPage}
+              name="MeetingSet"
+              component={MeetingSet}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="MeetingMemberOut"
+              component={MeetingMemberOut}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EditMeetingInfo"
+              component={EditMeetingInfo}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Report"
+              component={Report}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
