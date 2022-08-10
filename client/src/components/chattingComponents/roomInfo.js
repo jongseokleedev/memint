@@ -101,6 +101,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
           position: 'absolute',
+          zIndex: -1,
         }}>
         <Pressable>
           <Icon name="settings" size={35} color="black" />
@@ -111,6 +112,9 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
 }
 
 function Joiner({nickName, state, img, isHost, id, setModalVisible}) {
+  useEffect(() => {
+    console.log('work');
+  }, []);
   const user = useUser();
   return (
     <View style={styles.person}>
@@ -137,9 +141,9 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible}) {
               }
         }
         onPress={
-          id === user.id && state === 'accepted'
+          id === user.id
             ? () => {
-                setModalVisible(true);
+                state === 'accepted' ? setModalVisible(true) : null;
               }
             : null
         }>
