@@ -1,9 +1,12 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';
 import loveChain from '../../assets/icons/lovechain.png';
 import useUser from '../../utils/hooks/UseUser';
+import camera from '../../assets/icons/camera.png';
+import message from '../../assets/icons/message.png';
+import setting from '../../assets/icons/setting.png';
 const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
 
 function RoomInfo({chatInfo, userDetail, setModalVisible}) {
@@ -71,6 +74,37 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
       <View style={styles.wrapper}>
         <Text style={styles.hilightText}>미팅 참여자</Text>
         {people}
+        <View style={{width: '90%'}}>
+          <Pressable
+            style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
+            <Icon name="photo-camera" size={25} color="black" />
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              {' '}
+              미팅참여 인증하기
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
+            <Icon name="email" size={25} color="black" />
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              {' '}
+              미팅 후기 보내기
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      <View
+        style={{
+          height: '100%',
+          width: '90%',
+          // backgroundColor: 'yellow',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          position: 'absolute',
+        }}>
+        <Pressable>
+          <Icon name="settings" size={35} color="black" />
+        </Pressable>
       </View>
     </View>
   );
@@ -119,6 +153,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    // backgroundColor: 'green',
   },
   wrapper: {
     width: '85%',
