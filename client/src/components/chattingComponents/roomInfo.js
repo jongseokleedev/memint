@@ -7,11 +7,13 @@ import useUser from '../../utils/hooks/UseUser';
 import camera from '../../assets/icons/camera.png';
 import message from '../../assets/icons/message.png';
 import setting from '../../assets/icons/setting.png';
+import {useNavigation} from '@react-navigation/native';
 const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
 
 function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   const [states, setStates] = useState('');
   const [people, setPeople] = useState('');
+  const navigation = useNavigation();
 
   const getIsFixed = useMemo(
     () =>
@@ -103,7 +105,10 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
           position: 'absolute',
           zIndex: -1,
         }}>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate('MeetingSet');
+          }}>
           <Icon name="settings" size={35} color="black" />
         </Pressable>
       </View>
