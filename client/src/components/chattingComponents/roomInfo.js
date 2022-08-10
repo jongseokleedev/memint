@@ -33,87 +33,71 @@ function RoomInfo({chatInfo, isFixed, userDetail}) {
 
   useEffect(() => {
     // setMember(Object.values(isFixed));
-
+    console.log(chatInfo);
+    getIsFixed;
     const ids = Object.keys(userDetail);
 
     const arr = [];
 
     ids.forEach(el => {
-      arr.push([userDetail[el].nickName, userDetail[el].nftProfile]);
+      arr.push([userDetail[el].nickName, userDetail[el].nftProfile, el]);
     });
-    // console.log(userDetail);
-    // console.log(chatInfo);
 
-    setNickNames(arr);
+    states &&
+      states.forEach((el, idx) => {
+        arr[idx].push(el);
+      });
 
-    getIsFixed;
-    const people = () => {
-      if (states) {
-        return setPeople(
-          states.slice(1).map((el, idx) => {
-            return (
-              <Joiner
-                state={el}
-                nickName={nickNames ? nickNames.slice(1)[idx][0] : null}
-                img={nickNames ? nickNames.slice(1)[idx][1] : loveChain}
-                key={idx}
-              />
-            );
-          }),
+    setPeople(
+      arr.map((el, idx) => {
+        return (
+          <Joiner
+            state={el[3]}
+            nickName={arr[idx][0]}
+            img={arr[idx][1]}
+            key={idx}
+            isHost={el[2] === chatInfo.hostId}
+            id={el[2]}
+          />
         );
-      }
-    };
-    people();
+      }),
+    );
   }, [isFixed, getIsFixed, chatInfo, states]);
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <Text style={styles.hilightText}>미팅 참여자</Text>
-        <Host
-          nickName={nickNames && nickNames[0][0]}
-          img={nickNames && nickNames[0][1]}
-          confirmed={confirmed}
-        />
         {people}
       </View>
     </View>
   );
 }
 
-function Host({nickName, img}) {
-  return (
-    <View style={styles.person}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          style={styles.personImage}
-          source={img ? {uri: img} : loveChain}
-        />
-        <View style={{position: 'absolute', height: 95}}>
-          <Image
-            source={crown}
-            style={{width: 40, height: 40}}
-            resizeMode="contain"
-          />
-        </View>
-        <Text style={styles.personName}>{nickName}</Text>
-      </View>
-    </View>
-  );
-}
-
-function Joiner({nickName, state, img}) {
+function Joiner({nickName, state, img, isHost, id}) {
   return (
     <View style={styles.person}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image style={styles.personImage} source={{uri: img}} />
+        {isHost && (
+          <View style={{position: 'absolute', height: 95}}>
+            <Image
+              source={crown}
+              style={{width: 40, height: 40}}
+              resizeMode="contain"
+            />
+          </View>
+        )}
         <Text style={styles.personName}>{nickName}</Text>
       </View>
       <View
         style={
           state === 'accepted'
-            ? styles.isConfirmed
-            : {...styles.isConfirmed, backgroundColor: '#609afa'}
+            ? {...styles.isConfirmed, backgroundColor: 'lightgray'}
+            : {
+                ...styles.isConfirmed,
+                backgroundColor: '#609afa',
+              }
         }>
         <Text style={{color: 'white'}}>확정</Text>
       </View>
@@ -153,7 +137,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
-    backgroundColor: 'lightgray',
+
     marginLeft: 10,
   },
   personName: {
@@ -169,7 +153,6 @@ const styles = StyleSheet.create({
     height: 24,
     width: 40,
     borderRadius: 5,
-    backgroundColor: 'lightgray',
   },
 });
 

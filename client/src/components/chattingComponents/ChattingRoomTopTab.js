@@ -5,35 +5,29 @@ import {useToast} from '../../utils/hooks/useToast';
 import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
 
-function ChattingRoomTopTab({setProposeModalVisible, setModalVisible, data}) {
-  const user = useUser().id;
+function ChattingRoomTopTab({data}) {
   const meetingRef = useMemo(() => {
     return firestore().collection('Meeting').doc(data.id);
   }, [data]);
 
   const [roomData, setRoomData] = useState('');
-  const [count, setCount] = useState('');
+  const navigation = useNavigation();
+  const [roomStatus, setRoomStatus] = useState('');
 
   useEffect(() => {
     meetingRef.onSnapshot(result => {
       setRoomData(result.data());
+      setRoomStatus(result.data().status);
     });
   }, [meetingRef]);
 
-  return <Host meetingInfo={data} data={roomData} />;
-}
-
-const Host = ({data, meetingInfo}) => {
-  const navigation = useNavigation();
-  const [roomStatus, setRoomStatus] = useState('');
   useEffect(() => {
-    // 상황에 따른 텍스트 추가
-    if (data.status === 'open') setRoomStatus('모집중');
-    else if (data.status === 'full') setRoomStatus('모집완료');
-    else if (data.status === 'fixed') setRoomStatus('확정');
-    else if (data.status === 'confirmed') setRoomStatus('현장확인');
-    else if (data.status === 'end') setRoomStatus('미팅종료');
-  }, [data]);
+    if (roomData.status === 'open') setRoomStatus('모집중');
+    else if (roomData.status === 'full') setRoomStatus('모집완료');
+    else if (roomData.status === 'fixed') setRoomStatus('확정');
+    else if (roomData.status === 'confirmed') setRoomStatus('현장확인');
+    else if (roomData.status === 'end') setRoomStatus('미팅종료');
+  }, [roomData]);
 
   // console.log(data);
 
@@ -47,26 +41,24 @@ const Host = ({data, meetingInfo}) => {
               alignItems: 'center',
             }}>
             <Text style={{paddingRight: 7, fontSize: 16, fontWeight: '700'}}>
-              {data.title}
+              {roomData.title}
             </Text>
+            <View style={styles.status}>
+              <Text style={{color: 'white', fontWeight: '500'}}>
+                {roomStatus}
+              </Text>
+            </View>
           </View>
         </View>
 
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('MeetingDetail', {data: meetingInfo})
-          }>
+          onPress={() => navigation.navigate('MeetingDetail', {data: data})}>
           <Text style={{marginTop: 20}}>미팅 정보 보러가기 ></Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.status}>
-        <Text style={{color: 'white', fontWeight: '500', fontSize: 16}}>
-          {roomStatus}
-        </Text>
-      </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -83,13 +75,12 @@ const styles = StyleSheet.create({
     // backgroundColor: '',
   },
   status: {
-    height: 40,
-    width: 80,
+    height: 20,
+    width: 40,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'black',
-    borderRadius: 20,
-    marginLeft: 40,
+    borderRadius: 10,
   },
   button: {
     width: 90,
