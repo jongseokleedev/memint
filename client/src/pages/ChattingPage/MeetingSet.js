@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,6 +7,10 @@ import BackButton from '../../components/common/BackButton';
 import useUser from '../../utils/hooks/UseUser';
 
 function MeetingSet({route}) {
+  useEffect(() => {
+    console.log({meetingInfo: route.params.meetingInfo});
+    console.log({userInfo: route.params.userInfo});
+  }, []);
   //dummy
   const isHost = true;
   const userInfo = useUser();
@@ -18,7 +22,7 @@ function MeetingSet({route}) {
   const handleNavigateToMemberOut = () => {
     //meetingInfo 필요함!
     // navigation.navigate('MeetingMemberOut',{item: item});
-    navigation.navigate('MeetingMemberOut')
+    navigation.navigate('MeetingMemberOut');
   };
   const handleNavigateToReport = () => {
     navigation.navigate('Report');

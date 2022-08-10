@@ -58,7 +58,7 @@ function ChattingListPage({navigation}) {
             return {
               ...meetingInfo.data(),
               id: meetingId,
-              hostInfo: hostImage.data(),
+              hostInfo: hostImage.data().nftProfile,
             };
           } else {
             return {
@@ -70,7 +70,7 @@ function ChattingListPage({navigation}) {
                 .createdAt.toDate()
                 .toLocaleString()
                 .slice(6),
-              hostInfo: hostImage.data(),
+              hostInfo: hostImage.data().nftProfile,
             };
           }
         }),
@@ -115,6 +115,7 @@ function MetaData({item, navigation}) {
     [item.id],
   );
   useEffect(() => {
+    console.log(item);
     const getContent = async () => {
       MessageRef.orderBy('createdAt', 'desc')
         .limit(1)

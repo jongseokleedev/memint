@@ -13,6 +13,7 @@ const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
 function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   const [states, setStates] = useState('');
   const [people, setPeople] = useState('');
+  const [userInfo, setUserInfo] = useState('');
   const navigation = useNavigation();
 
   const getIsFixed = useMemo(
@@ -36,6 +37,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   );
 
   useEffect(() => {
+    console.log(chatInfo);
     getIsFixed;
     const ids = Object.keys(userDetail);
 
@@ -49,6 +51,8 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
       states.forEach((el, idx) => {
         arr[idx].push(el);
       });
+
+    setUserInfo(arr);
 
     setPeople(
       arr.map((el, idx) => {
@@ -107,7 +111,10 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         }}>
         <Pressable
           onPress={() => {
-            navigation.navigate('MeetingSet');
+            navigation.navigate('MeetingSet', {
+              meetingInfo: chatInfo,
+              userInfo,
+            });
           }}>
           <Icon name="settings" size={35} color="black" />
         </Pressable>
