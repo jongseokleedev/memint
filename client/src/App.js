@@ -39,6 +39,8 @@ import useUser from './utils/hooks/UseUser';
 import {getOnchainEthLog} from './lib/OnchainEthLog';
 import {getOnchainTokenLog} from './lib/OnchainTokenLog';
 import useOnchainActions from './utils/hooks/UseOnchainActions';
+import FeedbackChoicePage from './pages/ChattingPage/FeedbackChoicePage';
+import FeedbackSendPage from './pages/ChattingPage/FeedbackSendPage';
 
 const Stack = createNativeStackNavigator();
 const store = createStore(rootReducer);
@@ -260,6 +262,17 @@ function App() {
             <Stack.Screen
               name="ChattingRoom"
               component={ChattingRoom}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="FeedbackChoicePage"
+              component={FeedbackChoicePage}
+              options={{headerShown: false}}
+              // options={{animation: 'none'}}
+            />
+            <Stack.Screen
+              name="FeedbackSendPage"
+              component={FeedbackSendPage}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
