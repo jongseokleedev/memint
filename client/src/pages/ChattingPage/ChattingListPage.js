@@ -11,7 +11,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
-import WalletButton from '../common/WalletButton';
+import WalletButton from '../../components/common/WalletButton';
 import {useIsFocused} from '@react-navigation/native';
 
 function ChattingListPage({navigation}) {
@@ -110,8 +110,6 @@ function ChattingListPage({navigation}) {
 function MetaData({item, navigation}) {
   const [lastMsg, setLastMsg] = useState('');
   const [lastTime, setLastTime] = useState('');
-  // 추후 NFT 이미지로 바꿀 것
-
   const MessageRef = useMemo(
     () => firestore().collection('Meeting').doc(item.id).collection('Messages'),
     [item.id],
