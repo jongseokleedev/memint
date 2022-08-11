@@ -19,10 +19,12 @@ import firestore from '@react-native-firebase/firestore';
 import {useToast} from '../../utils/hooks/useToast';
 import {changeMeetingState} from '../../lib/Chatting';
 import useUser from '../../utils/hooks/UseUser';
+import {useNavigation} from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
 function ChattingRoom({route}) {
+  const navigation = useNavigation();
   const animation = useRef(new Animated.Value(1)).current;
   const [roomInfo, setRoomInfo] = useState(false);
   // 처음에 렌더링을 하면 가운데 있던 userinfo 화면이 우측으로 들어가는 것이 보인다.
@@ -46,14 +48,6 @@ function ChattingRoom({route}) {
   const [userDetail, setUserDetail] = useState('');
   const ex = useUser();
   const user = useUser().id;
-
-  // 아래는 params.data로 받아온 members라는, 참여자의 id값을 통해서 각각 참여자의 nickName을 받아와 객체화하는 과정이다. 결과값은 아래와 같다.
-  // {"연습용계정1": "남자", "연습용계정2": "소년", "연습용계정3": "소녀", "연습용계정4": "아저씨"}
-  // 이 객체를 userNickName이라는 state에 담아줄 것이고, 그렇게 되면 하위 페이지에서는 state를 받아 userId에 대응하는 알맞은 닉네임을 렌더링해줄 수 있다.
-  // asyncStorage를 사용하게 되면 관련 user의 닉네임 들을 저장해놓아 바로 렌더링할 수 있겠지만 지금은 그렇지 못하기때문에 이런 방법을 사용한다.
-
-  // 아래 방법에서 만약 Promise.all의 정보 호출이 순서가 맞지 않을 것이 걱정된다면, map을 돌릴 때 한 요소마다 한 번씩 바로 {el : nickName}의 형식으로
-  // memberNickName에 push해주고, 이후 reduce 함수를 사용하여 객체를 한번에 모아주는 방식도 고려해볼 수 있다.
 
   const memberId = useMemo(() => {
     return [];
@@ -84,12 +78,7 @@ function ChattingRoom({route}) {
               }, 0),
             );
           });
-
-          // console.log(route.params.data.members);
           if (results.length === memberId.length) {
-            // console.log(memberId);
-            // console.log(results);
-            // console.log(results);
             setUserDetail(
               results.reduce((acc, cur) => {
                 return {...acc, [cur.userId]: cur};
@@ -103,6 +92,14 @@ function ChattingRoom({route}) {
   );
 
   useEffect(() => {
+    if (
+      route.params.data.members.filter(el => {
+        return Object.keys(el)[0] === user;
+      }).length === 0
+    ) {
+      navigation.navigate('MeetingMarket');
+      return showToast('error', '접근권한이 없습니다.');
+    }
     Animated.spring(animation, {
       toValue: roomInfo ? windowWidth / 5 : windowWidth,
       useNativeDriver: true,
