@@ -126,7 +126,7 @@ function EditMeetingInfo({route}) {
       updateMeeting(item.id, meetingInfo);
       setConfirmModalVisible(false);
       showToast('success', '미팅이 수정되었습니다');
-      navigation.pop();
+      navigation.navigate('ChattingListPage');
     } catch (e) {
       console.log(e);
     }
@@ -135,12 +135,6 @@ function EditMeetingInfo({route}) {
   const handleDelete = () => {
     try {
       deleteMeeting(item.id);
-      saveInfo({
-        ...userInfo,
-        createdroomId: userInfo.createdroomId.filter(el => {
-          return el !== item.id;
-        }),
-      });
       updateUserMeetingOut(userInfo.id, 'createdroomId', item.id);
       showToast('success', '미팅이 삭제되었습니다.');
       navigation.pop();

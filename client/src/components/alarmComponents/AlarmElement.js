@@ -13,7 +13,9 @@ function AlarmElement({alarm}) {
   const navigation = useNavigation();
   const [chattingConfirmModal, setChattingConfirmModal] = useState(false);
   const handleClick = () => {
-    if (alarm.type === 'proposal') {
+    if (!alarm.meetingInfo) {
+      return;
+    } else if (alarm.type === 'proposal') {
       navigation.navigate('AlarmDetail', {
         alarm,
       });

@@ -42,7 +42,7 @@ import useOnchainActions from './utils/hooks/UseOnchainActions';
 import FeedbackChoicePage from './pages/ChattingPage/FeedbackChoicePage';
 import FeedbackSendPage from './pages/ChattingPage/FeedbackSendPage';
 import MeetingSet from './pages/ChattingPage/MeetingSet';
-import EditMeetingInfo from './pages/MyPage/EditMeetingInfo';
+import EditMeetingInfo from './pages/ChattingPage/EditMeetingInfo';
 import MeetingMemberOut from './pages/ChattingPage/MeetingMemberOut';
 import Report from './pages/ChattingPage/Report';
 

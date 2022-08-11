@@ -13,9 +13,13 @@ function ChattingRoomTopTab({data}) {
   const [roomStatus, setRoomStatus] = useState('');
 
   useEffect(() => {
-    meetingRef.onSnapshot(result => {
-      setRoomData(result.data());
-      setRoomStatus(result.data().status);
+    return meetingRef.onSnapshot(result => {
+      if (result.data() === undefined) {
+        navigation.navigate('MeetingMarket');
+      } else {
+        setRoomData(result.data());
+        setRoomStatus(result.data().status);
+      }
     });
   }, [meetingRef]);
 
@@ -39,11 +43,11 @@ function ChattingRoomTopTab({data}) {
               alignItems: 'center',
             }}>
             <Text style={{paddingRight: 7, fontSize: 16, fontWeight: '700'}}>
-              {roomData.title}
+              {roomData && roomData.title}
             </Text>
             <View style={styles.status}>
               <Text style={{color: 'white', fontWeight: '500'}}>
-                {roomStatus}
+                {roomStatus && roomStatus}
               </Text>
             </View>
           </View>

@@ -1,23 +1,37 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackButton from '../../components/common/BackButton';
+import DoubleModal from '../../components/common/DoubleModal';
+import {
+  deleteMeeting,
+  updateMeeting,
+  updateMembersOut,
+} from '../../lib/Meeting';
+import {updateUserMeetingOut} from '../../lib/Users';
+import {useToast} from '../../utils/hooks/useToast';
 import useUser from '../../utils/hooks/UseUser';
 
 function MeetingSet({route}) {
-  useEffect(() => {
-    console.log({meetingInfo: route.params.meetingInfo});
-    console.log({userInfo: route.params.userInfo});
-  }, []);
-  //dummy
-  const isHost = true;
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  // useEffect(() => {
+  //   console.log({meetingInfo: route.params.meetingInfo});
+  //   console.log({userInfo: route.params.userInfo});
+  // }, []);
+  const meetingInfo = route.params.meetingInfo;
   const userInfo = useUser();
   const navigation = useNavigation();
+  const {showToast} = useToast();
   const handleNavigateToEdit = () => {
-    //meetingInfo 필요함!
-    // navigation.navigate('EditMeetingInfo',{item: item});
+    navigation.navigate('EditMeetingInfo', {
+      item: {
+        ...route.params.meetingInfo,
+        meetDate: route.params.meetingInfo.meetDate.toDate().toISOString(),
+      },
+    });
   };
   const handleNavigateToMemberOut = () => {
     //meetingInfo 필요함!
@@ -27,24 +41,65 @@ function MeetingSet({route}) {
   const handleNavigateToReport = () => {
     navigation.navigate('Report');
   };
+
   const handleDelete = () => {
-    //meetingId, userId 필요
-    // deleteMeeting(item.id);
-    //   updateUserMeetingOut(userInfo.id, 'createdroomId', item.id);
-    //   showToast('success', '미팅이 삭제되었습니다.');
-    //   navigation.pop();
+    //미팅이 full, open 일때만 삭제 가능
+    if (meetingInfo.status !== 'full' && meetingInfo.status !== 'open') {
+      showToast('error', '미팅 확정 이후에는 삭제할 수 없습니다');
+      return;
+    }
+
+    updateUserMeetingOut(userInfo.id, 'createdroomId', meetingInfo.id)
+      .then(() => {
+        route.params.userInfo.map(el => {
+          if (el[2] !== meetingInfo.hostId) {
+            updateUserMeetingOut(el[2], 'joinedroomId', meetingInfo.id);
+          }
+        });
+      })
+      .then(() => {
+        deleteMeeting(meetingInfo.id);
+      })
+      .then(() => {
+        showToast('success', '미팅이 삭제되었습니다.');
+        setDeleteModalVisible(!deleteModalVisible);
+        navigation.navigate('ChattingListPage');
+        // navigation.reset({routes: [{name: 'MeetingMarket'}]});
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
+
   const handleMeetingOut = () => {
     //미팅이 확정상태라면 나가지 못함
-    //나간 후에 full -> open 이 되는지 확인
-    //meetingId, userId 필요
-    //updateMemberOut(item.id, userInfo.id)
-    //updateUserMeetingOut(userInfo.id, 'joinedroomId', item.id)
-    //navigate
+    if (
+      (meetingInfo.status !== 'full' && meetingInfo.status !== 'open') ||
+      meetingInfo.members[userInfo.id] !== 'accepted'
+    ) {
+      showToast('error', '미팅 확정 이후에는 나갈 수 없습니다');
+      return;
+    }
+    updateMembersOut(meetingInfo.id, userInfo.id)
+      .then(() => {
+        updateUserMeetingOut(userInfo.id, 'joinedroomId', meetingInfo.id);
+      })
+      .then(() => {
+        if (meetingInfo.status === 'full') {
+          updateMeeting(meetingInfo.id, {status: 'open'});
+        }
+      })
+      .then(() => {
+        showToast('success', '미팅에서 나왔습니다');
+        navigation.navigate('ChattingListPage');
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
+
   const renderByUser = () => {
-    //if(userInfo.id === hostId)
-    if (isHost) {
+    if (route.params.meetingInfo.hostId === userInfo.id) {
       return (
         <>
           <TouchableOpacity style={styles.li} onPress={handleNavigateToEdit}>
@@ -61,11 +116,26 @@ function MeetingSet({route}) {
             <Text style={styles.liText}>미팅 멤버 내보내기</Text>
             <Icon name="arrow-forward-ios" size={20} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.li} onPress={handleDelete}>
+          <TouchableOpacity
+            style={styles.li}
+            onPress={() => {
+              setDeleteModalVisible(true);
+            }}>
             <Text style={[styles.liText, styles.deleteText]}>
               미팅 삭제하기
             </Text>
           </TouchableOpacity>
+          <DoubleModal
+            text="미팅룸 삭제 후 복구가 불가합니다. 삭제하시겠습니까?"
+            nButtonText="네"
+            pButtonText="아니오"
+            modalVisible={deleteModalVisible}
+            setModalVisible={setDeleteModalVisible}
+            pFunction={() => {
+              setDeleteModalVisible(false);
+            }}
+            nFunction={handleDelete}
+          />
         </>
       );
     } else {

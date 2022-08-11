@@ -22,16 +22,20 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         .collection('Meeting')
         .doc(chatInfo.id)
         .onSnapshot(result => {
-          setStates(
-            result
-              .data()
-              .members.map(el => {
-                return Object.values(el);
-              })
-              .reduce((acc, cur) => {
-                return [...acc, ...cur];
-              }),
-          );
+          if (result.data() === undefined) {
+            navigation.navigate('MeetingMarket');
+          } else {
+            setStates(
+              result
+                .data()
+                .members.map(el => {
+                  return Object.values(el);
+                })
+                .reduce((acc, cur) => {
+                  return [...acc, ...cur];
+                }),
+            );
+          }
         }),
     [chatInfo],
   );
@@ -111,6 +115,11 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         }}>
         <Pressable
           onPress={() => {
+            // navigation.reset({
+            //   routes: [
+            //     {name: 'MeetingSet', params: {meetingInfo: chatInfo, userInfo}},
+            //   ],
+            // });
             navigation.navigate('MeetingSet', {
               meetingInfo: chatInfo,
               userInfo,

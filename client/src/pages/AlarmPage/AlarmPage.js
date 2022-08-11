@@ -51,7 +51,7 @@ function AlarmPage({navigation}) {
       const dataWithMeetingInfo = await Promise.all(
         dataWithSenderInfo.map(async el => {
           const meet = await getMeeting(el.meetingId);
-          const host = await getUser(meet.data().hostId);
+          const host = await getUser(meet.data()?.hostId);
           if (meet.data()) {
             return {
               ...el,

@@ -46,11 +46,11 @@ function MeetingElement({item}) {
             ))}
           </View>
           <View style={styles.imageNickname}>
+            <Text style={styles.username}>{item.hostInfo.nickName}</Text>
             <Image
               source={{uri: item.hostInfo.nftProfile}}
               style={styles.userImage}
             />
-            <Text style={styles.username}> {item.hostInfo.nickName}</Text>
           </View>
         </View>
       </View>
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 21,
     height: 21,
+    marginLeft: 4,
     // borderColor: 'black',
     // borderWidth:1
   },

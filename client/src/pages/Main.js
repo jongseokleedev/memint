@@ -11,7 +11,7 @@ import AlarmPage from './AlarmPage/AlarmPage';
 import FeedbackChoicePage from './ChattingPage/FeedbackChoicePage';
 import FeedbackSendPage from './ChattingPage/FeedbackSendPage';
 
-import EditMeetingInfo from './MyPage/EditMeetingInfo';
+import EditMeetingInfo from './ChattingPage/EditMeetingInfo';
 import EditMyInfo from './MyPage/EditMyInfo';
 import WalletMain from './WalletPage/WalletMain';
 import MyPage from './MyPage/MyPage';
@@ -139,7 +139,7 @@ const ChattingScreen = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="채팅 목록"
+        name="ChattingListPage"
         component={ChattingListPage}
         options={{headerShown: false}}
       />
