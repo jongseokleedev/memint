@@ -187,6 +187,7 @@ function ChattingRoom({route}) {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           setIsConfirmed={setIsConfirmed}
+          meetingStatus={route.params.data.status}
           isHost={isHost}
           id={route.params.data.id}
         />

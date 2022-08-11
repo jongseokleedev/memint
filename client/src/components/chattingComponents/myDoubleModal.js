@@ -25,7 +25,6 @@ function MyDoubleModal({
   nButtonText,
   modalVisible,
   setModalVisible,
-
   isHost,
   id,
 }) {

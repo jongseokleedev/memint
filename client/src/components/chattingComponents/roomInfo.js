@@ -67,6 +67,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
             key={idx}
             isHost={el[2] === chatInfo.hostId}
             id={el[2]}
+            chatInfo={chatInfo}
             setModalVisible={setModalVisible}
           />
         );
@@ -127,7 +128,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   );
 }
 
-function Joiner({nickName, state, img, isHost, id, setModalVisible}) {
+function Joiner({nickName, state, img, isHost, id, setModalVisible, chatInfo}) {
   const user = useUser();
   return (
     <View style={styles.person}>
@@ -154,7 +155,7 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible}) {
               }
         }
         onPress={
-          id === user.id
+          id === user.id && chatInfo.status === 'full'
             ? () => {
                 state === 'accepted' ? setModalVisible(true) : null;
               }
