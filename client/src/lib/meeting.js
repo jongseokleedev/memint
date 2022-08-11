@@ -58,13 +58,20 @@ export const updateMembersOut = (meetingId, userId) => {
 };
 
 //미팅 멤버 삭제 - merber의 status가 accepted, fixed일 때
-export const memberOut = async (meetingId, members, userId) => {
+export const memberOut = async (meetingId, members, userId, status) => {
   const theRestMember = members.filter(el => {
     return Object.keys(el)[0] !== userId;
   });
-  await meetingCollection.doc(meetingId).update({
-    members: theRestMember,
-  });
+  if (status === 'full') {
+    await meetingCollection.doc(meetingId).update({
+      members: theRestMember,
+      status: 'open',
+    });
+  } else {
+    await meetingCollection.doc(meetingId).update({
+      members: theRestMember,
+    });
+  }
 
   return await userCollection
     .doc(userId)
