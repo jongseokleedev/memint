@@ -74,9 +74,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
       }),
     );
 
-    return () => {
-      getIsFixed;
-    };
+    return getIsFixed;
   }, [chatInfo, states]);
 
   return (

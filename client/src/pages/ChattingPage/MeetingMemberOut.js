@@ -1,11 +1,34 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
+import CheckBox from '@react-native-community/checkbox';
+import useUser from '../../utils/hooks/UseUser';
 
-function MeetingMemberOut() {
-  const [checked, setChecked] = React.useState('first');
+function MeetingMemberOut({route}) {
+  const user = useUser();
+  const [form, setForm] = useState({
+    sender: user.id,
+    receiver: '',
+    text: '',
+  });
+  const member = route.params.data
+    .filter(el => {
+      return el[2] !== user.id;
+    })
+    .map((el, idx) => {
+      // console.log(el);
+      return <Person user={el} key={idx} form={form} setForm={setForm} />;
+    });
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -36,29 +59,17 @@ function MeetingMemberOut() {
             ※ 잦은 멤버 퇴출은 이용제한조치 사유가 될 수 있습니다.
           </Text>
         </View>
-        <View style={styles.selectSection}>
-          <Text style={styles.sectionTitle}>
-            내보내고 싶은 멤버를 선택해주세요
-          </Text>
-          <View style={styles.userElement}>
-            <Text>알콜스레기 성현</Text>
-            <Icon name="check-circle-outline" size={30} />
-          </View>
-          <View style={styles.userElement}>
-            <Text>알콜스레기 성현</Text>
-            <Icon name="check-circle-outline" size={30} />
-          </View>
-          <View style={styles.userElement}>
-            <Text>알콜스레기 성현</Text>
-            <Icon name="check-circle-outline" size={30} />
-          </View>
-        </View>
+        <View style={styles.selectSection}>{member}</View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>퇴출 사유</Text>
           <TextInput
             style={styles.textInput}
             placeholder="퇴출 사유를 구체적으로 적어주세요"
             multiline={true}
+            value={form.text}
+            onChangeText={text => {
+              setForm({...form, text});
+            }}
           />
         </View>
         <BasicButton
@@ -66,17 +77,60 @@ function MeetingMemberOut() {
           width={332}
           height={50}
           textSize={18}
-          backgroundColor="#000000"
+          backgroundColor={form.receiver ? '#000000' : 'gray'}
           textColor="#ffffff"
           margin={[30, 3, 3, 3]}
           borderRadius={10}
-          onPress={() => {}}
+          onPress={() => {
+            form.receiver && console.log(form);
+          }}
           border={false}
         />
       </View>
     </SafeAreaView>
   );
 }
+
+const Person = ({user, form, setForm}) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Image
+          source={{uri: user[1]}}
+          style={{width: 45, height: 45, borderRadius: 22.5}}
+        />
+        <Text style={{fontSize: 17, fontWeight: 'bold', paddingLeft: 8}}>
+          {user[0]}
+        </Text>
+      </View>
+      <CheckBox
+        value={form.receiver === user[2]}
+        onChange={() =>
+          form.receiver === user[2]
+            ? setForm({...form, receiver: ''})
+            : setForm({
+                ...form,
+                receiver: user[2],
+              })
+        }
+        onFillColor="#2196F3"
+        onCheckColor="white"
+        animationDuration={0.1}
+        offAnimationType="fade"
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

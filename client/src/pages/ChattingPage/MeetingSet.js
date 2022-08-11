@@ -36,7 +36,7 @@ function MeetingSet({route}) {
   const handleNavigateToMemberOut = () => {
     //meetingInfo 필요함!
     // navigation.navigate('MeetingMemberOut',{item: item});
-    navigation.navigate('MeetingMemberOut');
+    navigation.navigate('MeetingMemberOut', {data: route.params.userInfo});
   };
   const handleNavigateToReport = () => {
     navigation.navigate('Report');
