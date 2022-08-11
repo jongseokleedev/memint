@@ -41,7 +41,6 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   );
 
   useEffect(() => {
-    
     getIsFixed;
     const ids = Object.keys(userDetail);
 
@@ -73,8 +72,6 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         );
       }),
     );
-
-    
   }, [chatInfo, states]);
 
   return (
@@ -131,9 +128,6 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
 }
 
 function Joiner({nickName, state, img, isHost, id, setModalVisible}) {
-  useEffect(() => {
-    console.log('work');
-  }, []);
   const user = useUser();
   return (
     <View style={styles.person}>
