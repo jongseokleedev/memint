@@ -276,10 +276,13 @@ function App() {
               // options={{animation: 'none'}}
             />
             <Stack.Screen
-              name="FeedbackSendPage"
-              component={FeedbackSendPage}
               name="MeetingSet"
               component={MeetingSet}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="FeedbackSendPage"
+              component={FeedbackSendPage}
               options={{headerShown: false}}
             />
             <Stack.Screen

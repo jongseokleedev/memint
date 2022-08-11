@@ -97,7 +97,7 @@ function ChattingRoom({route}) {
         return Object.keys(el)[0] === user;
       }).length === 0
     ) {
-      navigation.navigate('MeetingMarket');
+      navigation.pop();
       return showToast('error', '접근권한이 없습니다.');
     }
     Animated.spring(animation, {
@@ -122,7 +122,7 @@ function ChattingRoom({route}) {
     >
       <SafeAreaView>
         <RoomHeader
-          title={route.params.data.title}
+          title="채팅목록"
           roomInfo={roomInfo}
           setRoomInfo={setRoomInfo}
           setRoomInfoExist={setRoomInfoExist}

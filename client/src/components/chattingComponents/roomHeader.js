@@ -17,16 +17,18 @@ function RoomHeader({title, roomInfo, setRoomInfo, setRoomInfoExist}) {
           color={'black'}
           style={{marginLeft: 5}}
         />
-        {/* <Text style={styles.buttonText}>목록</Text> */}
+        <Text style={styles.buttonText}>{title}</Text>
       </TouchableOpacity>
       {/* <Text style={{fontWeight: 'bold', fontSize: 18}}>{title}</Text> */}
-      <TouchableOpacity
-        onPress={() => {
-          setRoomInfo(!roomInfo);
-          setRoomInfoExist(true);
-        }}>
-        <Icon name="menu" size={30} color="black" style={{marginRight: 10}} />
-      </TouchableOpacity>
+      {title === '채팅목록' && (
+        <TouchableOpacity
+          onPress={() => {
+            setRoomInfo(!roomInfo);
+            setRoomInfoExist(true);
+          }}>
+          <Icon name="menu" size={30} color="black" style={{marginRight: 10}} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

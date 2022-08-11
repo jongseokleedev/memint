@@ -16,6 +16,7 @@ import {getUser} from '../../lib/Users';
 import useUser from '../../utils/hooks/UseUser';
 import EarnModal from '../../components/common/UserInfoModal/EarnModal';
 import {useToast} from '../../utils/hooks/useToast';
+import RoomHeader from '../../components/chattingComponents/roomHeader';
 const person = require('./dummydata/images/person.png');
 
 function FeedbackChoicePage({route}) {
@@ -35,6 +36,7 @@ function FeedbackChoicePage({route}) {
         })
         .flat(),
     );
+    console.log(route.params.userInfo);
   }, [route]);
 
   const people =
@@ -45,12 +47,12 @@ function FeedbackChoicePage({route}) {
 
   return (
     <SafeAreaView style={styles.view}>
-      <BackButton />
-      <View style={[styles.centeredView, styles.backgroudDim]}>
+      <RoomHeader title="돌아가기" />
+      <View style={{borderTopWidth: 0.3, flex: 1, backgroundColor: 'pink'}}>
         <Text style={{fontSize: 18, fontWeight: '700', marginBottom: 20}}>
           {owner.nickName}님! 오늘의 미팅은 어떠셨나요?
         </Text>
-        <View style={styles.modalView}>
+        <View>
           <Text>후기를 남길 미팅 상대를 선택해 주세요.</Text>
           {people}
           <BasicButton
@@ -72,7 +74,7 @@ function FeedbackChoicePage({route}) {
             pFunction={() => {
               setEarnModalVisible(false);
               showToast('basic', 'LCN + 1');
-              navigation.navigate('채팅 목록');
+              navigation.navigate('ChattingListPage');
             }}
             amount={1}
           />
@@ -142,33 +144,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: -1,
   },
-  modalView: {
-    margin: 20,
-    width: 350,
-    backgroundColor: 'white',
-    borderRadius: 30,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    height: 470,
-    // position: 'absolute',
-  },
   modalText: {
     fontWeight: 'bold',
     margin: 15,
     textAlign: 'center',
   },
-  backgroudDim: {
-    flex: 1,
-    // backgroundColor: 'lightgray',
-  },
+
   button: {
     height: 40,
     width: 100,

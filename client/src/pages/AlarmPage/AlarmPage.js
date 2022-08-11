@@ -29,16 +29,7 @@ function AlarmPage({navigation}) {
     try {
       //알림 데이터
       const res = await getAlarmsById(userInfo.id);
-      // const data = res.docs.map(el => {
-      //   return {
-      //     ...el.data(),
-      //     id: el.id,
-      //   };
-      // });
 
-      //alarm id 없음!!
-
-      //sender데이터
       const dataWithSenderInfo = await Promise.all(
         res
           .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())

@@ -8,6 +8,7 @@ import camera from '../../assets/icons/camera.png';
 import message from '../../assets/icons/message.png';
 import setting from '../../assets/icons/setting.png';
 import {useNavigation} from '@react-navigation/native';
+import {useToast} from '../../utils/hooks/useToast';
 const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
 
 function RoomInfo({chatInfo, userDetail, setModalVisible}) {
@@ -15,7 +16,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   const [people, setPeople] = useState('');
   const [userInfo, setUserInfo] = useState('');
   const navigation = useNavigation();
-
+  const {showToast} = useToast();
   const getIsFixed = useMemo(
     () =>
       firestore()
@@ -90,6 +91,17 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
             </Text>
           </Pressable>
           <Pressable
+            onPress={() => {
+              console.log(chatInfo);
+              if (chatInfo.status === 'end') {
+                navigation.navigate('FeedbackChoicePage', {
+                  data: chatInfo,
+                  userInfo,
+                });
+              } else {
+                showToast('error', '미팅이 끝난 후 후기 작성이 가능합니다.');
+              }
+            }}
             style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
             <Icon name="email" size={25} color="black" />
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
@@ -111,11 +123,6 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         }}>
         <Pressable
           onPress={() => {
-            // navigation.reset({
-            //   routes: [
-            //     {name: 'MeetingSet', params: {meetingInfo: chatInfo, userInfo}},
-            //   ],
-            // });
             navigation.navigate('MeetingSet', {
               meetingInfo: chatInfo,
               userInfo,

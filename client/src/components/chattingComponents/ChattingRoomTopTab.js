@@ -68,13 +68,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.3,
     padding: 20,
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    // borderBottomColor: 'black',
-    // borderBottomWidth: 1,
-    // position: 'absolute',
-    // backgroundColor: '',
   },
   status: {
     paddingVertical: 3,
