@@ -47,20 +47,12 @@ function MyDoubleModal({
               <BasicButton
                 text={pButtonText}
                 size="small"
-                onPress={
-                  isHost
-                    ? () => {
-                        setModalVisible(false);
-                      }
-                    : () => {
-                        changeJoinerState(id, user, setModalVisible).then(
-                          result => {
-                            result === 'runModal' &&
-                              showToast('basic', '미팅 참가가 확정되었습니다!');
-                          },
-                        );
-                      }
-                }
+                onPress={() => {
+                  changeJoinerState(id, user, setModalVisible).then(result => {
+                    result === 'runModal' &&
+                      showToast('basic', '미팅 참가가 확정되었습니다!');
+                  });
+                }}
               />
             </View>
           </View>

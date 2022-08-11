@@ -41,7 +41,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   );
 
   useEffect(() => {
-    console.log(chatInfo);
+    
     getIsFixed;
     const ids = Object.keys(userDetail);
 
@@ -74,7 +74,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
       }),
     );
 
-    return getIsFixed;
+    
   }, [chatInfo, states]);
 
   return (
