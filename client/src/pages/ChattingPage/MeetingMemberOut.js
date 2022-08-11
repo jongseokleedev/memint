@@ -114,15 +114,18 @@ function MeetingMemberOut({route}) {
             route.params.meetingData.members,
             form.receiver,
             route.params.meetingData.status,
-          ).then(() => {
-            createMeetingBanned({
-              sender: form.sender,
-              receiver: form.receiver,
-              meetigId: route.params.meetingData.id,
+          )
+            .then(() => {
+              createMeetingBanned({
+                sender: form.sender,
+                receiver: form.receiver,
+                meetingId: route.params.meetingData.id,
+              });
+            })
+            .then(() => {
+              navigation.navigate('ChattingListPage');
+              showToast('success,', `${form.nickName} 님을 내보내셨습니다.`);
             });
-            navigation.navigate('ChattingListPage');
-            showToast('success', `${form.nickName} 님을 내보내셨습니다.`);
-          });
         }}
         nFunction={() => {
           setModalVisible(!modalVisible);

@@ -45,6 +45,7 @@ import MeetingSet from './pages/ChattingPage/MeetingSet';
 import EditMeetingInfo from './pages/ChattingPage/EditMeetingInfo';
 import MeetingMemberOut from './pages/ChattingPage/MeetingMemberOut';
 import Report from './pages/ChattingPage/Report';
+import MeetingConfirm from './pages/ChattingPage/MeetingConfirm';
 
 const Stack = createNativeStackNavigator();
 const store = createStore(rootReducer);
@@ -298,6 +299,11 @@ function App() {
             <Stack.Screen
               name="Report"
               component={Report}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="MeetingConfirm"
+              component={MeetingConfirm}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

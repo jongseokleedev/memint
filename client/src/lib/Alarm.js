@@ -45,7 +45,7 @@ export const createMeetingAccept = ({...data}) => {
 
 //미팅 퇴장 알림 생성
 //sender, receiver, meetingId
-export const createMeetingBanned = ({...data}) => {
+export const createMeetingBanned = data => {
   return userCollection.doc(data.receiver).update({
     alarms: firestore.FieldValue.arrayUnion({
       type: 'banned',

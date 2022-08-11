@@ -83,7 +83,10 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         {people}
         <View style={{width: '90%'}}>
           <Pressable
-            style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
+            style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}
+            onPress={() => {
+              navigation.navigate('MeetingConfirm');
+            }}>
             <Icon name="photo-camera" size={25} color="black" />
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
               {' '}
