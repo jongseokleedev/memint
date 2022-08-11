@@ -53,7 +53,7 @@ function AlarmDetail({route}) {
     //waiting에서 제거, member에 추가
     updateWaitingOut(alarm.meetingId, alarm.sender); //신청 메시지의 sender
     updateMembersIn(alarm.meetingId, alarm.sender); //신청 메시지의 sender
-    updateMeetingProposal(alarm.id); //신청 알림 완료로 update
+    // updateMeetingProposal(alarm.id); //신청 알림 완료로 update
     updateUserMeetingIn(alarm.sender, 'joinedroomId', alarm.meetingId); //User에 room 추가하기
     if (
       alarm.meetingInfo.peopleNum * 2 - 1 ===
@@ -69,6 +69,45 @@ function AlarmDetail({route}) {
   //   showToast('basic', '신청이 거절되었습니다');
   //   navigation.pop();
   // };
+
+  const renderAcceptedStatus = () => {
+    if (alarm.meetingInfo.waiting.indexOf(alarm.sender) !== -1) {
+      return (
+        <>
+          <Text style={styles.acceptText}>신청을 수락하시겠습니까?</Text>
+          <View style={styles.buttonArea}>
+            {/* <BasicButton
+                text="거절하기"
+                width={120}
+                height={50}
+                textSize={17}
+                margin={[5, 20, 5, 20]}
+                backgroundColor="gray"
+                onPress={handleDeny}
+              /> */}
+            <BasicButton
+              text="수락하기"
+              width={120}
+              height={50}
+              textSize={17}
+              margin={[5, 20, 5, 20]}
+              onPress={() => setModalVisible(true)}
+            />
+          </View>
+        </>
+      );
+    } else if (
+      alarm.meetingInfo.members.filter(
+        el =>
+          el === {[alarm.sender]: 'accepted'} ||
+          el === {[alarm.sender]: 'fixed'},
+      )
+    ) {
+      return <Text style={styles.acceptText}>신청을 수락했습니다</Text>;
+    } else {
+      return <></>;
+    }
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -138,21 +177,19 @@ function AlarmDetail({route}) {
             </View>
           </TouchableOpacity>
         </View>
-        {alarm.complete ? (
-          <Text style={styles.acceptText}>신청을 수락했습니다</Text>
+
+        {/*         
+        {alarm.meetingInfo.members.filter(
+          el =>
+            el === {[alarm.sender]: 'accepted'} ||
+            el === {[alarm.sender]: 'fixed'},
+        ) ? (
+          <Text></Text>
         ) : (
           <>
             <Text style={styles.acceptText}>신청을 수락하시겠습니까?</Text>
             <View style={styles.buttonArea}>
-              {/* <BasicButton
-                text="거절하기"
-                width={120}
-                height={50}
-                textSize={17}
-                margin={[5, 20, 5, 20]}
-                backgroundColor="gray"
-                onPress={handleDeny}
-              /> */}
+
               <BasicButton
                 text="수락하기"
                 width={120}
@@ -163,7 +200,9 @@ function AlarmDetail({route}) {
               />
             </View>
           </>
-        )}
+        )} */}
+
+        {renderAcceptedStatus()}
       </View>
       <DoubleModal
         text="수락하시겠습니까?"
