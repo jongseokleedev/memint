@@ -16,6 +16,7 @@ import {memberOut} from '../../lib/Meeting';
 import DoubleModal from '../../components/common/DoubleModal';
 import {useNavigation} from '@react-navigation/native';
 import {useToast} from '../../utils/hooks/useToast';
+import {createMeetingBanned} from '../../lib/Alarm';
 
 function MeetingMemberOut({route}) {
   const {showToast} = useToast();
@@ -114,6 +115,11 @@ function MeetingMemberOut({route}) {
             form.receiver,
             route.params.meetingData.status,
           ).then(() => {
+            createMeetingBanned({
+              sender: form.sender,
+              receiver: form.receiver,
+              meetigId: route.params.meetingData.id,
+            });
             navigation.navigate('ChattingListPage');
             showToast('success', `${form.nickName} 님을 내보내셨습니다.`);
           });

@@ -43,6 +43,19 @@ export const createMeetingAccept = ({...data}) => {
   });
 };
 
+//미팅 퇴장 알림 생성
+//sender, receiver, meetingId
+export const createMeetingBanned = ({...data}) => {
+  return userCollection.doc(data.receiver).update({
+    alarms: firestore.FieldValue.arrayUnion({
+      type: 'banned',
+      sender: data.sender,
+      meetingId: data.meetingId,
+      createdAt: firestore.Timestamp.now(),
+    }),
+  });
+};
+
 //alarms를 유저 필드로 옮기면서 미팅 수락 시 변화 없고, 알림 detail에서 조건부 렌더링 구현
 // //미팅 수락 시 신청 알림에 대해 완료 상태로 update
 // export const updateMeetingProposal = alarmId => {

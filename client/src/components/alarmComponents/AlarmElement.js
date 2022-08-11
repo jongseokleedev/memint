@@ -13,7 +13,7 @@ function AlarmElement({alarm}) {
   const navigation = useNavigation();
   const [chattingConfirmModal, setChattingConfirmModal] = useState(false);
   const handleClick = () => {
-    if (!alarm.meetingInfo) {
+    if (!alarm.meetingInfo || alarm.type === 'banned') {
       return;
     } else if (alarm.type === 'proposal') {
       navigation.navigate('AlarmDetail', {
@@ -21,6 +21,18 @@ function AlarmElement({alarm}) {
       });
     } else {
       setChattingConfirmModal(!chattingConfirmModal);
+    }
+  };
+
+  const renderByType = () => {
+    if (alarm.type === 'banned') {
+      return '미팅방에서 강퇴당하셨습니다!';
+    } else if (alarm.type === 'accept') {
+      return `${alarm.senderInfo?.nickName}님이 신청을 수락했습니다!`;
+    } else if (alarm.type === 'proposal') {
+      return `${alarm.senderInfo?.nickName}님의 신청이 도착했습니다!`;
+    } else {
+      return '';
     }
   };
   return (
@@ -43,11 +55,7 @@ function AlarmElement({alarm}) {
       <Icon name="notifications" size={30} style={styles.icon} />
       <View style={styles.content}>
         <View style={styles.messageHead}>
-          <Text style={styles.message}>
-            {alarm.type === 'proposal'
-              ? `${alarm.senderInfo?.nickName}님의 신청이 도착했습니다!`
-              : `${alarm.senderInfo?.nickName}님이 신청을 수락했습니다!`}
-          </Text>
+          <Text style={styles.message}>{renderByType()}</Text>
           <Text style={styles.createdAt}>
             {handleDateFromNow(alarm.createdAt)}
           </Text>
