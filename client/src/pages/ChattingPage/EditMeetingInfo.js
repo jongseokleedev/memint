@@ -123,7 +123,14 @@ function EditMeetingInfo({route}) {
   };
   const handleUpdate = () => {
     try {
-      updateMeeting(item.id, meetingInfo);
+      updateMeeting(item.id, {
+        title: meetingInfo.title,
+        description: meetingInfo.description,
+        meetDate: meetingInfo.meetDate,
+        region: meetingInfo.region,
+        peopleNum: meetingInfo.peopleNum,
+        meetingTags: meetingInfo.meetingTags,
+      });
       setConfirmModalVisible(false);
       showToast('success', '미팅이 수정되었습니다');
       navigation.navigate('ChattingListPage');
