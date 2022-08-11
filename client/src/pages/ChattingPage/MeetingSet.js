@@ -76,7 +76,14 @@ function MeetingSet({route}) {
 
   const handleMeetingOut = () => {
     //미팅이 확정상태라면 나가지 못함
-    if (meetingInfo.members[userInfo.id] !== 'accepted') {
+    console.log();
+    if (
+      Object.values(
+        meetingInfo.members.filter(el => {
+          return Object.keys(el)[0] === userInfo.id;
+        })[0],
+      )[0] !== 'accepted'
+    ) {
       showToast('error', '미팅 확정 이후에는 나갈 수 없습니다');
       return;
     }
