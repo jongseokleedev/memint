@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 
 const meetingCollection = firestore().collection('Meeting');
+const userCollection = firestore().collection('User');
 //모든 모집중인 미팅 조회
 export const getMeetings = async () => {
   return await meetingCollection.where('status', '==', 'open').get();
@@ -49,11 +50,39 @@ export const updateMembersIn = (meetingId, userId) => {
   });
 };
 
-//미팅 멤버 삭제
+//미팅 멤버 삭제 - accepted 일 때만
 export const updateMembersOut = (meetingId, userId) => {
   return meetingCollection.doc(meetingId).update({
     members: firestore.FieldValue.arrayRemove({[userId]: 'accepted'}), //accept가 아니라면 삭제하지 못하도록 해야함
   });
+};
+
+//미팅 멤버 삭제 - merber의 status가 accepted, fixed일 때
+export const memberOut = async (meetingId, members, userId) => {
+  const theRestMember = members.filter(el => {
+    return Object.keys(el)[0] !== userId;
+  });
+  await meetingCollection.doc(meetingId).update({
+    members: theRestMember,
+  });
+
+  return await userCollection
+    .doc(userId)
+    .get()
+    .then(async result => {
+      const theRestRoom = result.data().joinedroomId.filter(el => {
+        return el !== meetingId;
+      });
+      if (theRestRoom.length === 0) {
+        await userCollection.doc(userId).update({
+          joinedroomId: [],
+        });
+      } else {
+        await userCollection.doc(userId).update({
+          joinedroomId: theRestRoom,
+        });
+      }
+    });
 };
 
 //미팅 정보 수정

@@ -12,12 +12,20 @@ import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
 import CheckBox from '@react-native-community/checkbox';
 import useUser from '../../utils/hooks/UseUser';
+import {memberOut} from '../../lib/Meeting';
+import DoubleModal from '../../components/common/DoubleModal';
+import {useNavigation} from '@react-navigation/native';
+import {useToast} from '../../utils/hooks/useToast';
 
 function MeetingMemberOut({route}) {
+  const {showToast} = useToast();
+  const navigation = useNavigation();
   const user = useUser();
+  const [modalVisible, setModalVisible] = useState('');
   const [form, setForm] = useState({
     sender: user.id,
     receiver: '',
+    nickName: '',
     text: '',
   });
   const member = route.params.data
@@ -77,16 +85,42 @@ function MeetingMemberOut({route}) {
           width={332}
           height={50}
           textSize={18}
-          backgroundColor={form.receiver ? '#000000' : 'gray'}
+          backgroundColor={form.receiver && form.text ? '#000000' : 'gray'}
           textColor="#ffffff"
           margin={[30, 3, 3, 3]}
           borderRadius={10}
           onPress={() => {
-            form.receiver && console.log(form);
+            // memberOut(
+            //   route.params.meetingData.id,
+            //   route.params.meetingData.members,
+            //   form.receiver,
+            // );
+
+            form.receiver && form.text && setModalVisible(true);
           }}
           border={false}
         />
       </View>
+      <DoubleModal
+        text={`${form.nickName} \n님을 내보내시겠습니까?`}
+        nButtonText="아니요"
+        pButtonText="네"
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        pFunction={() => {
+          memberOut(
+            route.params.meetingData.id,
+            route.params.meetingData.members,
+            form.receiver,
+          ).then(() => {
+            navigation.navigate('채팅 목록');
+            showToast('success', `${form.nickName} 님을 내보내셨습니다.`);
+          });
+        }}
+        nFunction={() => {
+          setModalVisible(!modalVisible);
+        }}
+      />
     </SafeAreaView>
   );
 }
@@ -117,10 +151,11 @@ const Person = ({user, form, setForm}) => {
         value={form.receiver === user[2]}
         onChange={() =>
           form.receiver === user[2]
-            ? setForm({...form, receiver: ''})
+            ? setForm({...form, receiver: '', nickName: ''})
             : setForm({
                 ...form,
                 receiver: user[2],
+                nickName: user[0],
               })
         }
         onFillColor="#2196F3"

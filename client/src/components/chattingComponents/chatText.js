@@ -12,6 +12,7 @@ import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
 import LinearGradient from 'react-native-linear-gradient';
 import UserInfoModal from '../common/UserInfoModal';
+import person from '../../assets/icons/person.png';
 
 function ChatText({data, roomInfo, userDetail}) {
   const [chattings, setChattings] = useState('');
@@ -96,21 +97,25 @@ function NotMyChat({item, userDetail, setUserInfoModalVisible, setUserId}) {
   return (
     <View style={styles.messageWrapper}>
       {/* 클릭할 시 유저 정보를 열겠냐고 물어보는 모달 창 띄우는 값 true로 설정 */}
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => {
-          setUserId(item.data().sender);
-          setUserInfoModalVisible(true);
-        }}>
-        <Image
-          source={
-            userDetail && {
-              uri: userDetail[item.data().sender].nftProfile,
+      {userDetail && userDetail[item.data().sender] ? (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            setUserId(item.data().sender);
+            setUserInfoModalVisible(true);
+          }}>
+          <Image
+            source={
+              userDetail && {
+                uri: userDetail[item.data().sender].nftProfile,
+              }
             }
-          }
-          style={styles.image}
-        />
-      </TouchableOpacity>
+            style={styles.image}
+          />
+        </TouchableOpacity>
+      ) : (
+        <Image source={person} style={styles.image} />
+      )}
       {/* <InquireUserProfile
         width={60}
         height={60}
@@ -120,7 +125,9 @@ function NotMyChat({item, userDetail, setUserInfoModalVisible, setUserId}) {
 
       <View style={styles.textWrapper}>
         <Text style={styles.senderName}>
-          {userDetail && userDetail[item.data().sender].nickName}
+          {userDetail && userDetail[item.data().sender]
+            ? userDetail[item.data().sender].nickName
+            : '(알수없음)'}
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
           <View style={styles.messageBody}>
@@ -146,10 +153,8 @@ function NotMyChat({item, userDetail, setUserInfoModalVisible, setUserId}) {
 
 function MyChat({item, userDetail, user}) {
   return (
-    <View style={styles.MymessageWrapper}>
-      {/* <Image source={{uri: user.picture}} style={styles.image} /> */}
+    <View style={{...styles.MymessageWrapper, paddingTop: 10}}>
       <View style={[styles.textWrapper, {alignItems: 'flex-end'}]}>
-        <Text style={styles.senderName}>{user.nickName}</Text>
         <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
           <View style={styles.date}>
             <Text style={{marginBottom: 5, fontSize: 10, color: 'gray'}}>
@@ -163,7 +168,11 @@ function MyChat({item, userDetail, user}) {
                 )}
             </Text>
           </View>
-          <View style={[styles.messageBody, {backgroundColor: 'white'}]}>
+          <View
+            style={[
+              styles.messageBody,
+              {backgroundColor: 'lightyellow', maxWidth: 300},
+            ]}>
             <Text style={{padding: 3}}>{item.data().text}</Text>
           </View>
         </View>
@@ -201,6 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 3,
+    maxWidth: 230,
   },
   mymessageBody: {
     backgroundColor: 'white',

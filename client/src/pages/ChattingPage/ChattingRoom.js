@@ -7,6 +7,7 @@ import {
   Animated,
   Dimensions,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import ChatText from '../../components/chattingComponents/chatText';
 import RoomHeader from '../../components/chattingComponents/roomHeader';

@@ -147,7 +147,7 @@ function MetaData({item, navigation}) {
     <TouchableOpacity
       onPress={() => navigation.navigate('ChattingRoom', {data: item})}>
       <View style={styles.container}>
-        <Image style={styles.image} source={{uri: item.hostInfo.nftProfile}} />
+        <Image style={styles.image} source={{uri: item.hostInfo}} />
         <View style={styles.chatInfo}>
           <View>
             <Text style={styles.titleText}>{item.title}</Text>

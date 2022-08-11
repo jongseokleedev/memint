@@ -36,7 +36,10 @@ function MeetingSet({route}) {
   const handleNavigateToMemberOut = () => {
     //meetingInfo 필요함!
     // navigation.navigate('MeetingMemberOut',{item: item});
-    navigation.navigate('MeetingMemberOut', {data: route.params.userInfo});
+    navigation.navigate('MeetingMemberOut', {
+      data: route.params.userInfo,
+      meetingData: route.params.meetingInfo,
+    });
   };
   const handleNavigateToReport = () => {
     navigation.navigate('Report');
@@ -110,17 +113,17 @@ function MeetingSet({route}) {
             <Text style={styles.liText}>신고하기</Text>
             <Icon name="arrow-forward-ios" size={20} />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.li}
-            onPress={handleNavigateToMemberOut}>
-            <Text style={styles.liText}>미팅 멤버 내보내기</Text>
-            <Icon name="arrow-forward-ios" size={20} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.li}
-            onPress={() => {
-              setDeleteModalVisible(true);
-            }}>
+
+          {route.params.meetingInfo.status === 'open' ||
+          route.params.meetingInfo.status === 'full' ? (
+            <TouchableOpacity
+              style={styles.li}
+              onPress={handleNavigateToMemberOut}>
+              <Text style={styles.liText}>미팅 멤버 내보내기</Text>
+              <Icon name="arrow-forward-ios" size={20} />
+            </TouchableOpacity>
+          ) : null}
+          <TouchableOpacity style={styles.li} onPress={handleDelete}>
             <Text style={[styles.liText, styles.deleteText]}>
               미팅 삭제하기
             </Text>
