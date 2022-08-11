@@ -114,7 +114,7 @@ function MeetingMemberOut({route}) {
             form.receiver,
             route.params.meetingData.status,
           ).then(() => {
-            navigation.navigate('채팅 목록');
+            navigation.navigate('ChattingListPage');
             showToast('success', `${form.nickName} 님을 내보내셨습니다.`);
           });
         }}
