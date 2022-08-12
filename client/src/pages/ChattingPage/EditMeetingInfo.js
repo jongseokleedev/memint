@@ -133,7 +133,8 @@ function EditMeetingInfo({route}) {
       });
       setConfirmModalVisible(false);
       showToast('success', '미팅이 수정되었습니다');
-      navigation.navigate('ChattingListPage');
+
+      navigation.pop();
     } catch (e) {
       console.log(e);
     }

@@ -187,7 +187,6 @@ function MeetingConfirm({route}) {
   };
 
   const renderByUser = () => {
-    console.log(meetingInfo);
     if (meetingInfo.hostId === userInfo.id) {
       return (
         <>

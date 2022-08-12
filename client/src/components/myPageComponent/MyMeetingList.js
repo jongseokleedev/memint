@@ -177,7 +177,7 @@ function MyMeetings({item, navigation, getCreatedRoom}) {
             })}
           </View>
 
-          <View style={styles.container}>
+          <View style={styles.meetingInfo}>
             <Text style={styles.details}>{item?.region}</Text>
             <View style={styles.bar} />
 
@@ -191,35 +191,9 @@ function MyMeetings({item, navigation, getCreatedRoom}) {
             </Text>
           </View>
 
-          <View style={styles.spaceBetween}>
-            <TouchableOpacity
-              style={styles.edit}
-              onPress={() => setEditModal(true)}>
-              <Text style={styles.editText}>미팅 정보 수정</Text>
-            </TouchableOpacity>
-            {renderButton()}
-          </View>
+          <View style={styles.spaceBetween}>{renderButton()}</View>
         </View>
 
-        <DoubleModal
-          text="미팅 정보를 수정하시겠어요?"
-          nButtonText="아니오"
-          pButtonText="네"
-          modalVisible={editModal}
-          setModalVisible={setEditModal}
-          pFunction={() => {
-            setEditModal(false);
-            navigation.navigate('EditMeetingInfo', {
-              item: {
-                ...item,
-                meetDate: item.meetDate.toDate().toISOString(),
-              },
-            });
-          }}
-          nFunction={() => {
-            setEditModal(false);
-          }}
-        />
         <DoubleModal
           text="미팅이 시작되었나요?"
           nButtonText="아니오"
@@ -269,14 +243,18 @@ function MyMeetings({item, navigation, getCreatedRoom}) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 6,
+    alignItems: 'space-between',
   },
   tagcontainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 3,
     height: 10,
+  },
+  meetingInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 6,
   },
   // meetingCard: {
   //   backgroundColor: 'white',
@@ -289,8 +267,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 5,
     paddingHorizontal: 27,
-    paddingVertical: 20,
-    height: 130,
+    paddingVertical: 22,
+    height: 110,
     borderColor: 'black',
     borderRadius: 30,
     borderWidth: 1,
@@ -344,10 +322,8 @@ const styles = StyleSheet.create({
   },
   spaceBetween: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 3,
-    justifyContent: 'space-between',
-    height: 23,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
   bar: {
     width: 1,
@@ -355,19 +331,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     backgroundColor: 'black',
   },
-  editText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#787878',
-  },
+
   finishText: {
     fontSize: 12,
     fontWeight: '500',
-  },
-  edit: {
-    // marginTop: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
 });
 
