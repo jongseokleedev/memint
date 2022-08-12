@@ -85,7 +85,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
           <Pressable
             style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}
             onPress={() => {
-              navigation.navigate('MeetingConfirm');
+              navigation.navigate('MeetingConfirm', {meetingInfo: chatInfo});
             }}>
             <Icon name="photo-camera" size={25} color="black" />
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
