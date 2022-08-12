@@ -16,17 +16,22 @@ function MyLikesRooms() {
     const meetings = await Promise.all(
       userInfo.likesroomId.map(async meetingId => {
         const res = await getMeeting(meetingId);
+        if (res.data() === undefined) {
+          return;
+        }
         return {id: res.id, ...res.data()};
       }),
     );
     const meetingsWithHost = await Promise.all(
-      meetings.map(async meeting => {
-        const hostInfo = await getUser(meeting.hostId);
-        return {
-          ...meeting,
-          hostInfo: {...hostInfo},
-        };
-      }),
+      meetings
+        .filter(el => el !== undefined)
+        .map(async meeting => {
+          const hostInfo = await getUser(meeting.hostId);
+          return {
+            ...meeting,
+            hostInfo: {...hostInfo},
+          };
+        }),
     );
     setLikesRooms(meetingsWithHost);
   }, [userInfo.likesroomId]);
