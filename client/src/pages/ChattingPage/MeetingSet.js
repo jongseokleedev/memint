@@ -18,7 +18,12 @@ import useUser from '../../utils/hooks/UseUser';
 
 function MeetingSet({route}) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const isFocused = useIsFocused();
+  const [editModal, setEditModal] = useState(false);
+
+  // useEffect(() => {
+  //   console.log({meetingInfo: route.params.meetingInfo});
+  //   console.log({userInfo: route.params.userInfo});
+  // }, []);
   const meetingInfo = route.params.meetingInfo;
   const userInfo = useUser();
   const navigation = useNavigation();
@@ -38,6 +43,7 @@ function MeetingSet({route}) {
   }, [userInfo.id, isFocused]);
 
   const handleNavigateToEdit = () => {
+    setEditModal(!editModal);
     navigation.navigate('EditMeetingInfo', {
       item: {
         ...route.params.meetingInfo,
@@ -46,8 +52,6 @@ function MeetingSet({route}) {
     });
   };
   const handleNavigateToMemberOut = () => {
-    //meetingInfo 필요함!
-    // navigation.navigate('MeetingMemberOut',{item: item});
     navigation.navigate('MeetingMemberOut', {
       data: route.params.userInfo,
       meetingData: route.params.meetingInfo,
@@ -138,7 +142,11 @@ function MeetingSet({route}) {
     if (route.params.meetingInfo.hostId === userInfo.id) {
       return (
         <>
-          <TouchableOpacity style={styles.li} onPress={handleNavigateToEdit}>
+          <TouchableOpacity
+            style={styles.li}
+            onPress={() => {
+              setEditModal(true);
+            }}>
             <Text style={styles.liText}>미팅 정보 변경하기</Text>
             <Icon name="arrow-forward-ios" size={20} />
           </TouchableOpacity>
@@ -159,7 +167,11 @@ function MeetingSet({route}) {
           <TouchableOpacity style={styles.li} onPress={setMeetingEnd}>
             <Text style={[styles.liText]}>미팅 끝내기</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.li} onPress={handleDelete}>
+          <TouchableOpacity
+            style={styles.li}
+            onPress={() => {
+              setDeleteModalVisible(true);
+            }}>
             <Text style={[styles.liText, styles.deleteText]}>
               미팅 삭제하기
             </Text>
@@ -174,6 +186,17 @@ function MeetingSet({route}) {
               setDeleteModalVisible(false);
             }}
             nFunction={handleDelete}
+          />
+          <DoubleModal
+            text="미팅 정보를 수정하시겠어요?"
+            nButtonText="아니오"
+            pButtonText="네"
+            modalVisible={editModal}
+            setModalVisible={setEditModal}
+            pFunction={handleNavigateToEdit}
+            nFunction={() => {
+              setEditModal(false);
+            }}
           />
         </>
       );

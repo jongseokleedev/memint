@@ -80,10 +80,8 @@ function MeetingConfirm({route}) {
   };
 
   const handleSecondSubmit = async () => {
-    const existedReference = storage().ref(
-      `/meeting/${meetingInfo.id}.${extension}`,
-    );
-    await deleteObject(existedReference);
+    const existedReference = storage().refFromURL(meetingInfo.confirmImage);
+    await existedReference.delete();
     let photoURL = null;
     const asset = image.assets[0];
     const extension = asset.fileName.split('.').pop(); //확장자 추출
