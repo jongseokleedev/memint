@@ -1,25 +1,26 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState, useCallback} from 'react';
-import {Text, View, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  SafeAreaView,
+  StyleSheet,
+  RefreshControl,
+  FlatList,
+} from 'react-native';
 import AlarmElement from '../../components/alarmComponents/AlarmElement';
-import DoubleModal from '../../components/common/DoubleModal';
 import {getAlarmsById} from '../../lib/Alarm';
 import {getMeeting} from '../../lib/Meeting';
-import {filterProfile} from '../../lib/NFT';
 import {getUser} from '../../lib/Users';
-import {
-  handleDateFromNow,
-  handleDateInFormat,
-} from '../../utils/common/Functions';
-import {useMeeting} from '../../utils/hooks/UseMeeting';
+
 import useUser from '../../utils/hooks/UseUser';
 import WalletButton from '../../components/common/WalletButton';
 
 function AlarmPage({navigation}) {
   const userInfo = useUser();
   // const meetingData = useMeeting();
-  const [chattingConfirmModal, setChattingConfirmModal] = useState(false);
   const [alarms, setAlarms] = useState([]);
+  const [refreshing, setRefreshing] = useState(true);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -63,7 +64,7 @@ function AlarmPage({navigation}) {
         }),
       );
       setAlarms(dataWithMeetingInfo);
-
+      setRefreshing(false);
       // const dataWithMeeting = dataWithSenderInfo.map(el => {
       //   const meet = meetingData.filter(meeting => {
       //     return meeting.id === el.meetingId;
@@ -82,17 +83,20 @@ function AlarmPage({navigation}) {
         <Text style={styles.title}>알림</Text>
       </View>
       {alarms.length === 0 ? (
-        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-          <Text style={{color: 'lightgray'}}>알림이 없습니다</Text>
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>알림이 없습니다</Text>
         </View>
       ) : (
-        <ScrollView>
-          <View>
-            {alarms.map((alarm, idx) => (
-              <AlarmElement key={idx} alarm={alarm} />
-            ))}
-          </View>
-        </ScrollView>
+        <FlatList
+          data={alarms}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => {
+            return <AlarmElement alarm={item} />;
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={getAlarmPage} />
+          }
+        />
       )}
 
       <WalletButton />
@@ -115,6 +119,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginLeft: 20,
   },
+  emptyView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  emptyText: {color: 'lightgray'},
 });
 
 export default AlarmPage;
