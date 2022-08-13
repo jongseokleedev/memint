@@ -5,6 +5,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackButton from '../../components/common/BackButton';
 import DoubleModal from '../../components/common/DoubleModal';
+import firestore from '@react-native-firebase/firestore';
+import {useIsFocused} from '@react-navigation/native';
 import {
   deleteMeeting,
   updateMeeting,
@@ -16,15 +18,25 @@ import useUser from '../../utils/hooks/UseUser';
 
 function MeetingSet({route}) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
-  // useEffect(() => {
-  //   console.log({meetingInfo: route.params.meetingInfo});
-  //   console.log({userInfo: route.params.userInfo});
-  // }, []);
+  const isFocused = useIsFocused();
   const meetingInfo = route.params.meetingInfo;
   const userInfo = useUser();
   const navigation = useNavigation();
   const {showToast} = useToast();
+  useEffect(() => {
+    firestore()
+      .collection('User')
+      .doc(userInfo.id)
+      .collection('Feedback')
+      .get()
+      .then(result =>
+        result.docs.forEach(el => {
+          console.log(el.id);
+        }),
+      );
+    return () => isFocused;
+  }, [userInfo.id, isFocused]);
+
   const handleNavigateToEdit = () => {
     navigation.navigate('EditMeetingInfo', {
       item: {
@@ -105,6 +117,23 @@ function MeetingSet({route}) {
       });
   };
 
+  // 미팅의 상태가
+  const setMeetingEnd = async () => {
+    if (meetingInfo.status === 'confirmed') {
+      return await firestore()
+        .collection('Meeting')
+        .doc(meetingInfo.id)
+        .update({status: 'end'})
+        .then(() => {
+          showToast('success', '미팅이 종료되었습니다.');
+        });
+    } else if (meetingInfo.status === 'end') {
+      return showToast('error', '이미 종료된 미팅입니다.');
+    } else {
+      return showToast('error', '미팅 인증을 받은 후 종료 가능합니다.');
+    }
+  };
+
   const renderByUser = () => {
     if (route.params.meetingInfo.hostId === userInfo.id) {
       return (
@@ -127,6 +156,9 @@ function MeetingSet({route}) {
               <Icon name="arrow-forward-ios" size={20} />
             </TouchableOpacity>
           ) : null}
+          <TouchableOpacity style={styles.li} onPress={setMeetingEnd}>
+            <Text style={[styles.liText]}>미팅 끝내기</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.li} onPress={handleDelete}>
             <Text style={[styles.liText, styles.deleteText]}>
               미팅 삭제하기

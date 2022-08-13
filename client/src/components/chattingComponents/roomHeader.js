@@ -20,6 +20,7 @@ function RoomHeader({title, roomInfo, setRoomInfo, setRoomInfoExist}) {
         <Text style={styles.buttonText}>{title}</Text>
       </TouchableOpacity>
       {/* <Text style={{fontWeight: 'bold', fontSize: 18}}>{title}</Text> */}
+
       {title === '채팅목록' && (
         <TouchableOpacity
           onPress={() => {

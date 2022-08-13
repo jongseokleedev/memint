@@ -121,6 +121,9 @@ export const changeJoinerToConfirmed = async (meetingId, userId) => {
     });
 };
 
+//feedback collection에 관련 정보를 추가하는 함수
+export const addFeddbackDoc = async (userId, meetingId, member) => {};
+
 /*
 //filter 조회 (peopleNum, meetDate, region)
 export const getMeetingsFiltered = async (filterField, filterValue) => {

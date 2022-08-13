@@ -2,12 +2,13 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import useUser from '../../utils/hooks/UseUser';
 
 function ChattingRoomTopTab({data}) {
   const meetingRef = useMemo(() => {
     return firestore().collection('Meeting').doc(data.id);
   }, [data]);
-
+  const user = useUser();
   const [roomData, setRoomData] = useState('');
   const navigation = useNavigation();
   const [roomStatus, setRoomStatus] = useState('');
@@ -24,6 +25,16 @@ function ChattingRoomTopTab({data}) {
   }, [meetingRef]);
 
   useEffect(() => {
+    firestore()
+      .collection('Meeting')
+      .doc(data.id)
+      .collection('Messages')
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(el => {
+          console.log(el.id);
+        });
+      });
     if (roomStatus === 'open') setRoomStatus('모집중');
     else if (roomStatus === 'full') setRoomStatus('모집완료');
     else if (roomStatus === 'fixed') setRoomStatus('확정');

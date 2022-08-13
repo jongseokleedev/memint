@@ -46,6 +46,7 @@ import EditMeetingInfo from './pages/ChattingPage/EditMeetingInfo';
 import MeetingMemberOut from './pages/ChattingPage/MeetingMemberOut';
 import Report from './pages/ChattingPage/Report';
 import MeetingConfirm from './pages/ChattingPage/MeetingConfirm';
+import firestore from '@react-native-firebase/firestore';
 
 const Stack = createNativeStackNavigator();
 const store = createStore(rootReducer);

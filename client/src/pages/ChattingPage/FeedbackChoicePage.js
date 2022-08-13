@@ -28,14 +28,16 @@ function FeedbackChoicePage({route}) {
   const {showToast} = useToast();
 
   useEffect(() => {
-    setUsers(
-      route.params.data.members
-        // .slice(1)
-        .map(el => {
-          return Object.keys(el);
-        })
-        .flat(),
-    );
+    // setUsers(
+    //   route.params.data.members
+    //     // .slice(1)
+    //     .map(el => {
+    //       return Object.keys(el);
+    //     })
+    //     .flat(),
+    // );
+    const {userInfo} = route.params;
+
     console.log(route.params.userInfo);
   }, [route]);
 
@@ -46,41 +48,26 @@ function FeedbackChoicePage({route}) {
     });
 
   return (
-    <SafeAreaView style={styles.view}>
-      <RoomHeader title="돌아가기" />
-      <View style={{borderTopWidth: 0.3, flex: 1, backgroundColor: 'pink'}}>
-        <Text style={{fontSize: 18, fontWeight: '700', marginBottom: 20}}>
-          {owner.nickName}님! 오늘의 미팅은 어떠셨나요?
-        </Text>
-        <View>
-          <Text>후기를 남길 미팅 상대를 선택해 주세요.</Text>
-          {people}
-          <BasicButton
-            text="후기 보내기"
-            size="large"
-            onPress={() => {
-              setConfirmModalVisible(true);
-            }}
-          />
-          <ConfirmModal
-            confirmModalVisible={confirmModalVisible}
-            setConfirmModalVisible={setConfirmModalVisible}
-            setEarnModalVisible={setEarnModalVisible}
-          />
-          <EarnModal
-            EarnModalVisible={earnModalVisible}
-            setEarnModalVisible={setEarnModalVisible}
-            txType="후기 작성"
-            pFunction={() => {
-              setEarnModalVisible(false);
-              showToast('basic', 'LCN + 1');
-              navigation.navigate('ChattingListPage');
-            }}
-            amount={1}
-          />
+    <View style={{flex: 1}}>
+      <SafeAreaView style={{backgroundColor: 'yellow'}}>
+        <RoomHeader title="돌아가기" />
+      </SafeAreaView>
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          <Text style={{fontSize: 15, fontWeight: '700', marginBottom: 60}}>
+            {owner.nickName}님,{'\n'}오늘의 미팅은 어떠셨나요?
+          </Text>
+          <View>
+            <Text style={{fontSize: 15, fontWeight: '700', marginBottom: 20}}>
+              후기를 남길 미팅 상대를 선택하세요.
+            </Text>
+            <Text style={{fontWeight: '200'}}>
+              최소 한 명 이상 후기를 작성해주세요.
+            </Text>
+          </View>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -135,19 +122,17 @@ function Human({id, data}) {
 }
 
 const styles = StyleSheet.create({
-  view: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
-  centeredView: {
-    justifyContent: 'center',
+  container: {
     alignItems: 'center',
-    zIndex: -1,
+    justifyContent: 'center',
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'pink',
+    borderTopWidth: 0.3,
   },
-  modalText: {
-    fontWeight: 'bold',
-    margin: 15,
-    textAlign: 'center',
+  wrapper: {
+    height: '87%',
+    width: '90%',
   },
 
   button: {
