@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,6 +7,7 @@ import {
   ActionSheetIOS,
   Platform,
   Image,
+  RefreshControl,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -14,14 +15,25 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import useUser from '../../utils/hooks/UseUser';
 import storage, {deleteObject} from '@react-native-firebase/storage';
-import {updateMeeting} from '../../lib/Meeting';
+import {getMeeting, updateMeeting} from '../../lib/Meeting';
 import BasicButton from '../../components/common/BasicButton';
 
 function MeetingConfirm({route}) {
-  const [status, setStatus] = useState('confirmed');
+  const [meetingInfo, setMeetingInfo] = useState({});
+  const [refreshing, setRefreshing] = useState(true);
   const [image, setImage] = useState(null);
   const userInfo = useUser();
-  const {meetingInfo} = route.params;
+  // const {meetingInfo} = route.params;
+
+  useEffect(() => {
+    getMeetingInfo();
+  }, []);
+
+  const getMeetingInfo = async () => {
+    const res = await getMeeting(route.params.meetingInfo.id);
+    setMeetingInfo(res.data());
+    setRefreshing(false);
+  };
   const imagePickerOption = {
     mediaType: 'photo',
     maxWidth: 768,
@@ -250,7 +262,7 @@ function MeetingConfirm({route}) {
         <BackButton />
         <Text style={styles.title}>미팅 참여 인증하기</Text>
       </View>
-      <ScrollView style={styles.wrapper}>
+      <ScrollView style={styles.wrapper} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={getMeetingInfo}/>}>
         <View style={styles.section}>
           <View style={styles.confirmTitleArea}>
             <Text style={styles.sectionTitle}>미팅 인증샷</Text>
