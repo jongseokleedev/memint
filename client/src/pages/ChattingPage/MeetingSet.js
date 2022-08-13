@@ -19,7 +19,7 @@ import useUser from '../../utils/hooks/UseUser';
 function MeetingSet({route}) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [editModal, setEditModal] = useState(false);
-
+  const isFocused = useIsFocused();
   // useEffect(() => {
   //   console.log({meetingInfo: route.params.meetingInfo});
   //   console.log({userInfo: route.params.userInfo});

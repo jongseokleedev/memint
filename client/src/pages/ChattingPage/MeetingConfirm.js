@@ -8,20 +8,24 @@ import {
   Platform,
   Image,
   RefreshControl,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import useUser from '../../utils/hooks/UseUser';
-import storage, {deleteObject} from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 import {getMeeting, updateMeeting} from '../../lib/Meeting';
 import BasicButton from '../../components/common/BasicButton';
+const window = Dimensions.get('window');
 
 function MeetingConfirm({route}) {
-  const [meetingInfo, setMeetingInfo] = useState({});
+  const [meetingInfo, setMeetingInfo] = useState(route.params.meetingInfo);
   const [refreshing, setRefreshing] = useState(true);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const userInfo = useUser();
   // const {meetingInfo} = route.params;
 
@@ -31,7 +35,7 @@ function MeetingConfirm({route}) {
 
   const getMeetingInfo = async () => {
     const res = await getMeeting(route.params.meetingInfo.id);
-    setMeetingInfo(res.data());
+    setMeetingInfo({id: res.id, ...res.data()});
     setRefreshing(false);
   };
   const imagePickerOption = {
@@ -67,31 +71,32 @@ function MeetingConfirm({route}) {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     let photoURL = null;
-    if (image) {
-      const asset = image.assets[0];
-      const extension = asset.fileName.split('.').pop(); //확장자 추출
-      const reference = storage().ref(
-        `/meeting/${meetingInfo.id}.${extension}`,
-      );
+    const asset = image.assets[0];
+    const extension = asset.fileName.split('.').pop(); //확장자 추출
+    const reference = storage().ref(`/meeting/${meetingInfo.id}.${extension}`);
 
-      if (Platform.OS === 'android') {
-        await reference.putString(asset.base64, 'base64', {
-          contentType: asset.type,
-        });
-      } else {
-        await reference.putFile(asset.uri);
-      }
-
-      photoURL = image ? await reference.getDownloadURL() : null;
-      updateMeeting(meetingInfo.id, {
-        confirmImage: photoURL,
-        confirmStatus: 'pending',
+    if (Platform.OS === 'android') {
+      await reference.putString(asset.base64, 'base64', {
+        contentType: asset.type,
       });
+    } else {
+      await reference.putFile(asset.uri);
     }
+
+    photoURL = image ? await reference.getDownloadURL() : null;
+    await updateMeeting(meetingInfo.id, {
+      confirmImage: photoURL,
+      confirmStatus: 'pending',
+    });
+    await getMeetingInfo();
+    setImage(null);
+    setLoading(false);
   };
 
   const handleSecondSubmit = async () => {
+    setLoading(true);
     const existedReference = storage().refFromURL(meetingInfo.confirmImage);
     await existedReference.delete();
     let photoURL = null;
@@ -108,10 +113,13 @@ function MeetingConfirm({route}) {
     }
 
     photoURL = image ? await reference.getDownloadURL() : null;
-    updateMeeting(meetingInfo.id, {
+    await updateMeeting(meetingInfo.id, {
       confirmImage: photoURL,
       confirmStatus: 'pending',
     });
+    await getMeetingInfo();
+    setImage(null);
+    setLoading(false);
   };
 
   const renderStatus = () => {
@@ -262,7 +270,11 @@ function MeetingConfirm({route}) {
         <BackButton />
         <Text style={styles.title}>미팅 참여 인증하기</Text>
       </View>
-      <ScrollView style={styles.wrapper} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={getMeetingInfo}/>}>
+      <ScrollView
+        style={styles.wrapper}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getMeetingInfo} />
+        }>
         <View style={styles.section}>
           <View style={styles.confirmTitleArea}>
             <Text style={styles.sectionTitle}>미팅 인증샷</Text>
@@ -294,6 +306,9 @@ function MeetingConfirm({route}) {
           </View>
         </View>
       </ScrollView>
+      {loading ? (
+        <ActivityIndicator style={styles.loading} size="large" />
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -416,6 +431,12 @@ const styles = StyleSheet.create({
   warningText: {
     fontSize: 13,
     color: '#EE404C',
+  },
+  loading: {
+    position: 'absolute',
+    top: window.height / 2.2,
+    left: window.width / 2.25,
+    zIndex: 3,
   },
 });
 

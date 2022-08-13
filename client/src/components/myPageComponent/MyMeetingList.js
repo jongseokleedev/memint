@@ -9,7 +9,6 @@ import {
   updateMeeting,
 } from '../../lib/Meeting';
 import useMeetingActions from '../../utils/hooks/UseMeetingActions';
-import EarnModal from '../common/UserInfoModal/EarnModal';
 import {getUser} from '../../lib/Users';
 import {useIsFocused} from '@react-navigation/native';
 import {useToast} from '../../utils/hooks/useToast';
@@ -91,70 +90,14 @@ function MyMeetingList({navigation, user}) {
 }
 
 function MyMeetings({item, navigation, getCreatedRoom}) {
-  const user = useUser();
-  const [editModal, setEditModal] = useState(false);
-  const [startModal, setStartModal] = useState(false);
-  const [endModal, setEndModal] = useState(false);
-  const [earnModalVisible, setEarnModalVisible] = useState(false);
-  const {showToast} = useToast();
   // const meetings = useMeeting();
   // const {saveMeeting} = useMeetingActions();
   const renderButton = () => {
-    if (item?.status === 'fixed') {
-      return (
-        <TouchableOpacity
-          style={{
-            ...styles.deleteButton,
-            ...styles.backgroundColorBlue,
-          }}
-          onPress={() => setStartModal(true)}>
-          <Text style={styles.buttonText}>미팅 시작하기</Text>
-        </TouchableOpacity>
-      );
-    } else if (item?.status === 'confirmed') {
-      return (
-        <TouchableOpacity
-          style={{
-            ...styles.deleteButton,
-            ...styles.backgroundColorBlue,
-          }}
-          onPress={() => setEndModal(true)}>
-          <Text style={styles.buttonText}>미팅 끝내기</Text>
-        </TouchableOpacity>
-      );
-    } else if (item?.status === 'end') {
+    if (item?.status === 'end') {
       return <Text style={styles.finishText}>종료된 미팅</Text>;
     }
   };
 
-  const handleMeetingStart = () => {
-    //서버에 요청
-    updateMeeting(item.id, {status: 'confirmed'});
-    changeJoinerToConfirmed(item.id, user.id);
-    getCreatedRoom();
-    //redux
-    // const updateData = meetings.map(el => {
-    //   if (el.id !== item.id) {
-    //     return el;
-    //   } else {
-    //     return {...el, status: 'confirmed'};
-    //   }
-    // });
-    // saveMeeting(updateData);
-  };
-  const handleMeetingEnd = () => {
-    //서버에 요청
-    updateMeeting(item.id, {status: 'end'});
-    getCreatedRoom();
-    // const updateData = meetings.map(el => {
-    //   if (el.id !== item.id) {
-    //     return el;
-    //   } else {
-    //     return {...el, status: 'end'};
-    //   }
-    // });
-    // saveMeeting(updateData);
-  };
   return (
     <>
       <TouchableOpacity
@@ -177,40 +120,25 @@ function MyMeetings({item, navigation, getCreatedRoom}) {
             })}
           </View>
 
-          <View style={styles.meetingInfo}>
-            <Text style={styles.details}>{item?.region}</Text>
-            <View style={styles.bar} />
+          <View style={styles.spaceBetween}>
+            <View style={styles.meetingInfo}>
+              <Text style={styles.details}>{item?.region}</Text>
+              <View style={styles.bar} />
 
-            <Text style={styles.details}>
-              {item ? handleDateInFormat(item.meetDate) : ''}
-            </Text>
-            <View style={styles.bar} />
+              <Text style={styles.details}>
+                {item ? handleDateInFormat(item.meetDate) : ''}
+              </Text>
+              <View style={styles.bar} />
 
-            <Text style={styles.details}>
-              {item?.peopleNum + ':' + item?.peopleNum}
-            </Text>
+              <Text style={styles.details}>
+                {item?.peopleNum + ':' + item?.peopleNum}
+              </Text>
+            </View>
+            {renderButton()}
           </View>
-
-          <View style={styles.spaceBetween}>{renderButton()}</View>
         </View>
 
-        <DoubleModal
-          text="미팅이 시작되었나요?"
-          nButtonText="아니오"
-          pButtonText="네"
-          modalVisible={startModal}
-          setModalVisible={setStartModal}
-          pFunction={() => {
-            setStartModal(false);
-            //earnModal 띄우기
-            //earnModal 후에는 status 변경
-            setEarnModalVisible(true);
-          }}
-          nFunction={() => {
-            setStartModal(false);
-          }}
-        />
-        <DoubleModal
+        {/* <DoubleModal
           text="미팅을 종료하시겠습니까?"
           nButtonText="아니오"
           pButtonText="네"
@@ -224,17 +152,7 @@ function MyMeetings({item, navigation, getCreatedRoom}) {
           nFunction={() => {
             setEndModal(false);
           }}
-        />
-        <EarnModal
-          EarnModalVisible={earnModalVisible}
-          setEarnModalVisible={setEarnModalVisible}
-          pFunction={() => {
-            handleMeetingStart();
-            showToast('success', '1LCN이 지급되었습니다!');
-          }}
-          amount={1}
-          txType="미팅 참여"
-        />
+        /> */}
       </TouchableOpacity>
     </>
   );
@@ -323,7 +241,7 @@ const styles = StyleSheet.create({
   spaceBetween: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   bar: {
     width: 1,
