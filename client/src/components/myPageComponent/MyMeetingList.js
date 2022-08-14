@@ -1,18 +1,7 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
-import DoubleModal from '../../components/common/DoubleModal';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
 import {handleDateInFormat} from '../../utils/common/Functions';
-import {
-  changeJoinerToConfirmed,
-  getMeeting,
-  updateMeeting,
-} from '../../lib/Meeting';
-import useMeetingActions from '../../utils/hooks/UseMeetingActions';
-import {getUser} from '../../lib/Users';
-import {useIsFocused} from '@react-navigation/native';
-import {useToast} from '../../utils/hooks/useToast';
-import useUser from '../../utils/hooks/UseUser';
 
 // function MyMeetingList({List, navigation}) {
 //   return (
@@ -28,68 +17,46 @@ import useUser from '../../utils/hooks/UseUser';
 // }
 
 function MyMeetingList({navigation, user}) {
-  // const meetingData = useMeeting(); //redux crete, join에 있는 모든 미팅 정보들
-  const [createdRoom, setCreatedRoom] = useState([]);
+  let {rooms} = useMeeting(); //redux crete, join에 있는 모든 미팅 정보들
+  const {createdrooms} = rooms;
+  // const getCreatedRoom = useCallback(async () => {
+  //   const userData = await getUser(user.id);
 
-  const getCreatedRoom = useCallback(async () => {
-    const userData = await getUser(user.id);
+  //   const data = await Promise.all(
+  //     userData.createdroomId.map(async el => {
+  //       const res = await getMeeting(el);
+  //       const host = await getUser(res.data().hostId);
+  //       return {
+  //         id: res.id,
+  //         ...res.data(),
+  //         hostInfo: host,
+  //       };
+  //     }),
+  //   );
+  //   setCreatedRoom(data);
+  // }, [user]);
 
-    const data = await Promise.all(
-      userData.createdroomId.map(async el => {
-        const res = await getMeeting(el);
-        const host = await getUser(res.data().hostId);
-        return {
-          id: res.id,
-          ...res.data(),
-          hostInfo: host,
-        };
-      }),
-    );
-    setCreatedRoom(data);
-  }, [user]);
-
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    getCreatedRoom();
-    //   setCreatedRoom(
-    //     user.createdroomId?.map(el => {
-    //       //내가 가지고 있는 아이디
-    //       const meetingInfo = meetingData.filter(meeting => {
-    //         return meeting.id === el;
-    //       });
-    //       return meetingInfo[0];
-    //     }),
-    //   );
-  }, [getCreatedRoom, isFocused]);
   return (
     <>
-      {createdRoom.length !== 0 ? (
-        createdRoom
-          .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())
-          .map((el, index) => (
-            <MyMeetings
-              item={el}
-              navigation={navigation}
-              key={index}
-              getCreatedRoom={getCreatedRoom}
-            />
-          ))
+      {createdrooms.length !== 0 ? (
+        createdrooms.map((el, index) => (
+          <MyMeetings
+            item={el}
+            navigation={navigation}
+            key={index}
+            // getCreatedRoom={getCreatedRoom}
+          />
+        ))
       ) : (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingTop: 30,
-          }}>
-          <Text style={{color: 'lightgray'}}>생성한 미팅이 없습니다.</Text>
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>생성한 미팅이 없습니다.</Text>
         </View>
       )}
     </>
   );
 }
 
-function MyMeetings({item, navigation, getCreatedRoom}) {
+function MyMeetings({item, navigation}) {
   // const meetings = useMeeting();
   // const {saveMeeting} = useMeetingActions();
   const renderButton = () => {
@@ -187,9 +154,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 27,
     paddingVertical: 22,
     height: 110,
-    borderColor: 'black',
     borderRadius: 30,
-    borderWidth: 1,
     marginHorizontal: 10,
     marginVertical: 6,
     shadowColor: '#000',
@@ -200,7 +165,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
 
-    elevation: 4,
+    elevation: 5,
   },
   titleRow: {
     flexDirection: 'row',
@@ -240,7 +205,7 @@ const styles = StyleSheet.create({
   },
   spaceBetween: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   bar: {
@@ -251,9 +216,15 @@ const styles = StyleSheet.create({
   },
 
   finishText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '500',
   },
+  emptyView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+  },
+  emptyText: {color: 'lightgray'},
 });
 
 export default MyMeetingList;

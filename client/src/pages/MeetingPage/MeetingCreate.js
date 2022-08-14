@@ -3,7 +3,6 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {
   Text,
   SafeAreaView,
-  TouchableOpacity,
   View,
   StyleSheet,
   ScrollView,
@@ -29,8 +28,8 @@ import SpendingModal from '../../components/common/UserInfoModal/SpendingModal';
 function MeetingCreate({route}) {
   const userInfo = useUser();
   const {saveInfo} = useAuthActions();
-  // const {saveMeeting} = useMeetingActions();
-  // const rooms = useMeeting();
+  const {saveMeeting} = useMeetingActions();
+  const {rooms} = useMeeting();
 
   const [submittable, setSubmittable] = useState(false);
   const [meetingInfo, setMeetingInfo] = useState({
@@ -131,6 +130,7 @@ function MeetingCreate({route}) {
       setConfirmModalVisible(true);
     }
   };
+
   //생성 요청
   const handleCreateMeeting = async () => {
     const data = {
@@ -145,18 +145,18 @@ function MeetingCreate({route}) {
         'createdroomId',
         res._documentPath._parts[1],
       );
-      // const newMeeting = await getMeeting(res._documentPath._parts[1]);
-      // saveInfo({
-      //   ...userInfo,
-      //   createdroomId: [...userInfo.createdroomId, res._documentPath._parts[1]],
-      // });
-      // saveMeeting([
-      //   ...rooms,
-      //   {
-      //     id: newMeeting.id,
-      //     ...newMeeting.data(),
-      //   },
-      // ]);
+      const newMeeting = await getMeeting(res._documentPath._parts[1]);
+      saveInfo({
+        ...userInfo,
+        createdroomId: [...userInfo.createdroomId, res._documentPath._parts[1]],
+      });
+      saveMeeting({
+        ...rooms,
+        createdrooms: [
+          {id: newMeeting.id, ...newMeeting.data()},
+          ...rooms.createdrooms,
+        ],
+      });
       setConfirmModalVisible(false);
       showToast('success', '미팅이 생성되었습니다');
       navigation.navigate('MeetingMarket');

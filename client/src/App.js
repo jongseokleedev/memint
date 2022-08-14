@@ -98,6 +98,36 @@ function App() {
       saveNFT(nfts);
 
       setMemin(...getMemin(nfts));
+      const createdrooms = await Promise.all(
+        userDetail.createdroomId.map(async el => {
+          const meetingInfo = await getMeeting(el);
+          const hostInfo = await getUser(meetingInfo.hostId);
+          return {
+            id: meetingInfo.id,
+            ...meetingInfo.data(),
+            hostInfo: {...hostInfo},
+          };
+        }),
+      );
+      const joinedrooms = await Promise.all(
+        userDetail.joinedroomId.map(async el => {
+          const meetingInfo = await getMeeting(el);
+          const hostInfo = await getUser(meetingInfo.hostId);
+          return {
+            id: meetingInfo.id,
+            ...meetingInfo.data(),
+            hostInfo: {...hostInfo},
+          };
+        }),
+      );
+      saveMeeting({
+        createdrooms: createdrooms.sort(
+          (a, b) => b.createdAt.toDate() - a.createdAt.toDate(),
+        ),
+        joinedrooms: joinedrooms.sort(
+          (a, b) => b.createdAt.toDate() - a.createdAt.toDate(),
+        ),
+      });
       // const meetingIdArray = [
       //   ...userDetail.createdroomId,
       //   ...userDetail.joinedroomId,
@@ -130,8 +160,8 @@ function App() {
         tokenAmount: userDetail.tokenAmount,
         ethAmount: userDetail.ethAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,
-        // createdroomId: userDetail.createdroomId,
-        // joinedroomId: userDetail.joinedroomId,
+        createdroomId: userDetail.createdroomId,
+        joinedroomId: userDetail.joinedroomId,
         nftProfile: userDetail.nftProfile.toString(),
         alcoholType: userProperty[0].alcoholType,
         drinkCapa: userProperty[0].drinkCapa,

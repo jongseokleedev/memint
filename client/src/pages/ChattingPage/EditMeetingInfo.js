@@ -20,13 +20,16 @@ import TagElement from '../../components/meetingComponents/TagElement';
 import DoubleModal from '../../components/common/DoubleModal';
 import {getUser, updateUserMeetingOut} from '../../lib/Users';
 import {getMeetingTags} from '../../lib/MeetingTag';
-import {deleteMeeting, updateMeeting} from '../../lib/Meeting';
+import {deleteMeeting, getMeeting, updateMeeting} from '../../lib/Meeting';
 import useUser from '../../utils/hooks/UseUser';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
+import {useMeeting} from '../../utils/hooks/UseMeeting';
+import useMeetingActions from '../../utils/hooks/UseMeetingActions';
 
 function EditMeetingInfo({route}) {
   const userInfo = useUser();
-  const {saveInfo} = useAuthActions();
+  const {rooms} = useMeeting();
+  const {saveMeeting} = useMeetingActions();
   const item = route.params.item;
   const [submittable, setSubmittable] = useState(false);
   const [meetingInfo, setMeetingInfo] = useState({
@@ -121,6 +124,7 @@ function EditMeetingInfo({route}) {
       setConfirmModalVisible(true);
     }
   };
+
   const handleUpdate = () => {
     try {
       updateMeeting(item.id, {
@@ -130,11 +134,30 @@ function EditMeetingInfo({route}) {
         region: meetingInfo.region,
         peopleNum: meetingInfo.peopleNum,
         meetingTags: meetingInfo.meetingTags,
-      });
-      setConfirmModalVisible(false);
-      showToast('success', '미팅이 수정되었습니다');
-
-      navigation.pop();
+      })
+        .then(() => {
+          return getMeeting(item.id);
+        })
+        .then(res => {
+          return getUser(res.data().hostId).then(hostInfo => {
+            return {id: item.id, ...res.data(), hostInfo: hostInfo};
+          });
+        })
+        .then(data => {
+          saveMeeting({
+            ...rooms,
+            createdrooms: [
+              data,
+              ...rooms.createdrooms.filter(el => el.id !== item.id),
+            ],
+          });
+          setConfirmModalVisible(false);
+          showToast('success', '미팅이 수정되었습니다');
+          navigation.pop();
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (e) {
       console.log(e);
     }

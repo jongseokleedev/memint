@@ -15,6 +15,9 @@ import {
 import {updateUserMeetingOut} from '../../lib/Users';
 import {useToast} from '../../utils/hooks/useToast';
 import useUser from '../../utils/hooks/UseUser';
+import {useMeeting} from '../../utils/hooks/UseMeeting';
+import useMeetingActions from '../../utils/hooks/UseMeetingActions';
+import useAuthActions from '../../utils/hooks/UseAuthActions';
 
 function MeetingSet({route}) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -28,6 +31,9 @@ function MeetingSet({route}) {
   const userInfo = useUser();
   const navigation = useNavigation();
   const {showToast} = useToast();
+  const {rooms} = useMeeting();
+  const {saveMeeting} = useMeetingActions();
+  const {saveInfo} = useAuthActions();
   useEffect(() => {
     firestore()
       .collection('User')
@@ -80,6 +86,18 @@ function MeetingSet({route}) {
         deleteMeeting(meetingInfo.id);
       })
       .then(() => {
+        saveMeeting({
+          ...rooms,
+          createdrooms: rooms.createdrooms.filter(
+            el => el.id !== meetingInfo.id,
+          ),
+        });
+        saveInfo({
+          ...userInfo,
+          createdroomId: userInfo.createdroomId.filter(
+            el => el !== meetingInfo.id,
+          ),
+        });
         showToast('success', '미팅이 삭제되었습니다.');
         setDeleteModalVisible(!deleteModalVisible);
         navigation.navigate('ChattingListPage');

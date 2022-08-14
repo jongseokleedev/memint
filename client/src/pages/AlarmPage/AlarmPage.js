@@ -15,10 +15,11 @@ import {getUser} from '../../lib/Users';
 
 import useUser from '../../utils/hooks/UseUser';
 import WalletButton from '../../components/common/WalletButton';
+import {useMeeting} from '../../utils/hooks/UseMeeting';
 
 function AlarmPage({navigation}) {
   const userInfo = useUser();
-  // const meetingData = useMeeting();
+  const {rooms} = useMeeting();
   const [alarms, setAlarms] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const isFocused = useIsFocused();
@@ -45,21 +46,33 @@ function AlarmPage({navigation}) {
       //미팅 데이터
       const dataWithMeetingInfo = await Promise.all(
         dataWithSenderInfo.map(async el => {
-          const meet = await getMeeting(el.meetingId);
-          const host = await getUser(meet.data()?.hostId);
-          if (meet.data()) {
-            return {
-              ...el,
-              meetingInfo: {
-                id: meet.id,
-                ...meet.data(),
-                hostInfo: {...host},
-              },
-            };
+          if (el.type === 'proposal') {
+            const meet = rooms.createdrooms.filter(meeting => {
+              return meeting.id === el.meetingId;
+            });
+            if (meet.length === 0) {
+              return {...el};
+            } else {
+              const host = await getUser(meet?.hostId);
+              return {...el, meetingInfo: meet[0], hostInfo: {...host}};
+            }
           } else {
-            return {
-              ...el,
-            };
+            const meet = await getMeeting(el.meetingId);
+            const host = await getUser(meet.data()?.hostId);
+            if (meet.data()) {
+              return {
+                ...el,
+                meetingInfo: {
+                  id: meet.id,
+                  ...meet.data(),
+                  hostInfo: {...host},
+                },
+              };
+            } else {
+              return {
+                ...el,
+              };
+            }
           }
         }),
       );
@@ -75,7 +88,7 @@ function AlarmPage({navigation}) {
     } catch (e) {
       console.log(e);
     }
-  }, [userInfo]);
+  }, [userInfo, rooms.createdrooms]);
 
   return (
     <SafeAreaView style={styles.view}>

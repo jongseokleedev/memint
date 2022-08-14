@@ -3,14 +3,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 
 import DoubleModal from '../../components/common/DoubleModal';
-import {
-  changeJoinerToConfirmed,
-  getMeeting,
-  updateMembersOut,
-} from '../../lib/Meeting';
+import {changeJoinerToConfirmed, getMeeting} from '../../lib/Meeting';
 import {getUser} from '../../lib/Users';
 import {handleDateInFormat} from '../../utils/common/Functions';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
+import useMeetingActions from '../../utils/hooks/UseMeetingActions';
 import {useToast} from '../../utils/hooks/useToast';
 import useUser from '../../utils/hooks/UseUser';
 import EarnModal from '../common/UserInfoModal/EarnModal';
@@ -27,6 +24,7 @@ import EarnModal from '../common/UserInfoModal/EarnModal';
 // }
 function ParticipatedMeetingList({user}) {
   const meetingData = useMeeting();
+  const {saveMeeting} = useMeetingActions();
   const [joinedRoom, setJoinedRoom] = useState([]);
   useEffect(() => {
     getJoinedRoom();
@@ -57,8 +55,9 @@ function ParticipatedMeetingList({user}) {
         };
       }),
     );
+    saveMeeting({...meetingData.rooms, joinedrooms: data});
     setJoinedRoom(data);
-  }, [user]);
+  }, [user, meetingData, saveMeeting]);
 
   return (
     <>
@@ -73,13 +72,8 @@ function ParticipatedMeetingList({user}) {
             />
           ))
       ) : (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingTop: 30,
-          }}>
-          <Text style={{color: 'lightgray'}}>참여 중인 미팅이 없습니다.</Text>
+        <View style={styles.emptyView}>
+          <Text style={styles.emptyText}>참여 중인 미팅이 없습니다.</Text>
         </View>
       )}
     </>
@@ -285,9 +279,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 27,
     paddingVertical: 22,
     height: 110,
-    borderColor: 'black',
     borderRadius: 30,
-    borderWidth: 1,
     marginHorizontal: 10,
     marginVertical: 6,
     shadowColor: '#000',
@@ -351,6 +343,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     backgroundColor: 'black',
   },
+  emptyView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+  },
+  emptyText: {color: 'lightgray'},
 });
 
 export default ParticipatedMeetingList;
