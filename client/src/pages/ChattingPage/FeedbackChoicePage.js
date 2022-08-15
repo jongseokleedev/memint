@@ -122,6 +122,7 @@ function FeedbackChoicePage({route}) {
             pFunction={() => {
               setFeedbackEnd(data.id, owner.id).then(() => {
                 showToast('success', '후기 보내기를 완료하였습니다.');
+                navigation.pop();
                 // 토큰 보상 로직 추가
               });
             }}
