@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Pressable,
   TextInput,
+  Button,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -23,6 +24,7 @@ import notgood from '../../assets/icons/notgood.png';
 import terrible from '../../assets/icons/terrible.png';
 import DoubleModal from '../../components/common/DoubleModal';
 import {sendFeedback} from '../../lib/Meeting';
+import CheckBox from '@react-native-community/checkbox';
 
 function FeedbackSendPage({route}) {
   const owner = useUser();
@@ -35,6 +37,7 @@ function FeedbackSendPage({route}) {
     receiver: person[2],
     emotion: '',
     message: '',
+    visible: true,
   });
 
   return (
@@ -125,10 +128,22 @@ function FeedbackSendPage({route}) {
               {form.message.length} / 100
             </Text>
           </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <CheckBox
+              onChange={() => {
+                setForm({
+                  ...form,
+                  visible: !form.visible,
+                });
+              }}
+            />
+            <Text style={{marginLeft: 10}}>보이지 않기</Text>
+          </View>
           <Pressable
             style={styles.confirmButton}
             onPress={() => {
-              setModalVisible(true);
+              console.log(form);
+              // setModalVisible(true);
             }}>
             <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
               후기 보내기
@@ -142,7 +157,7 @@ function FeedbackSendPage({route}) {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           pFunction={() => {
-            sendFeedback(data.id, person[2], owner.id).then(() => {
+            sendFeedback(data.id, person[2], owner.id, form).then(() => {
               showToast('success', '후기를 전송하였습니다.');
               navigation.navigate('FeedbackChoicePage', {data, userInfo});
             });

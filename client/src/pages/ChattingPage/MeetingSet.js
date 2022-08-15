@@ -147,6 +147,7 @@ function MeetingSet({route}) {
         .update({status: 'end'})
         .then(() => {
           showToast('success', '미팅이 종료되었습니다.');
+          navigation.pop();
         });
     } else if (meetingInfo.status === 'end') {
       return showToast('error', '이미 종료된 미팅입니다.');
