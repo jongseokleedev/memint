@@ -116,24 +116,31 @@ function AlarmDetail({route}) {
   };
   const renderEmotion = () => {
     let emotionText = '';
+    let image = null;
     if (alarm.emotion === 'knowmore') {
+      image = knowmore;
       emotionText = '좀 더 알고싶어요';
     } else if (alarm.emotion === 'befriend') {
+      image = befriend;
       emotionText = '친구가 되고싶어요';
     } else if (alarm.emotion === 'fallinlove') {
+      image = fallinlove;
       emotionText = '사랑에 빠졌어요';
     } else if (alarm.emotion === 'soso') {
+      image = soso;
       emotionText = '그저 그랬어요';
     } else if (alarm.emotion === 'notgood') {
+      image = notgood;
       emotionText = '다시는 안 보고 싶어요';
     } else if (alarm.emotion === 'terrible') {
+      image = terrible;
       emotionText = '불쾌했어요';
     }
 
     return (
-      <View>
-        <Image uri={alarm.emotion} style={styles.emotionIcon} />
-        <Text>{emotionText}</Text>
+      <View style={styles.emotionArea}>
+        <Image source={image} style={styles.emotionIcon} />
+        <Text style={styles.emotionText}>"{emotionText}"</Text>
       </View>
     );
   };
@@ -180,8 +187,10 @@ function AlarmDetail({route}) {
             </View>
           </View>
         </View>
+        <Text style={styles.key}>
+          {alarm.type === 'feedback' ? '후기 내용' : '메시지'}
+        </Text>
         {alarm.type === 'feedback' ? renderEmotion() : null}
-        <Text style={styles.key}>메시지</Text>
         <Text style={styles.message}>{alarm.message}</Text>
         <View>
           <Text style={styles.key}>미팅 정보</Text>
@@ -315,6 +324,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 10,
   },
+  meetingElement: {
+    fontSize: 11,
+  },
   bar: {
     width: 1,
     backgroundColor: 'gray',
@@ -341,12 +353,24 @@ const styles = StyleSheet.create({
   },
   meetingTitle: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   emotionIcon: {
     height: 30,
     width: 30,
+    color: 'black',
+    marginRight: 10,
+  },
+  emotionArea: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 15,
+    marginBottom: 5,
+  },
+  emotionText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
 
