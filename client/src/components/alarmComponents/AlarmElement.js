@@ -15,7 +15,7 @@ function AlarmElement({alarm}) {
   const handleClick = () => {
     if (!alarm.meetingInfo || alarm.type === 'banned') {
       return;
-    } else if (alarm.type === 'proposal') {
+    } else if (alarm.type === 'proposal' || alarm.type === 'feedback') {
       navigation.navigate('AlarmDetail', {
         alarm,
       });
@@ -27,6 +27,8 @@ function AlarmElement({alarm}) {
   const renderByType = () => {
     if (alarm.type === 'banned') {
       return '미팅방에서 강퇴당하셨습니다!';
+    } else if (alarm.type === 'feedback') {
+      return `${alarm.senderInfo?.nickName}님이 후기를 보내셨습니다!`;
     } else if (alarm.type === 'accept') {
       return `${alarm.senderInfo?.nickName}님이 신청을 수락했습니다!`;
     } else if (alarm.type === 'proposal') {

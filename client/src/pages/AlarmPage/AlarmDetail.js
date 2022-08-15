@@ -22,6 +22,12 @@ import {updateUserMeetingIn} from '../../lib/Users';
 import {handleBirth, handleDateInFormat} from '../../utils/common/Functions';
 import DoubleModal from '../../components/common/DoubleModal';
 import UserInfoModal from '../../components/common/UserInfoModal';
+import knowmore from '../../assets/icons/knowmore.png';
+import befriend from '../../assets/icons/befriend.png';
+import fallinlove from '../../assets/icons/fallinlove.png';
+import soso from '../../assets/icons/soso.png';
+import notgood from '../../assets/icons/notgood.png';
+import terrible from '../../assets/icons/terrible.png';
 
 function AlarmDetail({route}) {
   const userInfo = useUser();
@@ -34,11 +40,11 @@ function AlarmDetail({route}) {
 
   const [userId, setUserId] = useState('');
 
-  const checkIsVisible = userId => {
+  const checkIsVisible = user => {
     // console.log({userInfo})
     // console.log(visibleList)
     if (!visibleList) return false;
-    if (visibleList.indexOf(userId) !== -1) {
+    if (visibleList.indexOf(user) !== -1) {
       return true;
     }
     return false;
@@ -108,6 +114,29 @@ function AlarmDetail({route}) {
       return <></>;
     }
   };
+  const renderEmotion = () => {
+    let emotionText = '';
+    if (alarm.emotion === 'knowmore') {
+      emotionText = '좀 더 알고싶어요';
+    } else if (alarm.emotion === 'befriend') {
+      emotionText = '친구가 되고싶어요';
+    } else if (alarm.emotion === 'fallinlove') {
+      emotionText = '사랑에 빠졌어요';
+    } else if (alarm.emotion === 'soso') {
+      emotionText = '그저 그랬어요';
+    } else if (alarm.emotion === 'notgood') {
+      emotionText = '다시는 안 보고 싶어요';
+    } else if (alarm.emotion === 'terrible') {
+      emotionText = '불쾌했어요';
+    }
+
+    return (
+      <View>
+        <Image uri={alarm.emotion} style={styles.emotionIcon} />
+        <Text>{emotionText}</Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -151,6 +180,7 @@ function AlarmDetail({route}) {
             </View>
           </View>
         </View>
+        {alarm.type === 'feedback' ? renderEmotion() : null}
         <Text style={styles.key}>메시지</Text>
         <Text style={styles.message}>{alarm.message}</Text>
         <View>
@@ -178,7 +208,7 @@ function AlarmDetail({route}) {
           </TouchableOpacity>
         </View>
 
-        {/*         
+        {/*
         {alarm.meetingInfo.members.filter(
           el =>
             el === {[alarm.sender]: 'accepted'} ||
@@ -201,8 +231,7 @@ function AlarmDetail({route}) {
             </View>
           </>
         )} */}
-
-        {renderAcceptedStatus()}
+        {alarm.type === 'proposal' ? renderAcceptedStatus() : null}
       </View>
       <DoubleModal
         text="수락하시겠습니까?"
@@ -314,6 +343,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  emotionIcon: {
+    height: 30,
+    width: 30,
   },
 });
 
