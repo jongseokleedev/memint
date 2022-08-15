@@ -25,6 +25,7 @@ import terrible from '../../assets/icons/terrible.png';
 import DoubleModal from '../../components/common/DoubleModal';
 import {sendFeedback} from '../../lib/Meeting';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import firestore from '@react-native-firebase/firestore';
 
 function FeedbackSendPage({route}) {
   const owner = useUser();
@@ -169,7 +170,22 @@ function FeedbackSendPage({route}) {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           pFunction={() => {
-            sendFeedback(data.id, person[2], owner.id, form).then(() => {
+            sendFeedback(data.id, person[2], owner.id, form).then(async () => {
+              if (form.visible === true) {
+                console.log('good');
+                await firestore()
+                  .collection('User')
+                  .doc(person[2])
+                  .collection('Alarm')
+                  .add({
+                    type: 'feedback',
+                    sender: owner.id,
+                    message: form.message,
+                    createdAt: firestore.Timestamp.now(),
+                    meetingId: data.id,
+                    emotion: form.emotion,
+                  });
+              }
               showToast('success', '후기를 전송하였습니다.');
               navigation.navigate('FeedbackChoicePage', {data, userInfo});
             });
