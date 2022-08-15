@@ -136,7 +136,6 @@ function FeedbackSendPage({route}) {
             }}>
             <Pressable
               onPress={() => {
-                console.log(form);
                 setForm({
                   ...form,
                   visible: !form.visible,
@@ -146,7 +145,7 @@ function FeedbackSendPage({route}) {
                 style={{opacity: 1}}
                 name="check-circle-outline"
                 size={30}
-                color={form.visible ? 'black' : 'lightgray'}
+                color={form.visible ? 'lightgray' : 'black'}
               />
             </Pressable>
             <Text style={{marginLeft: 10, fontSize: 15, fontWeight: '600'}}>
