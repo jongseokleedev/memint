@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackButton from '../../components/common/BackButton';
 import DoubleModal from '../../components/common/DoubleModal';
 import firestore from '@react-native-firebase/firestore';
-import {useIsFocused} from '@react-navigation/native';
 import {
   deleteMeeting,
   updateMeeting,
@@ -141,7 +140,7 @@ function MeetingSet({route}) {
 
   // 미팅의 상태가
   const setMeetingEnd = async () => {
-    if (meetingInfo.status === 'confirmed') {
+    if (route.params.meetingStatus === 'confirmed') {
       return await firestore()
         .collection('Meeting')
         .doc(meetingInfo.id)

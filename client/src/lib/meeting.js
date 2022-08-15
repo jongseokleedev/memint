@@ -121,8 +121,76 @@ export const changeJoinerToConfirmed = async (meetingId, userId) => {
     });
 };
 
-//feedback collection에 관련 정보를 추가하는 함수
-export const addFeddbackDoc = async (userId, meetingId, member) => {};
+// Feedback collection에 관련 정보를 추가하는 함수
+export const addFeedbackDoc = async (userId, meetingId, member) => {
+  return await firestore()
+    .collection('User')
+    .doc(userId)
+    .collection('Feedback')
+    .doc(meetingId)
+    .get()
+    .then(async result => {
+      const others = member
+        .filter(el => {
+          return el[2] !== userId;
+        })
+        .reduce((acc, cur) => {
+          return {...acc, [cur[2]]: false};
+        }, 0);
+      // user의 Feedback collection에 meetingId와 같은 Id를 가진 document가 있는지 확인한다.
+
+      // 없다면, 아직 feedback 페이지에 들어가지 않았다는 의미이므로, document를 만들어준다.
+      // 그 형식은 {
+      //    completed : false
+      //    (나를 제외한) user1Id : false
+      //    (나를 제외한) user2Id : false
+      //    ...
+      // } 으로 구성된다.
+      // 이후 각각의 user에게 feedback을 전송하면 userId : true 가 되고, 최종 완료를 누르면 meetingId : true가 된다.
+      if (result.data() === undefined) {
+        return await firestore()
+          .collection('User')
+          .doc(userId)
+          .collection('Feedback')
+          .doc(meetingId)
+          .set({
+            completed: false,
+            ...others,
+          })
+          .then(() => {
+            return 'qualified';
+          });
+      }
+
+      // 있다면, completed : true / false 인지 확인하고 false이면 qualified, true이면 unqulified를 리턴한다.
+      else {
+        if (result.data().completed === false) {
+          return 'qualified';
+        } else {
+          return 'unqulified';
+        }
+      }
+    });
+};
+
+export const sendFeedback = (meetingId, receiver, owner) => {
+  // receiver에게 보내는 로직 추가
+  return userCollection
+    .doc(owner)
+    .collection('Feedback')
+    .doc(meetingId)
+    .update({
+      [receiver]: true,
+    });
+};
+
+export const setFeedbackEnd = (meetingId, owner) => {
+  return userCollection
+    .doc(owner)
+    .collection('Feedback')
+    .doc(meetingId)
+    .update({completed: true});
+};
 
 /*
 //filter 조회 (peopleNum, meetDate, region)

@@ -5,14 +5,17 @@ import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
 import {useNavigation} from '@react-navigation/native';
 import {useToast} from '../../utils/hooks/useToast';
+import {addFeedbackDoc} from '../../lib/Meeting';
 const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
 
 function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   const [states, setStates] = useState('');
+  const [meetingStatus, setMeetingStatus] = useState('');
   const [people, setPeople] = useState('');
   const [userInfo, setUserInfo] = useState('');
   const navigation = useNavigation();
   const {showToast} = useToast();
+  const user = useUser();
   const getIsFixed = useMemo(
     () =>
       firestore()
@@ -22,6 +25,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
           if (result.data() === undefined) {
             navigation.navigate('MeetingMarket');
           } else {
+            setMeetingStatus(result.data().status);
             setStates(
               result
                 .data()
@@ -91,11 +95,16 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
           </Pressable>
           <Pressable
             onPress={() => {
-              console.log(chatInfo);
-              if (chatInfo.status === 'end') {
-                navigation.navigate('FeedbackChoicePage', {
-                  data: chatInfo,
-                  userInfo,
+              if (meetingStatus === 'end') {
+                addFeedbackDoc(user.id, chatInfo.id, userInfo).then(result => {
+                  if (result === 'qualified') {
+                    navigation.navigate('FeedbackChoicePage', {
+                      data: chatInfo,
+                      userInfo,
+                    });
+                  } else {
+                    showToast('error', '이미 후기를 작성하셨습니다.');
+                  }
                 });
               } else {
                 showToast('error', '미팅이 끝난 후 후기 작성이 가능합니다.');
@@ -125,6 +134,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
             navigation.navigate('MeetingSet', {
               meetingInfo: chatInfo,
               userInfo,
+              meetingStatus,
             });
           }}>
           <Icon name="settings" size={35} color="black" />

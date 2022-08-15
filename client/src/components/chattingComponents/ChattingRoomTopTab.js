@@ -25,24 +25,12 @@ function ChattingRoomTopTab({data}) {
   }, [meetingRef]);
 
   useEffect(() => {
-    firestore()
-      .collection('Meeting')
-      .doc(data.id)
-      .collection('Messages')
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(el => {
-          console.log(el.id);
-        });
-      });
     if (roomStatus === 'open') setRoomStatus('모집중');
     else if (roomStatus === 'full') setRoomStatus('모집완료');
     else if (roomStatus === 'fixed') setRoomStatus('확정');
     else if (roomStatus === 'confirmed') setRoomStatus('현장확인');
     else if (roomStatus === 'end') setRoomStatus('미팅종료');
   }, [roomStatus]);
-
-  // console.log(data);
 
   return (
     <View style={styles.container}>

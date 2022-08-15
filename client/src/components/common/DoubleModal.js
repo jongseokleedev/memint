@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     margin: 15,
     textAlign: 'center',
+    lineHeight: 20,
   },
   backgroudDim: {
     flex: 1,
