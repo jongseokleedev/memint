@@ -5,9 +5,11 @@ const alarmCollection = firestore().collection('Alarm');
 const userCollection = firestore().collection('User');
 //userId로 모든 알림 조회
 export const getAlarmsById = async userId => {
-  const res = await getUser(userId);
-  if (res.alarms) return res.alarms;
-  else return [];
+  const res = await userCollection.doc(userId).collection('Alarm').get();
+
+  return res.docs.map(el => {
+    return el.data();
+  });
 };
 
 // //alarmId로 알림 조회
@@ -18,41 +20,61 @@ export const getAlarmsById = async userId => {
 //미팅 신청 알림 생성
 //sender, receiver, meetingId, message
 export const createMeetingProposal = ({...data}) => {
-  return userCollection.doc(data.receiver).update({
-    alarms: firestore.FieldValue.arrayUnion({
-      type: 'proposal',
-      sender: data.sender,
-      meetingId: data.meetingId,
-      message: data.message,
-      createdAt: firestore.Timestamp.now(),
-      complete: false,
-    }),
+  // return userCollection.doc(data.receiver).update({
+  //   alarms: firestore.FieldValue.arrayUnion({
+  //     type: 'proposal',
+  //     sender: data.sender,
+  //     meetingId: data.meetingId,
+  //     message: data.message,
+  //     createdAt: firestore.Timestamp.now(),
+  //     complete: false,
+  //   }),
+  // });
+  return userCollection.doc(data.receiver).collection('Alarm').add({
+    type: 'proposal',
+    sender: data.sender,
+    meetingId: data.meetingId,
+    message: data.message,
+    createdAt: firestore.Timestamp.now(),
+    complete: false,
   });
 };
 
 //미팅 수락 알림 생성
 //sender, receiver, meetingId
 export const createMeetingAccept = ({...data}) => {
-  return userCollection.doc(data.receiver).update({
-    alarms: firestore.FieldValue.arrayUnion({
-      type: 'accept',
-      sender: data.sender,
-      meetingId: data.meetingId,
-      createdAt: firestore.Timestamp.now(),
-    }),
+  // return userCollection.doc(data.receiver).update({
+  //   alarms: firestore.FieldValue.arrayUnion({
+  //     type: 'accept',
+  //     sender: data.sender,
+  //     meetingId: data.meetingId,
+  //     createdAt: firestore.Timestamp.now(),
+  //   }),
+  // });
+  return userCollection.doc(data.receiver).collection('Alarm').add({
+    type: 'accept',
+    sender: data.sender,
+    meetingId: data.meetingId,
+    createdAt: firestore.Timestamp.now(),
   });
 };
 
 //미팅 퇴장 알림 생성
 //sender, receiver, meetingId
 export const createMeetingBanned = data => {
-  return userCollection.doc(data.receiver).update({
-    alarms: firestore.FieldValue.arrayUnion({
-      type: 'banned',
-      sender: data.sender,
-      meetingId: data.meetingId,
-      createdAt: firestore.Timestamp.now(),
-    }),
+  // return userCollection.doc(data.receiver).update({
+  //   alarms: firestore.FieldValue.arrayUnion({
+  //     type: 'banned',
+  //     sender: data.sender,
+  //     meetingId: data.meetingId,
+  //     createdAt: firestore.Timestamp.now(),
+  //   }),
+  // });
+  return userCollection.doc(data.receiver).collection('Alarm').add({
+    type: 'banned',
+    sender: data.sender,
+    meetingId: data.meetingId,
+    createdAt: firestore.Timestamp.now(),
   });
 };
 
