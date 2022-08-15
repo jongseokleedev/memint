@@ -55,9 +55,9 @@ function ParticipatedMeetingList({user}) {
         };
       }),
     );
-    saveMeeting({...meetingData.rooms, joinedrooms: data});
+    // saveMeeting({...meetingData.rooms, joinedrooms: data});
     setJoinedRoom(data);
-  }, [user, meetingData, saveMeeting]);
+  }, [user]);
 
   return (
     <>
