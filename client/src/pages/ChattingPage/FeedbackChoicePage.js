@@ -11,9 +11,6 @@ import {
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
-import ConfirmModal from '../../components/chattingComponents/feedback/ConfirmModal';
-import BackButton from '../../components/common/BackButton';
-import {getUser} from '../../lib/Users';
 import useUser from '../../utils/hooks/UseUser';
 import EarnModal from '../../components/common/UserInfoModal/EarnModal';
 import {useToast} from '../../utils/hooks/useToast';
@@ -22,7 +19,6 @@ import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
 import {setFeedbackEnd} from '../../lib/Meeting';
 import DoubleModal from '../../components/common/DoubleModal';
-const person = require('./dummydata/images/person.png');
 
 function FeedbackChoicePage({route}) {
   const isFocused = useIsFocused();
@@ -34,6 +30,7 @@ function FeedbackChoicePage({route}) {
   const navigation = useNavigation();
   const {showToast} = useToast();
   const [other, setOther] = useState('');
+  const [confirmable, setConfirmable] = useState(true);
   const {data, userInfo} = route.params;
 
   useEffect(() => {
@@ -51,6 +48,14 @@ function FeedbackChoicePage({route}) {
           .map(el => {
             return [...el, result.data()[el[2]]];
           });
+
+        if (
+          other.filter(el => {
+            return el[4] === true;
+          }).length === 0
+        ) {
+          setConfirmable(false);
+        }
 
         setOther(
           other.map((el, idx) => {
@@ -99,7 +104,6 @@ function FeedbackChoicePage({route}) {
           </View>
           <View
             style={{
-              justifyContent: 'space-between',
               flex: 1,
             }}>
             {other && other}
@@ -120,11 +124,14 @@ function FeedbackChoicePage({route}) {
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             pFunction={() => {
-              setFeedbackEnd(data.id, owner.id).then(() => {
-                showToast('success', '후기 보내기를 완료하였습니다.');
-                navigation.pop();
-                // 토큰 보상 로직 추가
-              });
+              confirmable
+                ? setFeedbackEnd(data.id, owner.id).then(() => {
+                    showToast('success', '후기 보내기를 완료하였습니다.');
+                    navigation.pop();
+                    // 토큰 보상 로직 추가
+                  })
+                : setModalVisible(!modalVisible);
+              showToast('error', '한 명 이상의 후기를 작성해주세요.');
             }}
             nFunction={() => {
               setModalVisible(!modalVisible);
