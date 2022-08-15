@@ -175,6 +175,7 @@ export const addFeedbackDoc = async (userId, meetingId, member) => {
 
 export const sendFeedback = async (meetingId, receiver, owner, form) => {
   if (form.visible === true) {
+    console.log('good');
     await userCollection.doc(receiver).collection('Alarm').add({
       type: 'feedback',
       sender: owner,

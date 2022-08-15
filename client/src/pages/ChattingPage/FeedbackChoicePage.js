@@ -138,6 +138,7 @@ function FeedbackChoicePage({route}) {
 function Human({person, meetingId, data, userInfo}) {
   const navigation = useNavigation();
   const {showToast} = useToast();
+
   return (
     <View
       style={{

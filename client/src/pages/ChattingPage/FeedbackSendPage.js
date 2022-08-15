@@ -24,7 +24,7 @@ import notgood from '../../assets/icons/notgood.png';
 import terrible from '../../assets/icons/terrible.png';
 import DoubleModal from '../../components/common/DoubleModal';
 import {sendFeedback} from '../../lib/Meeting';
-import CheckBox from '@react-native-community/checkbox';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function FeedbackSendPage({route}) {
   const owner = useUser();
@@ -128,22 +128,35 @@ function FeedbackSendPage({route}) {
               {form.message.length} / 100
             </Text>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <CheckBox
-              onChange={() => {
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 7,
+            }}>
+            <Pressable
+              onPress={() => {
+                console.log(form);
                 setForm({
                   ...form,
                   visible: !form.visible,
                 });
-              }}
-            />
-            <Text style={{marginLeft: 10}}>보이지 않기</Text>
+              }}>
+              <Icon
+                style={{opacity: 1}}
+                name="check-circle-outline"
+                size={30}
+                color={form.visible ? 'black' : 'lightgray'}
+              />
+            </Pressable>
+            <Text style={{marginLeft: 10, fontSize: 15, fontWeight: '600'}}>
+              상대방에게 후기 보이지 않기
+            </Text>
           </View>
           <Pressable
             style={styles.confirmButton}
             onPress={() => {
-              console.log(form);
-              // setModalVisible(true);
+              setModalVisible(true);
             }}>
             <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
               후기 보내기
@@ -239,7 +252,7 @@ const styles = StyleSheet.create({
     tintColor: '#AEC0EB',
   },
   message: {
-    marginTop: 45,
+    marginTop: 30,
     width: '100%',
     height: 150,
   },
