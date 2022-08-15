@@ -41,6 +41,15 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
     [chatInfo],
   );
 
+  const handleNavigateToConfirm = () => {
+    if (chatInfo.status === 'open' || chatInfo.status === 'full') {
+      showToast('error', '미팅 확정 후 인증이 가능합니다');
+      return;
+    } else {
+      navigation.navigate('MeetingConfirm', {meetingInfo: chatInfo});
+    }
+  };
+
   useEffect(() => {
     getIsFixed;
     const ids = Object.keys(userDetail);
@@ -84,9 +93,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
         <View style={{width: '90%'}}>
           <Pressable
             style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}
-            onPress={() => {
-              navigation.navigate('MeetingConfirm', {meetingInfo: chatInfo});
-            }}>
+            onPress={handleNavigateToConfirm}>
             <Icon name="photo-camera" size={25} color="black" />
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
               {' '}
