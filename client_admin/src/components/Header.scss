@@ -1,0 +1,9 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  .navbar {
+    span {
+      font-weight: bold;
+    }
+  }
+}
