@@ -46,33 +46,21 @@ function AlarmPage({navigation}) {
       //미팅 데이터
       const dataWithMeetingInfo = await Promise.all(
         dataWithSenderInfo.map(async el => {
-          if (el.type === 'proposal') {
-            const meet = rooms.createdrooms.filter(meeting => {
-              return meeting.id === el.meetingId;
-            });
-            if (meet.length === 0) {
-              return {...el};
-            } else {
-              const host = await getUser(meet?.hostId);
-              return {...el, meetingInfo: meet[0], hostInfo: {...host}};
-            }
+          const meet = await getMeeting(el.meetingId);
+          const host = await getUser(meet.data()?.hostId);
+          if (meet.data()) {
+            return {
+              ...el,
+              meetingInfo: {
+                id: meet.id,
+                ...meet.data(),
+                hostInfo: {...host},
+              },
+            };
           } else {
-            const meet = await getMeeting(el.meetingId);
-            const host = await getUser(meet.data()?.hostId);
-            if (meet.data()) {
-              return {
-                ...el,
-                meetingInfo: {
-                  id: meet.id,
-                  ...meet.data(),
-                  hostInfo: {...host},
-                },
-              };
-            } else {
-              return {
-                ...el,
-              };
-            }
+            return {
+              ...el,
+            };
           }
         }),
       );
@@ -88,7 +76,7 @@ function AlarmPage({navigation}) {
     } catch (e) {
       console.log(e);
     }
-  }, [userInfo, rooms.createdrooms]);
+  }, [userInfo]);
 
   return (
     <SafeAreaView style={styles.view}>
