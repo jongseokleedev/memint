@@ -5,7 +5,7 @@ const {
 	LCNToKlay,
 	toOffChain,
 	toOnChain,
-	transferETH,
+	transferKlay,
 	transferLCN,
 	getBalance,
 } = require("./walletCtrl");
@@ -18,7 +18,7 @@ wallet.route("/toOffChain").post(toOffChain);
 
 wallet.route("/toOnChain").post(toOnChain);
 
-wallet.route("/transferETH").post(transferETH);
+wallet.route("/transferKlay").post(transferKlay);
 
 wallet.route("/transferLCN").post(transferLCN);
 

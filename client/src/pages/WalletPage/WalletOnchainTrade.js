@@ -17,18 +17,18 @@ import DoubleModal from '../../components/common/DoubleModal';
 import {useToast} from '../../utils/hooks/useToast';
 import useUser from '../../utils/hooks/UseUser';
 import {getUser} from '../../lib/Users';
-import {ETHToLCN, LCNToETH} from '../../lib/api/wallet';
+import {KlayToLCN, LCNToKlay} from '../../lib/api/wallet';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
-import {getOnchainEthLog} from '../../lib/OnchainEthLog';
+import {getOnchainKlayLog} from '../../lib/OnchainKlayLog';
 import {getOnchainTokenLog} from '../../lib/OnchainTokenLog';
 import useOnchainActions from '../../utils/hooks/UseOnchainActions';
 
 const WalletOnchainTrade = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const {showToast} = useToast();
-  const [fromEth, setFromEth] = useState(true);
+  const [fromKlay, setFromKlay] = useState(true);
   const userInfo = useUser();
-  const {addEthLog, addLcnLog} = useOnchainActions();
+  const {addKlayLog, addLcnLog} = useOnchainActions();
   const {updateTokenInfo} = useAuthActions();
   const [amount, setAmount] = useState({
     fromAmount: '',
@@ -39,28 +39,28 @@ const WalletOnchainTrade = () => {
     setAmount({
       ...amount,
       [name]: Number(value),
-      toAmount: fromEth ? Number(value) * 1000 : Number(value) / 1000,
+      toAmount: fromKlay ? Number(value) * 10 : Number(value) / 10,
     });
   };
-  const transferETHToLCN = async () => {
+  const transferKlayToLCN = async () => {
     const body = {
       id: userInfo.id,
-      ethAmount: amount.fromAmount,
+      klayAmount: amount.fromAmount,
     };
     try {
-      return await ETHToLCN(body);
+      return await KlayToLCN(body);
     } catch (e) {
       console.log(e);
     }
   };
 
-  const transferLCNToETH = async () => {
+  const transferLCNToKlay = async () => {
     const body = {
       id: userInfo.id,
       tokenAmount: amount.fromAmount,
     };
     try {
-      return await LCNToETH(body);
+      return await LCNToKlay(body);
     } catch (e) {
       console.log(e);
     }
@@ -73,15 +73,15 @@ const WalletOnchainTrade = () => {
         <LargeLcnButton
           amount={amount.fromAmount}
           setAmount={createChangeAmountHandler('fromAmount')}
-          balance={fromEth ? userInfo.ethAmount : userInfo.onChainTokenAmount}
+          balance={fromKlay ? userInfo.klayAmount : userInfo.onChainTokenAmount}
           width={330}
           height={110}
           margin={[30, 0, 30, 0]}
           text="From"
-          content={fromEth ? 'ETH' : 'LCN'}
+          content={fromKlay ? 'KLAY' : 'LCN'}
           //   backgroundColor={'lightblue'}
         />
-        <TouchableOpacity onPress={() => setFromEth(!fromEth)}>
+        <TouchableOpacity onPress={() => setFromKlay(!fromKlay)}>
           <Icon name="autorenew" size={50} />
         </TouchableOpacity>
         <SmallLcnButton
@@ -90,7 +90,7 @@ const WalletOnchainTrade = () => {
           height={110}
           margin={[30, 0, 0, 0]}
           text="To (Estimated)"
-          content={fromEth ? 'LCN' : 'ETH'}
+          content={fromKlay ? 'LCN' : 'KLAY'}
         />
         <BasicButton
           margin={[80, 0, 0, 0]}
@@ -113,23 +113,23 @@ const WalletOnchainTrade = () => {
           setModalVisible(false);
         }}
         pFunction={() => {
-          fromEth
-            ? transferETHToLCN().then(result => {
+          fromKlay
+            ? transferKlayToLCN().then(result => {
                 console.log(result.data);
                 if (result.data.message === 'success') {
                   showToast('success', '토큰 교환이 완료되었습니다!');
                   getUser(userInfo.id).then(userDetail => {
                     updateTokenInfo({
                       tokenAmount: Number(userDetail.tokenAmount),
-                      ethAmount: Number(result.data.ETHBalance),
+                      klayAmount: Number(result.data.KlayBalance),
                       onChainTokenAmount: Number(result.data.LCNBalance),
                     });
-                    getOnchainEthLog(userInfo.id).then(res => {
+                    getOnchainKlayLog(userInfo.id).then(res => {
                       console.log({res});
                       const logs = res.docs.map(el => {
                         return {...el.data()};
                       });
-                      addEthLog(logs);
+                      addKlayLog(logs);
                     });
                     getOnchainTokenLog(userInfo.id).then(res => {
                       console.log({res});
@@ -141,22 +141,22 @@ const WalletOnchainTrade = () => {
                   });
                 }
               })
-            : transferLCNToETH().then(result => {
+            : transferLCNToKlay().then(result => {
                 console.log(result.data);
                 if (result.data.message === 'success') {
                   showToast('success', '토큰 교환이 완료되었습니다!');
                   getUser(userInfo.id).then(userDetail => {
                     updateTokenInfo({
                       tokenAmount: Number(userDetail.tokenAmount),
-                      ethAmount: Number(result.data.ETHBalance),
+                      klayAmount: Number(result.data.KlayBalance),
                       onChainTokenAmount: Number(result.data.LCNBalance),
                     });
-                    getOnchainEthLog(userInfo.id).then(res => {
+                    getOnchainKlayLog(userInfo.id).then(res => {
                       console.log({res});
                       const logs = res.docs.map(el => {
                         return {...el.data()};
                       });
-                      addEthLog(logs);
+                      addKlayLog(logs);
                     });
                     getOnchainTokenLog(userInfo.id).then(res => {
                       console.log({res});

@@ -15,7 +15,7 @@ function HistoryButton({onPress, time, balanceChange, txHash, content}) {
   return (
     <TouchableOpacity
       onPress={() => {
-        Linking.openURL(`https://rinkeby.etherscan.io/tx/${txHash}`);
+        Linking.openURL(`https://baobab.scope.klaytn.com/tx/${txHash}`);
       }}>
       <View style={[styles.button]}>
         <View style={styles.contentWrapper}>

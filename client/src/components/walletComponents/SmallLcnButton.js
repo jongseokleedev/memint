@@ -13,7 +13,7 @@ function SmallLcnButton({
   backgroundColor,
   content,
 }) {
-  const imgSrc = content === 'ETH' ? ethIcon : lovechainIcon;
+  const imgSrc = content === 'KLAY' ? klayIcon : lovechainIcon;
   const [marginTop, marginRight, marginBottom, marginLeft] = margin;
   return (
     <View

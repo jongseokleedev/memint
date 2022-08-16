@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import WalletAccountElement from '../../components/walletComponents/WalletAccountElement';
-import WalletEthHistory from '../../components/walletComponents/WalletEthHistory';
+import WalletKlayHistory from '../../components/walletComponents/WalletKlayHistory';
 import WalletLcnHistory from '../../components/walletComponents/WalletLcnHistory';
 import SingleModal from '../../components/common/SingleModal';
 import WalletCustomModal from '../../components/walletComponents/WalletCustomModal';
 import {useToast} from '../../utils/hooks/useToast';
 import useUser from '../../utils/hooks/UseUser';
-import ethIcon from '../../assets/icons/ethereum.png';
+import klayIcon from '../../assets/icons/klaytn-klay-logo.png';
 import lovechainIcon from '../../assets/icons/lovechain.png';
 const WalletOnchainMain = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,20 +34,20 @@ const WalletOnchainMain = ({navigation}) => {
     navigation.navigate('WalletOnchainTrade');
   };
   const imgSrc =
-    currentTab === 'ETH'
-      ? ethIcon
+    currentTab === 'KLAY'
+      ? klayIcon
       : currentTab === 'LCN'
       ? lovechainIcon
-      : ethIcon;
+      : klayIcon;
   const ticker =
-    currentTab === 'ETH' ? 'ETH' : currentTab === 'LCN' ? 'LCN' : 'ETH';
+    currentTab === 'KLAY' ? 'KLAY' : currentTab === 'LCN' ? 'LCN' : 'KLAY';
   const currentBalance =
-    currentTab === 'ETH'
-      ? Math.round((userInfo.ethAmount + Number.EPSILON) * 10000) / 10000
+    currentTab === 'KLAY'
+      ? Math.round((userInfo.klayAmount + Number.EPSILON) * 10000) / 10000
       : currentTab === 'LCN'
       ? Math.round((userInfo.onChainTokenAmount + Number.EPSILON) * 10000) /
         10000
-      : Math.round((userInfo.ethAmount + Number.EPSILON) * 10000) / 10000;
+      : Math.round((userInfo.klayAmount + Number.EPSILON) * 10000) / 10000;
   const copyToClipboard = text => {
     Clipboard.setString(text);
   };
@@ -107,18 +107,18 @@ const WalletOnchainMain = ({navigation}) => {
           onPress={() => setCurrentTab('account')}>
           <Text style={styles.walletText}>Wallet Account</Text>
         </TouchableOpacity>
-        {currentTab === 'ETH' ? (
+        {currentTab === 'KLAY' ? (
           <View style={styles.contentContainer}>
-            <WalletEthHistory />
+            <WalletKlayHistory />
           </View>
         ) : currentTab === 'LCN' ? (
           <WalletLcnHistory />
         ) : (
           <View style={styles.contentContainer}>
             <WalletAccountElement
-              content="ETH"
+              content="KLAY"
               balance={
-                Math.round((userInfo.ethAmount + Number.EPSILON) * 10000) /
+                Math.round((userInfo.klayAmount + Number.EPSILON) * 10000) /
                 10000
               }
               onPress={setCurrentTab}
@@ -136,7 +136,7 @@ const WalletOnchainMain = ({navigation}) => {
         )}
       </View>
       <SingleModal
-        text="Recieve ETH"
+        text="Recieve KLAY"
         buttonText="주소 복사하기"
         body={
           <View style={styles.address}>
@@ -156,7 +156,7 @@ const WalletOnchainMain = ({navigation}) => {
         setModalVisible={setTransferModalVisible}
         nFunction={() => {
           setTransferModalVisible(false);
-          navigation.navigate('WalletEthTransfer');
+          navigation.navigate('WalletKlayTransfer');
         }}
         pFunction={() => {
           setTransferModalVisible(false);

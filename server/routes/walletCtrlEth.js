@@ -14,7 +14,7 @@ const firestore = require("firebase-admin/firestore");
 // 토큰 가격은 0.001eth === 1LCN으로 고정한 상태로 진행한다.
 const updateEthAndOnchainToken = async (id, ETHBalance, LCNBalance) => {
 	await app.db.collection("User").doc(id).update({
-		ethAmount: ETHBalance,
+		klayAmount: ETHBalance,
 		onChainTokenAmount: LCNBalance,
 	});
 };
@@ -35,7 +35,7 @@ const updateOnchainToken = async (id, LCNBalance) => {
 const updateEth = async (id, ETHBalance) => {
 	console.log({ id, ETHBalance });
 	await app.db.collection("User").doc(id).update({
-		ethAmount: ETHBalance,
+		klayAmount: ETHBalance,
 	});
 };
 
@@ -55,7 +55,7 @@ const createLcnOnTxLog = async (id, txType, txHash) => {
 };
 
 const ETHToLCN = async (req, res) => {
-	const { id, ethAmount } = req.body;
+	const { id, klayAmount } = req.body;
 	const doc = await app.db.collection("User").doc(id).get();
 	const { address, privateKey } = doc.data();
 	try {

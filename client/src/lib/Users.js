@@ -21,7 +21,7 @@ export function createUser({userId, nickName, gender, birth, picture}) {
     address: null,
     privateKey: null,
     tokenAmount: 10,
-    ethAmount: 0,
+    klayAmount: 0,
     onChainTokenAmount: 0,
     visibleUser: [],
     createdroomId: [],

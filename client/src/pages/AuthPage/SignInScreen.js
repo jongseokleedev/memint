@@ -78,7 +78,7 @@ const SignInScreen = ({navigation, route}) => {
         picture: userDetail.picture,
         address: userDetail.address,
         tokenAmount: userDetail.tokenAmount,
-        ethAmount: userDetail.ethAmount,
+        klayAmount: userDetail.klayAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,
         nftProfile: userDetail.nftProfile.toString(),
         alcoholType: userProperty[0].alcoholType,

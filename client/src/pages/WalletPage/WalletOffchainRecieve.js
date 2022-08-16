@@ -89,7 +89,7 @@ const WalletOffchainRecieve = ({navigation}) => {
                 console.log(userDetail);
                 updateTokenInfo({
                   tokenAmount: Number(userDetail.tokenAmount),
-                  ethAmount: userInfo.ethAmount,
+                  klayAmount: userInfo.klayAmount,
                   onChainTokenAmount: Number(result.data.LCNBalance),
                 });
                 // createEarnOffTxLg(

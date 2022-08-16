@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  onETHtxlog: null,
+  onKlaytxlog: null,
   onLCNtxlog: null,
 };
 
@@ -11,8 +11,8 @@ const onchainSlice = createSlice({
   reducers: {
     // state 변화할 action 이름 선언
 
-    addEthLog(state, action) {
-      state.onETHtxlog = action.payload;
+    addKlayLog(state, action) {
+      state.onKlaytxlog = action.payload;
     },
     addLcnLog(state, action) {
       state.onLCNtxlog = action.payload;
@@ -21,4 +21,4 @@ const onchainSlice = createSlice({
 });
 
 export default onchainSlice.reducer;
-export const {addEthLog, addLcnLog} = onchainSlice.actions;
+export const {addKlayLog, addLcnLog} = onchainSlice.actions;

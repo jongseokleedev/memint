@@ -6,7 +6,7 @@ import WalletOffchainTransfer from './WalletOffchainTransfer';
 import WalletOnchainMain from './WalletOnchainMain';
 import WalletOnchainTrade from './WalletOnchainTrade';
 import WalletLcnTransfer from './WalletLcnTransfer';
-import WalletEthTransfer from './WalletEthTransfer';
+import WalletKlayTransfer from './WalletKlayTransfer';
 import WalletOffchainTrade from './WalletOffchainTrade';
 
 const Stack = createNativeStackNavigator();
@@ -50,8 +50,8 @@ const WalletOffchainScreen = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="WalletEthTransfer"
-        component={WalletEthTransfer}
+        name="WalletKlayTransfer"
+        component={WalletKlayTransfer}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

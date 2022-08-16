@@ -107,7 +107,7 @@ const WalletLcnTransfer = () => {
                   getUser(userInfo.id).then(userDetail => {
                     updateTokenInfo({
                       tokenAmount: Number(userDetail.tokenAmount),
-                      ethAmount: userInfo.ethAmount,
+                      klayAmount: userInfo.klayAmount,
                       onChainTokenAmount: Number(result.data.balance),
                     });
                     getOnchainTokenLog(userInfo.id).then(res => {

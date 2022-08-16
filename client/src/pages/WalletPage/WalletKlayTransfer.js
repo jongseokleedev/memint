@@ -14,20 +14,20 @@ import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
 import DoubleModal from '../../components/common/DoubleModal';
 import {useToast} from '../../utils/hooks/useToast';
-import ethIcon from '../../assets/icons/ethereum.png';
-import {transferETH} from '../../lib/api/wallet';
+import klayIcon from '../../assets/icons/klaytn-klay-logo.png';
+import {transferKlay} from '../../lib/api/wallet';
 import useUser from '../../utils/hooks/UseUser';
 import {getUser} from '../../lib/Users';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
-import {getOnchainEthLog} from '../../lib/OnchainEthLog';
+import {getOnchainKlayLog} from '../../lib/OnchainKlayLog';
 import useOnchainActions from '../../utils/hooks/UseOnchainActions';
 
-const WalletEthTransfer = () => {
+const WalletKlayTransfer = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const {showToast} = useToast();
   const userInfo = useUser();
   const {updateTokenInfo} = useAuthActions();
-  const {addEthLog} = useOnchainActions();
+  const {addKlayLog} = useOnchainActions();
   const [form, setForm] = useState({
     address: '',
     amount: '',
@@ -39,14 +39,14 @@ const WalletEthTransfer = () => {
     Keyboard.dismiss();
     console.log(form);
   };
-  const sendETH = async () => {
+  const sendKlay = async () => {
     const body = {
       id: userInfo.id,
-      ETHAmount: form.amount,
+      klayAmount: form.amount,
       toAddress: form.address,
     };
     try {
-      return await transferETH(body);
+      return await transferKlay(body);
     } catch (e) {
       console.log(e);
     }
@@ -60,7 +60,7 @@ const WalletEthTransfer = () => {
         <View style={styles.container}>
           <Text style={styles.transferText}>Transfer</Text>
           <View style={styles.imageContainer}>
-            <Image source={ethIcon} style={styles.icon} />
+            <Image source={klayIcon} style={styles.icon} />
           </View>
           <Text style={styles.text}>To Address</Text>
           <TextInput
@@ -74,7 +74,7 @@ const WalletEthTransfer = () => {
             style={styles.input}
             value={form.amount}
             onChangeText={createChangeTextHandler('amount')}
-            placeholder="ETH"
+            placeholder="KLAY"
             keyboardType="numeric"
             // returnKeyType={'done'}
             onPress={onSubmit}
@@ -101,25 +101,25 @@ const WalletEthTransfer = () => {
               setModalVisible(false);
             }}
             pFunction={() => {
-              sendETH().then(result => {
+              sendKlay().then(result => {
                 console.log('result.data is');
                 console.log(result.data);
                 if (result.data.message === 'success') {
-                  showToast('success', 'ETH 전송이 완료되었습니다!');
+                  showToast('success', 'KLAY 전송이 완료되었습니다!');
                   getUser(userInfo.id).then(userDetail => {
                     // console.log(userDetail);
                     updateTokenInfo({
                       tokenAmount: Number(userDetail.tokenAmount),
-                      ethAmount: Number(result.data.balance),
+                      klayAmount: Number(result.data.balance),
                       onChainTokenAmount: userInfo.onChainTokenAmount,
                     });
                   });
-                  getOnchainEthLog(userInfo.id).then(res => {
+                  getOnchainKlayLog(userInfo.id).then(res => {
                     console.log({res});
                     const logs = res.docs.map(el => {
                       return {...el.data()};
                     });
-                    addEthLog(logs);
+                    addKlayLog(logs);
                   });
                 }
               });
@@ -182,4 +182,4 @@ const styles = StyleSheet.create({
   },
   text: {fontWeight: 'bold', fontSize: 16, marginTop: 20, marginLeft: 25},
 });
-export default WalletEthTransfer;
+export default WalletKlayTransfer;

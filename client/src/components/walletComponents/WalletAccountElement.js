@@ -4,7 +4,7 @@ import klayIcon from '../../assets/icons/klaytn-klay-logo.png';
 import ethIcon from '../../assets/icons/ethereum.png';
 import lovechainIcon from '../../assets/icons/lovechain.png';
 function WalletAccountElement({onPress, balance, content}) {
-  const imgSrc = content === 'ETH' ? ethIcon : lovechainIcon;
+  const imgSrc = content === 'KLAY' ? klayIcon : lovechainIcon;
   return (
     <TouchableOpacity onPress={() => onPress(content)}>
       <View style={[styles.button]}>
@@ -24,7 +24,7 @@ WalletAccountElement.defaultProps = {
   height: 40,
   borderColor: '#bdbddd',
   balance: 0,
-  content: 'ETH',
+  content: 'KLAY',
   onPress: () => {},
 };
 

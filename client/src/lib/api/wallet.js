@@ -4,14 +4,14 @@ export const createWallet = async body => {
   axios.post('/auth/register', body);
 };
 
-export const ETHToLCN = async body => {
-  return axios.post('/wallet/ETHToLCN', body).then(result => {
+export const KlayToLCN = async body => {
+  return axios.post('/wallet/KlayToLCN', body).then(result => {
     return result;
   });
 };
 
-export const LCNToETH = async body => {
-  return axios.post('wallet/LCNToETH', body).then(result => {
+export const LCNToKlay = async body => {
+  return axios.post('wallet/LCNToKlay', body).then(result => {
     return result;
   });
 };
@@ -27,8 +27,8 @@ export const toOnChain = async body => {
   });
 };
 
-export const transferETH = async body => {
-  return axios.post('wallet/transferETH', body).then(result => {
+export const transferKlay = async body => {
+  return axios.post('wallet/transferKlay', body).then(result => {
     return result;
   });
 };

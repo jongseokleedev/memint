@@ -1,16 +1,16 @@
 import React from 'react';
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
-import {useOnETHtxlog} from '../../utils/hooks/UseOnchain';
+import {useOnKlaytxlog} from '../../utils/hooks/UseOnchain';
 import OnchainHistory from './OnchainHistoryButton';
-function WalletEthHistory({navigation}) {
-  const onETHTxLogs = useOnETHtxlog();
+function WalletKlayHistory({navigation}) {
+  const onKlayTxLogs = useOnKlaytxlog();
 
   return (
     <View style={styles.view}>
-      <Text style={styles.historyText}>ETH Transaction History</Text>
+      <Text style={styles.historyText}>KLAY Transaction History</Text>
       <ScrollView>
-        {onETHTxLogs ? (
-          onETHTxLogs.map((log, idx) => {
+        {onKlayTxLogs ? (
+          onKlayTxLogs.map((log, idx) => {
             const parsedTime = log.createdAt.toDate().toLocaleString();
             return (
               <OnchainHistory
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletEthHistory;
+export default WalletKlayHistory;

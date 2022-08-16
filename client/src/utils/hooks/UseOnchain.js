@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux';
 
-export function useOnETHtxlog() {
-  return useSelector(state => state.onchain.onETHtxlog); //state.auth.user자리에 slice에서 선언한 state를 채워줌
+export function useOnKlaytxlog() {
+  return useSelector(state => state.onchain.onKlaytxlog); //state.auth.user자리에 slice에서 선언한 state를 채워줌
 }
 
 export function useOnLCNtxlog() {

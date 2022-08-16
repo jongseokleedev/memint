@@ -36,7 +36,7 @@ import {getNFTs, getProfile, getMemin} from './lib/NFT';
 import {getMeeting} from './lib/Meeting';
 import useMeetingActions from './utils/hooks/UseMeetingActions';
 import useUser from './utils/hooks/UseUser';
-import {getOnchainEthLog} from './lib/OnchainEthLog';
+import {getOnchainKlayLog} from './lib/OnchainKlayLog';
 import {getOnchainTokenLog} from './lib/OnchainTokenLog';
 import useOnchainActions from './utils/hooks/UseOnchainActions';
 import FeedbackChoicePage from './pages/ChattingPage/FeedbackChoicePage';
@@ -58,16 +58,16 @@ function App() {
   const {saveNFT, setMemin} = useNftActions();
   const {saveMeeting} = useMeetingActions();
   const [initialRouteName, setInitialRouteName] = useState('SignIn');
-  const {addEthLog, addLcnLog} = useOnchainActions();
+  const {addKlayLog, addLcnLog} = useOnchainActions();
   const saveUserInfo = async user => {
     try {
       let userDetail = await getUser(user.uid);
       let userProperty = await getUserProperty(user.uid);
-      getOnchainEthLog(user.uid).then(res => {
+      getOnchainKlayLog(user.uid).then(res => {
         const logs = res.docs.map(el => {
           return {...el.data()};
         });
-        addEthLog(logs);
+        addKlayLog(logs);
       });
       getOnchainTokenLog(user.uid).then(res => {
         const logs = res.docs.map(el => {
@@ -89,7 +89,6 @@ function App() {
               },
             ]
           : userProperty;
-      /////////////////////////////////////////////////
 
       const res = await getNFTs(user.uid);
       const nfts = res.docs.map(el => {
@@ -158,7 +157,7 @@ function App() {
         address: userDetail.address,
         // privateKey: userDetail.privateKey,
         tokenAmount: userDetail.tokenAmount,
-        ethAmount: userDetail.ethAmount,
+        klayAmount: userDetail.klayAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,
         createdroomId: userDetail.createdroomId,
         joinedroomId: userDetail.joinedroomId,

@@ -43,8 +43,8 @@ function WalletCustomModal({
         <View style={[styles.centeredView, styles.backgroudDim]}>
           <View style={styles.modalView}>
             <TouchableOpacity style={styles.tokenWrapper} onPress={nFunction}>
-              <Image source={ethIcon} style={styles.icon} />
-              <Text style={styles.contentText}>ETH</Text>
+              <Image source={klayIcon} style={styles.icon} />
+              <Text style={styles.contentText}>KLAY</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.tokenWrapper} onPress={pFunction}>
               <Image source={lcnIcon} style={styles.icon} />

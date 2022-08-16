@@ -20,7 +20,7 @@ const authSlice = createSlice({
     updateTokenInfo(state, action) {
       state.user.tokenAmount = action.payload.tokenAmount;
       state.user.onChainTokenAmount = action.payload.onChainTokenAmount;
-      state.user.ethAmount = action.payload.ethAmount;
+      state.user.klayAmount = action.payload.klayAmount;
     },
     // action 인자값 없는 경우
     logout(state) {

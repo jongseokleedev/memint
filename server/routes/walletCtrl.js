@@ -111,7 +111,7 @@ const KlayToLCN = async (req, res) => {
 			const txObject = caver.transaction.smartContractExecution.create({
 				from: SERVER_ADDRESS,
 				to: contractAddress,
-				gas: 50000,
+				gas: 100000,
 				input: txInput,
 			});
 			const signedTx = await txObject
@@ -159,7 +159,8 @@ const KlayToLCN = async (req, res) => {
 };
 
 const LCNToKlay = async (req, res) => {
-	const { id, klayAmount } = req.body;
+	const { id, tokenAmount } = req.body;
+	console.log({ id, tokenAmount });
 	const doc = await app.db.collection("User").doc(id).get();
 	const { address, privateKey } = doc.data();
 	const keyring = new caver.wallet.keyring.singleKeyring(address, privateKey);
@@ -181,7 +182,7 @@ const LCNToKlay = async (req, res) => {
 						},
 					],
 				},
-				[SERVER_ADDRESS, convertToPeb((klayAmount * 10).toString())]
+				[SERVER_ADDRESS, convertToPeb(tokenAmount.toString())]
 			);
 			const txObject = caver.transaction.smartContractExecution.create({
 				from: address,
@@ -206,7 +207,7 @@ const LCNToKlay = async (req, res) => {
 				from: SERVER_ADDRESS,
 				to: address,
 				gas: 25000,
-				value: convertToPeb(klayAmount.toString(), "KLAY"),
+				value: convertToPeb((tokenAmount / 10).toString(), "KLAY"),
 			});
 			const signedTx = await tx
 				.sign(caver.wallet.getKeyring(SERVER_ADDRESS))
@@ -227,7 +228,7 @@ const LCNToKlay = async (req, res) => {
 		// server의 account에서 user의 account로, 알맞은 양의 LCN을 지급하는 함수
 
 		// 이더 받는 함수 실행 후, 이어서 LCN을 보내는 함수 실행
-		if (check && beforeBalance > klayAmount * 10) {
+		if (check && beforeBalance > tokenAmount * 10) {
 			getLCNFromUser()
 				.then(() => {
 					return sendKlayToUser();
@@ -256,10 +257,238 @@ const LCNToKlay = async (req, res) => {
 	}
 };
 
-const toOffChain = () => {};
-const toOnChain = () => {};
-const transferETH = () => {};
-const transferLCN = () => {};
+const toOffChain = async (req, res) => {
+	const { id, tokenAmount, currentTokenAmount } = req.body;
+	const doc = await app.db.collection("User").doc(id).get();
+	const { address, privateKey } = doc.data();
+	const keyring = new caver.wallet.keyring.singleKeyring(address, privateKey);
+	try {
+		// tokenAmount만큼 user의 계정에서 server의 계정으로 LCN을 transfer해주는 함수
+		const beforeBalance = await myContract.methods.balanceOf(address).call();
+		const check = await caver.klay.accountCreated(address);
+		// user의 지갑에서 server지갑으로 LCN Amount만큼 transfer하는 함수
+		const getLCNFromUser = async () => {
+			const txInput = caver.abi.encodeFunctionCall(
+				{
+					name: "transfer",
+					type: "function",
+					inputs: [
+						{ type: "address", name: "recipient" },
+						{
+							type: "uint256",
+							name: "amount",
+						},
+					],
+				},
+				[SERVER_ADDRESS, convertToPeb(tokenAmount.toString())]
+			);
+			const txObject = caver.transaction.smartContractExecution.create({
+				from: address,
+				to: contractAddress,
+				gas: 50000,
+				input: txInput,
+			});
+			const signedTx = await txObject.sign(keyring).then((result) => {
+				return result.getRLPEncoding();
+			});
+			return await caver.rpc.klay.sendRawTransaction(
+				signedTx,
+				async (err, result) => {
+					if (err) return res.status(400).send({ error: err });
+					await createLcnOnTxLog(id, "Transfer LCN", result);
+				}
+			);
+		};
+
+		getLCNFromUser().then(async () => {
+			// 아래 나와있는 balance를 firestore db에 업데이트해준다.
+			const LCNBalance = await myContract.methods.balanceOf(address).call();
+			await updateLCN(
+				id,
+				tokenAmount + currentTokenAmount,
+				Number(convertFromPeb(LCNBalance.toString()))
+			);
+			res.status(200).send({
+				message: "success",
+				LCNBalance: convertFromPeb(LCNBalance.toString()),
+			});
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const toOnChain = async (req, res) => {
+	const { id, tokenAmount, currentTokenAmount } = req.body;
+	const doc = await app.db.collection("User").doc(id).get();
+	const { address, privateKey } = doc.data();
+	// firestore에서 user db에 저장되어있는 토큰의 개수가 tokenAmount이상인지 확인한다.
+	// ex) const userInfo = await db.collection('User').doc(id).get()
+	// if(userInfo.data().tokenAmount >= tokenAmount) { ... }
+
+	// server의 account에서 user의 account로, 알맞은 양의 LCN을 지급하는 함수
+	try {
+		const sendLCNToUser = async () => {
+			const txInput = caver.abi.encodeFunctionCall(
+				{
+					name: "transfer",
+					type: "function",
+					inputs: [
+						{ type: "address", name: "recipient" },
+						{
+							type: "uint256",
+							name: "amount",
+						},
+					],
+				},
+				[address, convertToPeb(tokenAmount.toString())]
+			);
+			const txObject = caver.transaction.smartContractExecution.create({
+				from: SERVER_ADDRESS,
+				to: contractAddress,
+				gas: 50000,
+				input: txInput,
+			});
+			const signedTx = await txObject
+				.sign(caver.wallet.getKeyring(SERVER_ADDRESS))
+				.then((result) => {
+					return result.getRLPEncoding();
+				});
+			return await caver.rpc.klay.sendRawTransaction(
+				signedTx,
+				async (err, result) => {
+					if (err) return res.status(400).send({ error: err });
+					await createLcnOnTxLog(id, "Recieve LCN", result);
+				}
+			);
+		};
+
+		sendLCNToUser().then(async () => {
+			const LCNBalance = await myContract.methods.balanceOf(address).call();
+			await updateLCN(
+				id,
+				currentTokenAmount - tokenAmount,
+				Number(convertFromPeb(LCNBalance.toString()))
+			);
+			// const afterTokenAmount = 원래 user document의 tokenAmount - 파라미터로 받은 tokenAmount
+			// firebase에서 onChainTokenAmount에 LCNBalance 값을, tokenAmount에 afterTokenAmount 값을 업데이트해준 후 front에 res를 보내준다.
+			res.status(200).send({
+				message: "success",
+				LCNBalance: convertFromPeb(LCNBalance.toString()),
+			});
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const transferKlay = async (req, res) => {
+	const { id, klayAmount, toAddress } = req.body;
+	const doc = await app.db.collection("User").doc(id).get();
+	const { address, privateKey } = doc.data();
+	const keyring = new caver.wallet.keyring.singleKeyring(address, privateKey);
+	// ETHAmount보다 beforeBalance의 값이 크거나 같은지 먼저 체크한다.
+
+	try {
+		const beforeBalance = await caver.rpc.klay.getBalance(address);
+		// user의 address에서 toAddress로 klay 보내주는 함수
+
+		const sendKlayTo = async () => {
+			const tx = caver.transaction.valueTransfer.create({
+				from: address,
+				to: toAddress,
+				gas: 25000,
+				value: convertToPeb(klayAmount.toString(), "KLAY"),
+			});
+			const signedTx = await tx.sign(keyring).then((result) => {
+				return result.getRLPEncoding();
+			});
+
+			return await caver.rpc.klay.sendRawTransaction(
+				signedTx,
+				async (err, result) => {
+					if (err) return res.status(400).send({ error: err });
+					await createKlayOnTxLog(id, "Transfer KLAY", result);
+					return { status: "success", result };
+				}
+			);
+		};
+
+		sendKlayTo().then(async () => {
+			// 아래 afterBalance 값을 user document의 onChainTokenAmount 값에 업데이트해준다.
+			const afterBalance = await caver.rpc.klay.getBalance(address);
+			await updateKlay(id, Number(convertFromPeb(afterBalance.toString())));
+
+			res.status(200).send({
+				message: "success",
+				balance: convertFromPeb(afterBalance.toString()),
+			});
+		});
+	} catch (error) {
+		res.status(400).send({ error });
+	}
+};
+
+const transferLCN = async (req, res) => {
+	const { id, tokenAmount, toAddress } = req.body;
+	const doc = await app.db.collection("User").doc(id).get();
+	const { address, privateKey } = doc.data();
+	const keyring = new caver.wallet.keyring.singleKeyring(address, privateKey);
+	try {
+		// user의 address에서 toAddress로 LCN을 보내주는 함수
+		const beforeBalance = await myContract.methods.balanceOf(address).call();
+		const check = await caver.klay.accountCreated(address);
+		// user의 지갑에서 server지갑으로 LCN Amount만큼 transfer하는 함수
+		const sendLCNTo = async () => {
+			const txInput = caver.abi.encodeFunctionCall(
+				{
+					name: "transfer",
+					type: "function",
+					inputs: [
+						{ type: "address", name: "recipient" },
+						{
+							type: "uint256",
+							name: "amount",
+						},
+					],
+				},
+				[toAddress, convertToPeb(tokenAmount.toString())]
+			);
+			const txObject = caver.transaction.smartContractExecution.create({
+				from: address,
+				to: contractAddress,
+				gas: 50000,
+				input: txInput,
+			});
+			const signedTx = await txObject.sign(keyring).then((result) => {
+				return result.getRLPEncoding();
+			});
+			return await caver.rpc.klay.sendRawTransaction(
+				signedTx,
+				async (err, result) => {
+					if (err) return res.status(400).send({ error: err });
+					await createLcnOnTxLog(id, "Transfer LCN", result);
+				}
+			);
+		};
+
+		sendLCNTo().then(async () => {
+			// 아래 afterBalance 값을 firestore에 업데이트해준다.
+			const afterBalance = await myContract.methods.balanceOf(address).call();
+			await updateOnchainToken(
+				id,
+				Number(convertFromPeb(afterBalance.toString()))
+			);
+			res.status(200).send({
+				message: "success",
+				balance: convertFromPeb(afterBalance.toString()),
+			});
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 const getBalance = () => {};
 
 module.exports = {
@@ -267,7 +496,7 @@ module.exports = {
 	LCNToKlay,
 	toOffChain,
 	toOnChain,
-	transferETH,
+	transferKlay,
 	transferLCN,
 	getBalance,
 };
