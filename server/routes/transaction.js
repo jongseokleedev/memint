@@ -4,7 +4,8 @@ const Web3 = require("web3");
 require("dotenv").config();
 const fs = require("fs");
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETH_NETWORK));
-console.log(process.env.ETH_NETWORK);
+const Caver = require("caver-js");
+const caver = new Caver(process.env.BAOBOB_NETWORK);
 router.post("/sendEther", async (req, res) => {
 	try {
 		const { fromAddress, toAddress, amount } = req.body;
