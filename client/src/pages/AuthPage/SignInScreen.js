@@ -44,7 +44,8 @@ const SignInScreen = ({navigation, route}) => {
   const [loading, setLoading] = useState();
   const goToSignUp = () => {
     Keyboard.dismiss();
-    navigation.navigate('SignUp');
+    // navigation.navigate('SignUp');
+    navigation.navigate('VerifyMobile');
     console.log(form);
   };
 
