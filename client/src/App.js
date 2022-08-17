@@ -156,6 +156,7 @@ function App() {
         picture: userDetail.picture,
         address: userDetail.address,
         // privateKey: userDetail.privateKey,
+        phoneNumber: userDetail.phoneNumber,
         tokenAmount: userDetail.tokenAmount,
         klayAmount: userDetail.klayAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,

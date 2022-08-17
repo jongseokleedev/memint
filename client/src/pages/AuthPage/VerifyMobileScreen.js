@@ -14,35 +14,43 @@ import BasicButton from '../../components/common/BasicButton';
 import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
 import memintLogo from '../../assets/icons/logo.png';
+import {createPhoneNumber} from '../../lib/Users';
 
-const VerifyMobileScreen = ({navigation}) => {
+const VerifyMobileScreen = ({navigation, route}) => {
+  const {uid} = route.params || {};
   const [buttonReady, setButtonReady] = useState(false);
   const [validNumber, setValidNumber] = useState(
     '11자리 숫자 전화번호를 입력해주세요',
   );
   const [textColor, setTextColor] = useState('gray');
+  const [verified, setVerified] = useState(null);
+  const [verifyTextColor, setVerifyTextColor] = useState('gray');
   const [confirm, setConfirm] = useState(null);
   const [form, setForm] = useState({
     mobileNumber: '',
     code: '',
   });
+  const [fixedPhoneNumber, setFiexedPhoneNumber] = useState('');
+
   // const {isSignup} = route.params || {};
   const passwordRef = useRef();
 
   const createChangeTextHandler = name => value => {
+    console.log({value}, value.length);
     setForm({...form, [name]: value});
-    if (value.length === 0) {
-      setValidNumber('11자리 숫자 전화번호를 입력해주세요');
-      setTextColor('gray');
-    }
-    if (value.length !== 11) {
-      setButtonReady(false);
-      setValidNumber('전화번호가 유효하지 않습니다');
-      setTextColor('red');
-    } else if (value.length === 11) {
-      setButtonReady(true);
-      setValidNumber('유효한 전화번호 입니다.');
-      setTextColor('green');
+    if (name === 'mobileNumber') {
+      if (value.length === 0) {
+        setValidNumber('전화번호를 입력해주세요 (11자리 숫자)');
+        setTextColor('gray');
+      } else if (value.length !== 11 || value.slice(0, 3) !== '010') {
+        setButtonReady(false);
+        setValidNumber('전화번호가 유효하지 않습니다');
+        setTextColor('red');
+      } else if (value.length === 11) {
+        setButtonReady(true);
+        setValidNumber('유효한 전화번호 입니다.');
+        setTextColor('green');
+      }
     }
   };
 
@@ -52,21 +60,31 @@ const VerifyMobileScreen = ({navigation}) => {
   };
 
   async function verifyPhoneNumber(phoneNumber) {
-    const confirmation = await auth().verifyPhoneNumber(phoneNumber);
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setFiexedPhoneNumber(form.mobileNumber);
     setConfirm(confirmation);
   }
 
   // Handle confirm code button press
   async function confirmCode() {
     try {
-      await confirm.confirm(form.code);
+      console.log(form.code);
+      console.log(confirm);
+      await confirm.confirm(form.code).then(console.log);
+      setVerified(true);
+      setVerifyTextColor('green');
+      auth().signOut();
     } catch (error) {
+      console.log(error);
       console.log('Invalid code.');
+      setVerified(false);
+      setVerifyTextColor('red');
     }
   }
 
   const goToNextPage = () => {
-    navigation.navigate('SignUpUserInfo');
+    createPhoneNumber({userId: uid, phoneNumber: fixedPhoneNumber});
+    navigation.push('SignUpUserDetail', {uid: uid});
   };
   return (
     <KeyboardAvoidingView
@@ -103,7 +121,7 @@ const VerifyMobileScreen = ({navigation}) => {
               backgroundColor={buttonReady ? 'black' : 'lightgray'}
               text="인증번호받기"
               hasMarginBottom
-              onPress={() =>
+              onPress={async () =>
                 verifyPhoneNumber(
                   `+82 ${form.mobileNumber.slice(
                     0,
@@ -112,11 +130,13 @@ const VerifyMobileScreen = ({navigation}) => {
                     7,
                     11,
                   )}`,
-                )
+                ).then(setValidNumber('인증번호가 발송되었습니다'))
               }
             />
           </View>
-          <Text style={styles.invalidNumber}>{validNumber}</Text>
+          <Text style={[styles.invalidNumber, {color: textColor}]}>
+            {validNumber}
+          </Text>
           <Text style={styles.contentTextVerify}>인증번호</Text>
           <View style={styles.secondForm} hasMarginBottom>
             <BorderedInput
@@ -124,7 +144,7 @@ const VerifyMobileScreen = ({navigation}) => {
               placeholder="인증번호를 입력해주세요"
               value={form.code}
               onChangeText={createChangeTextHandler('code')}
-              secureTextEntry
+              // secureTextEntry
               // ref={passwordRef}
               keyboardType="numeric"
               // returnKeyType={'done'}
@@ -138,17 +158,28 @@ const VerifyMobileScreen = ({navigation}) => {
               height={35}
               textSize={13}
               margin={[5, 5, 5, 5]}
+              border={false}
               text="인증"
               hasMarginBottom
               onPress={() => confirmCode()}
             />
           </View>
+          <Text style={[styles.invalidNumber, {color: verifyTextColor}]}>
+            {verified === null
+              ? ''
+              : verified
+              ? '성공적으로 인증되었습니다'
+              : '인증번호가 유효하지 않습니다.'}
+          </Text>
           <BasicButton
             style={styles.button}
             width={300}
             height={40}
             textSize={17}
-            margin={[5, 5, 5, 5]}
+            margin={[50, 5, 5, 5]}
+            border={false}
+            disabled={!verified}
+            backgroundColor={verified ? 'black' : 'lightgray'}
             text="다음 단계"
             hasMarginBottom
             onPress={goToNextPage}
@@ -180,9 +211,8 @@ const styles = StyleSheet.create({
   },
   invalidNumber: {
     fontSize: 14,
-    marginBottom: 20,
-    marginRight: 50,
-    // justifyContent: 'flex-start',
+    // marginBottom: 20,
+    // marginRight: 100,
   },
   text: {
     fontSize: 32,
@@ -190,7 +220,7 @@ const styles = StyleSheet.create({
   },
   contentText: {
     fontSize: 24,
-    marginTop: 32,
+    marginTop: 2,
     // fontWeight: 'bold',
   },
   contentTextSub: {
@@ -200,7 +230,8 @@ const styles = StyleSheet.create({
   },
   contentTextVerify: {
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 50,
+    marginBottom: 10,
     // fontWeight: 'bold',
   },
   form: {
@@ -212,7 +243,7 @@ const styles = StyleSheet.create({
   },
   secondForm: {
     marginTop: 10,
-    marginBottom: 50,
+    marginBottom: 10,
     width: '100%',
     paddingHorizontal: 32,
     flexDirection: 'row',

@@ -16,3 +16,7 @@ export function subscribeAuth(callback) {
 export function signOut() {
   return auth().signOut();
 }
+
+export function passwordReset(emailAddress) {
+  return auth().sendPasswordReset(emailAddress);
+}

@@ -15,6 +15,7 @@ import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
 import logo from '../../assets/icons/logo.png';
 import GradientButton from '../../components/common/GradientButton';
+import {passwordReset} from '../../lib/Auth';
 
 const SetNewPWScreen = ({navigation}) => {
   const [form, setForm] = useState({

@@ -45,7 +45,7 @@ const SignInScreen = ({navigation, route}) => {
   const goToSignUp = () => {
     Keyboard.dismiss();
     // navigation.navigate('SignUp');
-    navigation.navigate('VerifyMobile');
+    navigation.navigate('SignUp');
     console.log(form);
   };
 
@@ -78,6 +78,7 @@ const SignInScreen = ({navigation, route}) => {
         nftIds: userDetail.nftIds,
         picture: userDetail.picture,
         address: userDetail.address,
+        phoneNumber: userDetail.phoneNumber,
         tokenAmount: userDetail.tokenAmount,
         klayAmount: userDetail.klayAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,

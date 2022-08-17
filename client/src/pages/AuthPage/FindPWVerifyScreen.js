@@ -99,16 +99,6 @@ const FindPWVerifyScreen = ({navigation}) => {
                 onSubmit();
               }}
             />
-            {/* <BasicButton
-              style={styles.button}
-              width={70}
-              height={35}
-              textSize={13}
-              margin={[5, 5, 5, 5]}
-              text="인증"
-              hasMarginBottom
-              onPress={onSubmit}
-            /> */}
             <GradientButton
               style={styles.button}
               width={80}

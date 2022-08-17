@@ -45,8 +45,6 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
   const onSubmit = async () => {
     try {
       Keyboard.dismiss();
-      console.log('uid is ' + uid);
-      console.log(form);
       setLoading(true);
       let photoURL = null;
       if (response) {
@@ -78,7 +76,7 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
       };
       console.log(body);
       await createWallet(body);
-      navigation.push('SignUpUserDetail', {uid: uid, nickName: form.nickName});
+      navigation.push('VerifyMobile', {uid: uid, nickName: form.nickName});
     } catch (e) {
       console.log(e);
     } finally {

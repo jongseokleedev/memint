@@ -17,6 +17,7 @@ export function createUser({userId, nickName, gender, birth, picture}) {
     createdAt: firestore.FieldValue.serverTimestamp(),
     picture: newPicture,
     nftProfile: null,
+    phoneNumber: '',
     nftIds: [],
     address: null,
     privateKey: null,
@@ -66,6 +67,12 @@ export function createProperty({userId, drinkCapa, drinkStyle, alcoholType}) {
     drinkCapa,
     drinkStyle,
     alcoholType,
+  });
+}
+
+export function createPhoneNumber({userId, phoneNumber}) {
+  return usersCollection.doc(userId).update({
+    phoneNumber: phoneNumber,
   });
 }
 
