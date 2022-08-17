@@ -15,11 +15,9 @@ import {getUser} from '../../lib/Users';
 
 import useUser from '../../utils/hooks/UseUser';
 import WalletButton from '../../components/common/WalletButton';
-import {useMeeting} from '../../utils/hooks/UseMeeting';
 
 function AlarmPage({navigation}) {
   const userInfo = useUser();
-  const {rooms} = useMeeting();
   const [alarms, setAlarms] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const isFocused = useIsFocused();
@@ -36,6 +34,9 @@ function AlarmPage({navigation}) {
         res
           .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())
           .map(async el => {
+            if (el.sender === 'admin') {
+              return {...el};
+            }
             const info = await getUser(el.sender);
             return {
               ...el,

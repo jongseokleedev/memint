@@ -1,8 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
-import {getUser} from './Users.js';
 
-const alarmCollection = firestore().collection('Alarm');
 const userCollection = firestore().collection('User');
+const adminCollection = firestore().collection('Admin');
 //userId로 모든 알림 조회
 export const getAlarmsById = async userId => {
   const res = await userCollection.doc(userId).collection('Alarm').get();
@@ -72,6 +71,19 @@ export const createMeetingBanned = data => {
   // });
   return userCollection.doc(data.receiver).collection('Alarm').add({
     type: 'banned',
+    sender: data.sender,
+    meetingId: data.meetingId,
+    createdAt: firestore.Timestamp.now(),
+  });
+};
+
+export const createConfirmAlarm = async data => {
+  const res = await adminCollection.get();
+  const adminId = res.docs.map(el => {
+    return el.id;
+  })[0];
+  return await adminCollection.doc(adminId).collection('Alarm').add({
+    type: 'confirmRequest',
     sender: data.sender,
     meetingId: data.meetingId,
     createdAt: firestore.Timestamp.now(),

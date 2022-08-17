@@ -33,6 +33,8 @@ function AlarmElement({alarm}) {
       return `${alarm.senderInfo?.nickName}님이 신청을 수락했습니다!`;
     } else if (alarm.type === 'proposal') {
       return `${alarm.senderInfo?.nickName}님의 신청이 도착했습니다!`;
+    } else if (alarm.type === 'earned') {
+      return '미팅 참여 보상을 받았습니다!';
     } else {
       return '';
     }
@@ -78,7 +80,7 @@ function AlarmElement({alarm}) {
                 </Text>
                 <View style={styles.bar} />
                 <Text style={styles.meetingElement}>
-                  {handleBirth(alarm.senderInfo.birth)}
+                  {handleBirth(alarm.meetingInfo.hostId.birth)}
                 </Text>
                 <View style={styles.bar} />
                 <Text style={styles.meetingElement}>

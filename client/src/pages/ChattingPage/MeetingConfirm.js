@@ -19,6 +19,7 @@ import useUser from '../../utils/hooks/UseUser';
 import storage from '@react-native-firebase/storage';
 import {getMeeting, updateMeeting} from '../../lib/Meeting';
 import BasicButton from '../../components/common/BasicButton';
+import {createConfirmAlarm} from '../../lib/Alarm';
 const window = Dimensions.get('window');
 
 function MeetingConfirm({route}) {
@@ -90,6 +91,7 @@ function MeetingConfirm({route}) {
       confirmImage: photoURL,
       confirmStatus: 'pending',
     });
+    await createConfirmAlarm({sender: userInfo.id, meetingId: meetingInfo.id});
     await getMeetingInfo();
     setImage(null);
     setLoading(false);
@@ -117,6 +119,8 @@ function MeetingConfirm({route}) {
       confirmImage: photoURL,
       confirmStatus: 'pending',
     });
+    await createConfirmAlarm({sender: userInfo.id, meetingId: meetingInfo.id});
+
     await getMeetingInfo();
     setImage(null);
     setLoading(false);
