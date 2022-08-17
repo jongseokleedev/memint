@@ -17,6 +17,7 @@ function GradientButton({
     <TouchableOpacity onPress={onPress}>
       <LinearGradient
         colors={['#A7BFEB', '#FBC2EA']}
+        // colors={['black']}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         style={[

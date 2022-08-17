@@ -14,7 +14,7 @@ import BasicButton from '../../components/common/BasicButton';
 import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
 import memintLogo from '../../assets/icons/logo.png';
-import {createPhoneNumber} from '../../lib/Users';
+import {createPhoneNumber, getUserByPhoneNumber} from '../../lib/Users';
 
 const VerifyMobileScreen = ({navigation, route}) => {
   const {uid} = route.params || {};
@@ -60,9 +60,16 @@ const VerifyMobileScreen = ({navigation, route}) => {
   };
 
   async function verifyPhoneNumber(phoneNumber) {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    setFiexedPhoneNumber(form.mobileNumber);
-    setConfirm(confirmation);
+    const userEmail = await getUserByPhoneNumber(form.mobileNumber);
+    console.log({userEmail});
+    if (!userEmail) {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setFiexedPhoneNumber(form.mobileNumber);
+      setConfirm(confirmation);
+    } else {
+      setValidNumber('이미 해당 전화번호로 가입한 회원이 있습니다');
+      setTextColor('red');
+    }
   }
 
   // Handle confirm code button press

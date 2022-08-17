@@ -28,7 +28,7 @@ import {createWallet} from '../../lib/api/wallet';
 // const url = await reference.getDownloadURL();
 
 const SignUpUserInfoScreen = ({navigation, route}) => {
-  const {uid} = route.params || {};
+  const {uid, email} = route.params || {};
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [form, setForm] = useState({
@@ -65,6 +65,7 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
 
       createUser({
         userId: uid,
+        email: email,
         nickName: form.nickName,
         gender: form.gender,
         birth: `${form.birthYear}년 ${form.birthMonth}월 ${form.birthDay}일`,

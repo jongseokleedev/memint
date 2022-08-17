@@ -15,11 +15,11 @@ import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
 import logo from '../../assets/icons/logo.png';
 import GradientButton from '../../components/common/GradientButton';
-
+import {passwordReset} from '../../lib/Auth';
+import {useToast} from '../../utils/hooks/useToast';
 const FindPWVerifyScreen = ({navigation}) => {
+  const {showToast} = useToast();
   const [form, setForm] = useState({
-    mobileNumber: '',
-    verficationCode: '',
     email: '',
   });
   // const {isSignup} = route.params || {};
@@ -34,7 +34,10 @@ const FindPWVerifyScreen = ({navigation}) => {
     console.log(form);
   };
   const goToNextPage = () => {
-    navigation.navigate('SetNewPW');
+    passwordReset(form.email).then(() => {
+      showToast('success', '이메일 전송이 완료되었습니다!');
+    });
+    navigation.navigate('SignIn');
   };
 
   return (
@@ -45,72 +48,9 @@ const FindPWVerifyScreen = ({navigation}) => {
         <BackButton />
         <View style={styles.fullscreenSub}>
           <Image source={logo} style={styles.logo} />
-          <Text style={styles.contentText}>
-            회원가입 시 사용하신 전화번호를 입력해주세요.
+          <Text style={styles.contentTextVerify}>
+            회원가입시 사용한 이메일을 입력해주세요
           </Text>
-          {/* <Text style={styles.contentTextSub}>
-            안전한 미팅주선을 위해 사용됩니다
-          </Text> */}
-          <View style={styles.form}>
-            <BorderedInput
-              size="large"
-              placeholder="핸드폰 번호를 입력해주세요"
-              hasMarginBottom
-              value={form.mobileNumber}
-              onChangeText={createChangeTextHandler('mobileNumber')}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="numeric"
-              returnKeyType={'done'}
-              onSubmitEditing={() => verificationCodeRef.current.focus()}
-            />
-            {/* <BasicButton
-              style={styles.button}
-              width={70}
-              height={35}
-              textSize={13}
-              margin={[5, 5, 5, 5]}
-              text="인증번호받기"
-              hasMarginBottom
-              onPress={onSubmit}
-            /> */}
-            <GradientButton
-              style={styles.button}
-              width={80}
-              height={35}
-              textSize={13}
-              margin={[5, 5, 5, 5]}
-              text="인증번호받기"
-              hasMarginBottom
-              onPress={onSubmit}
-            />
-          </View>
-          <Text style={styles.contentTextVerify}>인증번호</Text>
-          <View style={styles.secondForm} hasMarginBottom>
-            <BorderedInput
-              size="large"
-              placeholder="인증번호를 입력해주세요"
-              value={form.verificationCode}
-              onChangeText={createChangeTextHandler('verficationCode')}
-              secureTextEntry
-              ref={verificationCodeRef}
-              returnKeyType={'done'}
-              onSubmitEditing={() => {
-                onSubmit();
-              }}
-            />
-            <GradientButton
-              style={styles.button}
-              width={80}
-              height={35}
-              textSize={13}
-              margin={[5, 5, 5, 5]}
-              text="인증"
-              hasMarginBottom
-              onPress={onSubmit}
-            />
-          </View>
-          <Text style={styles.contentTextVerify}>이메일을 입력해주세요</Text>
           <View style={styles.secondForm} hasMarginBottom>
             <BorderedInput
               size="wide"
@@ -127,23 +67,13 @@ const FindPWVerifyScreen = ({navigation}) => {
               }}
             />
           </View>
-          {/* <BasicButton
-            style={styles.button}
-            width={300}
-            height={40}
-            textSize={17}
-            margin={[0, 5, 5, 5]}
-            text="다음 단계"
-            hasMarginBottom
-            onPress={goToNextPage}
-          /> */}
           <GradientButton
             style={styles.button}
             width={300}
             height={40}
             textSize={17}
             margin={[0, 5, 5, 5]}
-            text="다음 단계"
+            text="이메일 보내기"
             hasMarginBottom
             onPress={goToNextPage}
           />
@@ -199,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   secondForm: {
-    marginTop: 10,
+    marginTop: 30,
     marginBottom: 40,
     width: '100%',
     paddingHorizontal: 32,

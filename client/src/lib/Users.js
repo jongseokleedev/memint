@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 
 export const usersCollection = firestore().collection('User');
 
-export function createUser({userId, nickName, gender, birth, picture}) {
+export function createUser({userId, email, nickName, gender, birth, picture}) {
   // return usersCollection.doc(id).get();
   // console.log(usersCollection);
   const newNickName = nickName ? nickName : '';
@@ -11,6 +11,7 @@ export function createUser({userId, nickName, gender, birth, picture}) {
   const newPicture = picture ? picture : '';
   return usersCollection.doc(userId).set({
     userId,
+    email: email,
     nickName: newNickName,
     gender: newGender,
     birth: newBirth,
@@ -121,6 +122,13 @@ export async function getUserByNickname(str, loginUser) {
     }
   });
   return data.filter(el => el !== undefined);
+}
+
+export async function getUserByPhoneNumber(phoneNumber) {
+  const res = await usersCollection
+    .where('phoneNumber', '==', phoneNumber)
+    .get();
+  return res.docs[0]._data.email;
 }
 
 export async function addVisibleUser(id, value) {

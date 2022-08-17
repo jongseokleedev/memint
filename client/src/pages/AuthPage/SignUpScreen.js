@@ -42,7 +42,7 @@ const SignUpScreen = ({navigation}) => {
         const {user} = await signUp(info);
         console.log(user);
         // navigation.navigate('SignUpUserInfo');
-        navigation.push('SignUpUserInfo', {uid: user.uid});
+        navigation.push('SignUpUserInfo', {uid: user.uid, email: form.email});
       } catch (e) {
         const messages = {
           'auth/email-already-in-use': '이미 가입된 이메일입니다.',

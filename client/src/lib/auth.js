@@ -18,5 +18,5 @@ export function signOut() {
 }
 
 export function passwordReset(emailAddress) {
-  return auth().sendPasswordReset(emailAddress);
+  return auth().sendPasswordResetEmail(emailAddress);
 }
