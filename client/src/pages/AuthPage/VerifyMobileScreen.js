@@ -13,24 +13,58 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
 import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
-import memintLogo from '../../assets/icons/memint.png';
+import memintLogo from '../../assets/icons/logo.png';
 
 const VerifyMobileScreen = ({navigation}) => {
+  const [buttonReady, setButtonReady] = useState(false);
+  const [validNumber, setValidNumber] = useState(
+    '11자리 숫자 전화번호를 입력해주세요',
+  );
+  const [textColor, setTextColor] = useState('gray');
+  const [confirm, setConfirm] = useState(null);
   const [form, setForm] = useState({
     mobileNumber: '',
-    verficationCode: '',
+    code: '',
   });
   // const {isSignup} = route.params || {};
   const passwordRef = useRef();
 
   const createChangeTextHandler = name => value => {
     setForm({...form, [name]: value});
+    if (value.length === 0) {
+      setValidNumber('11자리 숫자 전화번호를 입력해주세요');
+      setTextColor('gray');
+    }
+    if (value.length !== 11) {
+      setButtonReady(false);
+      setValidNumber('전화번호가 유효하지 않습니다');
+      setTextColor('red');
+    } else if (value.length === 11) {
+      setButtonReady(true);
+      setValidNumber('유효한 전화번호 입니다.');
+      setTextColor('green');
+    }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     Keyboard.dismiss();
     console.log(form);
   };
+
+  async function verifyPhoneNumber(phoneNumber) {
+    const confirmation = await auth().verifyPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  }
+
+  // Handle confirm code button press
+  async function confirmCode() {
+    try {
+      await confirm.confirm(form.code);
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  }
+
   const goToNextPage = () => {
     navigation.navigate('SignUpUserInfo');
   };
@@ -49,14 +83,14 @@ const VerifyMobileScreen = ({navigation}) => {
           <View style={styles.form}>
             <BorderedInput
               size="large"
-              placeholder="핸드폰 번호를 입력해주세요"
+              placeholder="전화번호를 입력해주세요"
               hasMarginBottom
-              value={form.email}
+              value={form.mobileNumber}
               onChangeText={createChangeTextHandler('mobileNumber')}
               autoCapitalize="none"
               autoCorrect={false}
               returnKeyType={'done'}
-              onSubmitEditing={() => passwordRef.current.focus()}
+              // onSubmitEditing={() => passwordRef.current.focus()}
             />
             <BasicButton
               style={styles.button}
@@ -64,22 +98,36 @@ const VerifyMobileScreen = ({navigation}) => {
               height={35}
               textSize={13}
               margin={[5, 5, 5, 5]}
+              disabled={!buttonReady}
+              border={false}
+              backgroundColor={buttonReady ? 'black' : 'lightgray'}
               text="인증번호받기"
               hasMarginBottom
-              onPress={onSubmit}
+              onPress={() =>
+                verifyPhoneNumber(
+                  `+82 ${form.mobileNumber.slice(
+                    0,
+                    3,
+                  )}-${form.mobileNumber.slice(3, 7)}-${form.mobileNumber.slice(
+                    7,
+                    11,
+                  )}`,
+                )
+              }
             />
           </View>
+          <Text style={styles.invalidNumber}>{validNumber}</Text>
           <Text style={styles.contentTextVerify}>인증번호</Text>
           <View style={styles.secondForm} hasMarginBottom>
             <BorderedInput
               size="large"
               placeholder="인증번호를 입력해주세요"
-              value={form.password}
-              onChangeText={createChangeTextHandler('verficationCode')}
+              value={form.code}
+              onChangeText={createChangeTextHandler('code')}
               secureTextEntry
-              ref={passwordRef}
+              // ref={passwordRef}
               keyboardType="numeric"
-              returnKeyType={'done'}
+              // returnKeyType={'done'}
               onSubmitEditing={() => {
                 onSubmit();
               }}
@@ -92,7 +140,7 @@ const VerifyMobileScreen = ({navigation}) => {
               margin={[5, 5, 5, 5]}
               text="인증"
               hasMarginBottom
-              onPress={onSubmit}
+              onPress={() => confirmCode()}
             />
           </View>
           <BasicButton
@@ -114,6 +162,7 @@ const VerifyMobileScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 1,
+    backgroundColor: 'white',
   },
   fullscreen: {
     flex: 1,
@@ -125,9 +174,15 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   logo: {
-    width: 160,
+    width: 200,
     height: 160,
     marginTop: 70,
+  },
+  invalidNumber: {
+    fontSize: 14,
+    marginBottom: 20,
+    marginRight: 50,
+    // justifyContent: 'flex-start',
   },
   text: {
     fontSize: 32,

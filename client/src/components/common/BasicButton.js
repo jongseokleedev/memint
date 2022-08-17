@@ -41,10 +41,11 @@ function BasicButton({
   textColor,
   borderRadius,
   border,
+  disabled,
 }) {
   const [marginTop, marginRight, marginBottom, marginLeft] = margin;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View
         style={[
           styles.button,
@@ -80,6 +81,7 @@ BasicButton.defaultProps = {
   onPress: () => {},
   borderRadius: 30,
   border: true,
+  disabled: false,
 };
 
 const styles = StyleSheet.create({
