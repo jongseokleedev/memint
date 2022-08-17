@@ -1,0 +1,131 @@
+.alarm-element {
+  .alarm {
+    box-shadow: 3px 3px 3px 3px rgb(228, 228, 228);
+    border-radius: 1em;
+    margin: 1em;
+    padding: 1.2em;
+    display: flex;
+    justify-content: space-between;
+
+    .message {
+      margin-bottom: 0.6em;
+    }
+  }
+  .alarm:hover {
+    transform: scale(1.02) translateY(-3px);
+    transition: transform 0.1s ease-in-out;
+  }
+
+  .title {
+    color: gray;
+    font-size: 0.7em;
+    margin-bottom: 0.2em;
+  }
+
+  .meetingTitle {
+    font-size: 0.9em;
+    margin-bottom: 0.1em;
+  }
+
+  .meetingInfo {
+    display: flex;
+    align-items: center;
+  }
+
+  .info {
+    font-size: 0.7em;
+  }
+
+  .createdAt {
+    color: gray;
+    font-size: 0.8em;
+  }
+
+  .bar {
+    width: 0.1em;
+    height: 0.55em;
+    background-color: gray;
+    margin: 0 0.3em 0 0.3em;
+  }
+
+  .modalContainer {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    .modal {
+      width: 32em;
+      height: 35em;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      border-radius: 2em;
+      display: flex;
+      flex-direction: column;
+      padding: 1em 2em;
+
+      .header {
+        margin-bottom: 0.3em;
+        font-weight: bold;
+      }
+
+      .close-button {
+        font-size: 1.5em;
+        color: gray;
+      }
+
+      .img {
+        display: flex;
+        justify-content: center;
+      }
+
+      .meetingInfoArea {
+        margin: 1em 0;
+      }
+
+      textarea {
+        width: 30em;
+        height: 3em;
+      }
+
+      .button-area {
+        display: flex;
+        justify-content: space-around;
+        margin: 1em;
+      }
+
+      .submit {
+        border-radius: 0.8em;
+        padding: 0.5em;
+        width: 6em;
+        height: 2.5em;
+        color: white;
+        font-weight: bold;
+      }
+
+      .confirm {
+        background-color: skyblue;
+      }
+      .deny {
+        background-color: salmon;
+      }
+    }
+
+    img {
+      max-width: 30em;
+      max-height: 17em;
+    }
+
+    button {
+      border: none;
+      background-color: white;
+    }
+  }
+}

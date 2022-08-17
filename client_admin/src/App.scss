@@ -1,9 +1,13 @@
 .App {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  padding-inline: 10em;
+  padding-inline: 10%;
+
+  .footer {
+    margin-top: auto;
+  }
 }

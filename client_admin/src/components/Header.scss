@@ -4,6 +4,20 @@
   .navbar {
     span {
       font-weight: bold;
+      color: black;
+    }
+    .logout-button {
+      cursor: pointer;
+      margin-left: 1em;
     }
   }
+  padding: 1em 0;
+
+  h2 {
+    color: black;
+  }
+}
+
+a {
+  text-decoration: none;
 }

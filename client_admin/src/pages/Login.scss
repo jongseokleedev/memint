@@ -1,0 +1,18 @@
+.login-container {
+  input {
+    height: 2em;
+    padding: 0.5em;
+    border: none;
+    border-radius: 0.5em;
+    margin: 0.5em;
+    background-color: rgb(232, 240, 254);
+  }
+  button {
+    background-color: skyblue;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    color: white;
+    margin: 0 1em;
+  }
+}
