@@ -53,9 +53,11 @@ const SignInScreen = ({navigation, route}) => {
     Keyboard.dismiss();
     const {email, password} = form;
     const info = {email, password};
+    console.log(info);
     setLoading(true);
     try {
       const {user} = await signIn(info);
+      // console.log({user});
       const userDetail = await getUser(user.uid);
       const userProperty = await getUserProperty(user.uid);
 

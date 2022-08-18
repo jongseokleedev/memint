@@ -125,10 +125,16 @@ export async function getUserByNickname(str, loginUser) {
 }
 
 export async function getUserByPhoneNumber(phoneNumber) {
+  console.log({phoneNumber});
   const res = await usersCollection
     .where('phoneNumber', '==', phoneNumber)
     .get();
-  return res.docs[0]._data.email;
+  console.log({res});
+  if (res.docs.length === 0) {
+    return 'NA';
+  } else {
+    return res.docs[0]._data.email;
+  }
 }
 
 export async function addVisibleUser(id, value) {

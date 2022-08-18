@@ -62,7 +62,7 @@ const VerifyMobileScreen = ({navigation, route}) => {
   async function verifyPhoneNumber(phoneNumber) {
     const userEmail = await getUserByPhoneNumber(form.mobileNumber);
     console.log({userEmail});
-    if (!userEmail) {
+    if (userEmail === 'NA') {
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
       setFiexedPhoneNumber(form.mobileNumber);
       setConfirm(confirmation);
