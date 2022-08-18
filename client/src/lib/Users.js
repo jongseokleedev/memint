@@ -99,7 +99,26 @@ export function updateUserMeetingIn(id, field, value) {
     .update({[field]: firestore.FieldValue.arrayUnion(value)});
 }
 
-export function updateUserMeetingOut(id, field, value) {
+export async function updateUserMeetingOut(
+  id,
+  field,
+  value,
+  nickName,
+  meetingId,
+) {
+  // 나가기 전에 메시지 보내고 나가기
+  if (nickName && meetingId) {
+    const obj = {
+      createdAt: firestore.FieldValue.serverTimestamp(),
+      status: 'out',
+      nickName,
+    };
+    await firestore()
+      .collection('Meeting')
+      .doc(meetingId)
+      .collection('Messages')
+      .add(obj);
+  }
   return usersCollection
     .doc(id)
     .update({[field]: firestore.FieldValue.arrayRemove(value)});

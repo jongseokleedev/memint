@@ -69,7 +69,9 @@ function ChatText({data, roomInfo, userDetail}) {
           style={styles.container}
           data={chattings}
           renderItem={({item}) =>
-            item.data().sender === user ? (
+            item.data().status ? (
+              <StatusMessage item={item} />
+            ) : item.data().sender === user ? (
               <MyChat item={item} user={userDesc} userDetail={userDetail} />
             ) : (
               <NotMyChat
@@ -151,7 +153,7 @@ function NotMyChat({item, userDetail, setUserInfoModalVisible, setUserId}) {
   );
 }
 
-function MyChat({item, userDetail, user}) {
+function MyChat({item}) {
   return (
     <View style={{...styles.MymessageWrapper, paddingTop: 10}}>
       <View style={[styles.textWrapper, {alignItems: 'flex-end'}]}>
@@ -176,6 +178,33 @@ function MyChat({item, userDetail, user}) {
             <Text style={{padding: 3}}>{item.data().text}</Text>
           </View>
         </View>
+      </View>
+    </View>
+  );
+}
+
+function StatusMessage({item}) {
+  return (
+    <View
+      style={{
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 3,
+      }}>
+      <View
+        style={{
+          minWidth: '77%',
+          alignItems: 'center',
+          backgroundColor: 'lightgray',
+          padding: 2,
+          borderRadius: 10,
+          opacity: 0.7,
+        }}>
+        <Text>
+          {item.data().nickName} 님이{' '}
+          {item.data().status === 'out' ? '퇴장하셨습니다.' : '입장하셨습니다.'}
+        </Text>
       </View>
     </View>
   );
