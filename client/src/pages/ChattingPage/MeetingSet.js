@@ -22,10 +22,10 @@ function MeetingSet({route}) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const isFocused = useIsFocused();
-  // useEffect(() => {
-  //   console.log({meetingInfo: route.params.meetingInfo});
-  //   console.log({userInfo: route.params.userInfo});
-  // }, []);
+  useEffect(() => {
+    // console.log({meetingInfo: route.params.meetingInfo.id});
+    // console.log({userInfo: route.params.userInfo});
+  }, []);
   const meetingInfo = route.params.meetingInfo;
   const userInfo = useUser();
   const navigation = useNavigation();
@@ -73,7 +73,13 @@ function MeetingSet({route}) {
       return;
     }
 
-    updateUserMeetingOut(userInfo.id, 'createdroomId', meetingInfo.id)
+    updateUserMeetingOut(
+      userInfo.id,
+      'createdroomId',
+      meetingInfo.id,
+      userInfo.nickName,
+      meetingInfo.id,
+    )
       .then(() => {
         route.params.userInfo.map(el => {
           if (el[2] !== meetingInfo.hostId) {

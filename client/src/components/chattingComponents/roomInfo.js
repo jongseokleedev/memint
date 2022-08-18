@@ -42,7 +42,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   );
 
   const handleNavigateToConfirm = () => {
-    if (chatInfo.status === 'open' || chatInfo.status === 'full') {
+    if (meetingStatus === 'open' || meetingStatus === 'full') {
       showToast('error', '미팅 확정 후 인증이 가능합니다');
       return;
     } else {

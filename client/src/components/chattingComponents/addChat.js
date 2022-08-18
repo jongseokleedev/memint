@@ -1,5 +1,11 @@
 import React, {useContext, useReducer, useState} from 'react';
-import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ChatContext from './context/chatContext';
 import firestore from '@react-native-firebase/firestore';
