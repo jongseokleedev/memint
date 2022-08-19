@@ -16,6 +16,7 @@ import {useIsFocused} from '@react-navigation/native';
 
 function ChattingListPage({navigation}) {
   const [chatLog, setChatLog] = useState('');
+  const [refresh, setRefresh] = useState(false);
   const user = useUser();
 
   const isFocused = useIsFocused();
@@ -35,7 +36,7 @@ function ChattingListPage({navigation}) {
       userInfo.joinedroomId && meetingList.push(...userInfo.joinedroomId);
 
       const meetingInfos = await Promise.all(
-        meetingList.map(async meetingId => {
+        meetingList.map(async (meetingId, idx) => {
           const meetingInfo = await firestore()
             .collection('Meeting')
             .doc(meetingId)
@@ -45,7 +46,7 @@ function ChattingListPage({navigation}) {
             .collection('Meeting')
             .doc(meetingId)
             .collection('Messages')
-            .orderBy('createdAt')
+            .orderBy('createdAt', 'desc')
             .limit(1)
             .get();
 
@@ -54,34 +55,42 @@ function ChattingListPage({navigation}) {
             .doc(meetingInfo.data().hostId)
             .get();
 
-          if (lastMsg.docs.length === 0) {
-            return {
-              ...meetingInfo.data(),
-              id: meetingId,
-              hostInfo: hostImage.data().nftProfile,
-            };
-          } else {
-            return {
-              ...meetingInfo.data(),
-              id: meetingId,
-              lastMsg: lastMsg.docs[0].data().text,
-              lastTime: lastMsg.docs[0]
-                .data()
-                .createdAt.toDate()
-                .toLocaleString()
-                .slice(6),
-              hostInfo: hostImage.data().nftProfile,
-            };
-          }
+          return {
+            ...meetingInfo.data(),
+            id: meetingId,
+            hostInfo: hostImage.data().nftProfile,
+            lastMsg: lastMsg.docs[0] && lastMsg.docs[0].data(),
+          };
         }),
       );
 
-      setChatLog(meetingInfos);
+      // const findAndIn = (id, value) => {
+      //   meetingInfos.forEach(el => {
+      //     if (el.id === id) {
+      //       el = value;
+      //     }
+      //   });
+      // };
 
-      // return isFocused;
+      // meetingList.forEach(el => {
+      //   firestore()
+      //     .collection('Meeting')
+      //     .doc(el)
+      //     .collection('Messages')
+      //     .orderBy('createdAt', 'desc')
+      //     .limit(1)
+      //     .onSnapshot(result => {
+      //       if (result.docs.length !== 0) {
+      //         console.log(result.docs[0].data());
+      //         findAndIn(el, result.docs[0].data());
+      //       }
+      //     });
+      // });
+      setChatLog(meetingInfos);
     };
+    console.log('hi');
     getChatLogs();
-  }, [user, isFocused]);
+  }, [user, isFocused, refresh]);
 
   return (
     <SafeAreaView style={styles.view}>
@@ -95,9 +104,20 @@ function ChattingListPage({navigation}) {
       ) : (
         <FlatList
           ItemSeparatorComponent={() => <View style={styles.separator} />}
-          data={chatLog}
+          data={chatLog.sort((a, b) => {
+            let lastA;
+            let lastB;
+            a.lastMsg ? (lastA = a.lastMsg.createdAt) : (lastA = a.createdAt);
+            b.lastMsg ? (lastB = b.lastMsg.createdAt) : (lastB = b.createdAt);
+            return lastB - lastA;
+          })}
           renderItem={({item}) => (
-            <MetaData item={item} navigation={navigation} />
+            <MetaData
+              item={item}
+              navigation={navigation}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
           )}
         />
       )}
@@ -107,7 +127,7 @@ function ChattingListPage({navigation}) {
   );
 }
 
-function MetaData({item, navigation}) {
+function MetaData({item, navigation, refresh, setRefresh}) {
   const [lastMsg, setLastMsg] = useState('');
   const [lastTime, setLastTime] = useState('');
   const MessageRef = useMemo(
@@ -115,7 +135,6 @@ function MetaData({item, navigation}) {
     [item.id],
   );
   useEffect(() => {
-    console.log(item);
     const getContent = async () => {
       MessageRef.orderBy('createdAt', 'desc')
         .limit(1)
@@ -127,21 +146,22 @@ function MetaData({item, navigation}) {
               result.docChanges()[result.docChanges().length - 1].doc._data
                 .createdAt
             ) {
+              setRefresh(!refresh);
               setLastMsg(result.docs[0].data().text);
               setLastTime(
                 result.docs[0]
                   .data()
                   .createdAt.toDate()
                   .toLocaleString()
-                  .slice(6),
+                  .slice(6, 20),
               );
             }
           },
           [MessageRef],
         );
     };
-
     getContent();
+    return () => getContent();
   }, [MessageRef]);
   return (
     <TouchableOpacity
@@ -150,8 +170,12 @@ function MetaData({item, navigation}) {
         <Image style={styles.image} source={{uri: item.hostInfo}} />
         <View style={styles.chatInfo}>
           <View>
-            <Text style={styles.titleText}>{item.title}</Text>
-            <Text>{lastMsg ? lastMsg : '채팅을 시작해보세요!'}</Text>
+            <Text style={styles.titleText} numberOfLines={1}>
+              {item.title}
+            </Text>
+            <Text numberOfLines={1} style={{width: 180}}>
+              {lastMsg ? lastMsg : '채팅을 시작해보세요!'}
+            </Text>
           </View>
           <View style={{justifyContent: 'center'}}>
             <Text>{lastTime ? lastTime : ''}</Text>
@@ -209,6 +233,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     fontSize: 15,
     fontWeight: 'bold',
+    width: 150,
   },
 });
 

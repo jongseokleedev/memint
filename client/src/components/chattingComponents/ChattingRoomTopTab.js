@@ -40,8 +40,11 @@ function ChattingRoomTopTab({data}) {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
+              maxWidth: 270,
             }}>
-            <Text style={{paddingRight: 7, fontSize: 16, fontWeight: '700'}}>
+            <Text
+              style={{paddingRight: 7, fontSize: 16, fontWeight: '700'}}
+              numberOfLines={1}>
               {roomData && roomData.title}
             </Text>
             <View style={styles.status}>
