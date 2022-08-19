@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
 import {handleDateInFormat} from '../../utils/common/Functions';
+import {getUser} from '../../lib/Users';
+import {getMeeting} from '../../lib/Meeting';
+import {useIsFocused} from '@react-navigation/native';
 
 // function MyMeetingList({List, navigation}) {
 //   return (
@@ -17,24 +20,30 @@ import {handleDateInFormat} from '../../utils/common/Functions';
 // }
 
 function MyMeetingList({navigation, user}) {
+  const [createdrooms, setCreatedRoom] = useState([]);
+  const isFocused = useIsFocused();
   let {rooms} = useMeeting(); //redux crete, join에 있는 모든 미팅 정보들
-  const {createdrooms} = rooms;
-  // const getCreatedRoom = useCallback(async () => {
-  //   const userData = await getUser(user.id);
+  // const {createdrooms} = rooms;
+  const getCreatedRoom = useCallback(async () => {
+    const userData = await getUser(user.id);
 
-  //   const data = await Promise.all(
-  //     userData.createdroomId.map(async el => {
-  //       const res = await getMeeting(el);
-  //       const host = await getUser(res.data().hostId);
-  //       return {
-  //         id: res.id,
-  //         ...res.data(),
-  //         hostInfo: host,
-  //       };
-  //     }),
-  //   );
-  //   setCreatedRoom(data);
-  // }, [user]);
+    const data = await Promise.all(
+      userData.createdroomId.map(async el => {
+        const res = await getMeeting(el);
+        const host = await getUser(res.data().hostId);
+        return {
+          id: res.id,
+          ...res.data(),
+          hostInfo: host,
+        };
+      }),
+    );
+    setCreatedRoom(data);
+  }, [user]);
+
+  useEffect(() => {
+    getCreatedRoom();
+  }, [isFocused]);
 
   return (
     <>

@@ -85,18 +85,18 @@ function MeetingSet({route}) {
         deleteMeeting(meetingInfo.id);
       })
       .then(() => {
-        saveMeeting({
-          ...rooms,
-          createdrooms: rooms.createdrooms.filter(
-            el => el.id !== meetingInfo.id,
-          ),
-        });
-        saveInfo({
-          ...userInfo,
-          createdroomId: userInfo.createdroomId.filter(
-            el => el !== meetingInfo.id,
-          ),
-        });
+        // saveMeeting({
+        //   ...rooms,
+        //   createdrooms: rooms.createdrooms.filter(
+        //     el => el.id !== meetingInfo.id,
+        //   ),
+        // });
+        // saveInfo({
+        //   ...userInfo,
+        //   createdroomId: userInfo.createdroomId.filter(
+        //     el => el !== meetingInfo.id,
+        //   ),
+        // });
         showToast('success', '미팅이 삭제되었습니다.');
         setDeleteModalVisible(!deleteModalVisible);
         navigation.navigate('ChattingListPage');

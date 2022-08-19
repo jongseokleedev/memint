@@ -144,13 +144,13 @@ function EditMeetingInfo({route}) {
           });
         })
         .then(data => {
-          saveMeeting({
-            ...rooms,
-            createdrooms: [
-              data,
-              ...rooms.createdrooms.filter(el => el.id !== item.id),
-            ],
-          });
+          // saveMeeting({
+          //   ...rooms,
+          //   createdrooms: [
+          //     data,
+          //     ...rooms.createdrooms.filter(el => el.id !== item.id),
+          //   ],
+          // });
           setConfirmModalVisible(false);
           showToast('success', '미팅이 수정되었습니다');
           navigation.pop();

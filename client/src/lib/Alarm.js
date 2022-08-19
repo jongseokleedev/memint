@@ -1,4 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
+import axios from 'axios';
+import {notification} from './api/notification';
 
 const userCollection = firestore().collection('User');
 const adminCollection = firestore().collection('Admin');
@@ -18,7 +20,7 @@ export const getAlarmsById = async userId => {
 
 //미팅 신청 알림 생성
 //sender, receiver, meetingId, message
-export const createMeetingProposal = ({...data}) => {
+export const createMeetingProposal = data => {
   // return userCollection.doc(data.receiver).update({
   //   alarms: firestore.FieldValue.arrayUnion({
   //     type: 'proposal',
@@ -29,14 +31,26 @@ export const createMeetingProposal = ({...data}) => {
   //     complete: false,
   //   }),
   // });
-  return userCollection.doc(data.receiver).collection('Alarm').add({
-    type: 'proposal',
-    sender: data.sender,
-    meetingId: data.meetingId,
-    message: data.message,
-    createdAt: firestore.Timestamp.now(),
-    complete: false,
-  });
+  return userCollection
+    .doc(data.receiver)
+    .collection('Alarm')
+    .add({
+      type: 'proposal',
+      sender: data.sender,
+      meetingId: data.meetingId,
+      message: data.message,
+      createdAt: firestore.Timestamp.now(),
+      complete: false,
+    })
+    .then(() => {
+      notification({
+        receiver: data.receiver,
+        message: '미팅 신청 메시지가 도착했습니다!',
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 //미팅 수락 알림 생성
@@ -50,12 +64,24 @@ export const createMeetingAccept = ({...data}) => {
   //     createdAt: firestore.Timestamp.now(),
   //   }),
   // });
-  return userCollection.doc(data.receiver).collection('Alarm').add({
-    type: 'accept',
-    sender: data.sender,
-    meetingId: data.meetingId,
-    createdAt: firestore.Timestamp.now(),
-  });
+  return userCollection
+    .doc(data.receiver)
+    .collection('Alarm')
+    .add({
+      type: 'accept',
+      sender: data.sender,
+      meetingId: data.meetingId,
+      createdAt: firestore.Timestamp.now(),
+    })
+    .then(() => {
+      notification({
+        receiver: data.receiver,
+        message: '수락 메시지가 도착했습니다!',
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 //미팅 퇴장 알림 생성

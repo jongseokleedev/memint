@@ -89,23 +89,23 @@ function ParticipatedMeetings({item, getJoinedRoom}) {
   const {showToast} = useToast();
 
   const renderButton = () => {
-    if (
-      item?.status === 'confirmed' &&
-      item.members.filter(el => {
-        return Object.keys(el)[0] === user.id;
-      })[0][user.id] === 'fixed'
-    ) {
-      return (
-        <TouchableOpacity
-          style={{
-            ...styles.button,
-            ...styles.backgroundColorBlue,
-          }}
-          onPress={() => setStartModalVisible(true)}>
-          <Text style={styles.buttonText}>참여 보상받기</Text>
-        </TouchableOpacity>
-      );
-    } else if (item?.status === 'end') {
+    // if (
+    //   item?.status === 'confirmed' &&
+    //   item.members.filter(el => {
+    //     return Object.keys(el)[0] === user.id;
+    //   })[0][user.id] === 'fixed'
+    // ) {
+    //   return (
+    //     <TouchableOpacity
+    //       style={{
+    //         ...styles.button,
+    //         ...styles.backgroundColorBlue,
+    //       }}
+    //       onPress={() => setStartModalVisible(true)}>
+    //       <Text style={styles.buttonText}>참여 보상받기</Text>
+    //     </TouchableOpacity>
+    //   );
+    if (item?.status === 'end') {
       return <Text style={styles.finishText}>종료된 미팅</Text>;
     }
   };

@@ -167,3 +167,12 @@ export async function addVisibleUser(id, value) {
     .doc(id)
     .update({visibleUser: firestore.FieldValue.arrayUnion(value)});
 }
+
+export const saveTokenToDatabase = async (token, userId) => {
+  await firestore()
+    .collection('User')
+    .doc(userId)
+    .update({
+      deviceTokens: firestore.FieldValue.arrayUnion(token),
+    });
+};

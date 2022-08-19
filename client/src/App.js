@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text} from 'react-native';
+import {Alert, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
@@ -30,7 +30,7 @@ import WalletOffchainScreen from './pages/WalletPage/WalletOffchainScreen';
 import useAuth from './utils/hooks/UseAuth';
 import useAuthActions from './utils/hooks/UseAuthActions';
 import {subscribeAuth} from './lib/Auth';
-import {getUser, getUserProperty} from './lib/Users';
+import {getUser, getUserProperty, saveTokenToDatabase} from './lib/Users';
 import useNftActions from './utils/hooks/UseNftActions';
 import {getNFTs, getProfile, getMemin} from './lib/NFT';
 import {getMeeting} from './lib/Meeting';
@@ -47,6 +47,8 @@ import MeetingMemberOut from './pages/ChattingPage/MeetingMemberOut';
 import Report from './pages/ChattingPage/Report';
 import MeetingConfirm from './pages/ChattingPage/MeetingConfirm';
 import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import {useToast} from './utils/hooks/useToast';
 
 const Stack = createNativeStackNavigator();
 const store = createStore(rootReducer);
@@ -97,42 +99,8 @@ function App() {
       saveNFT(nfts);
 
       setMemin(...getMemin(nfts));
-      const createdrooms = await Promise.all(
-        userDetail.createdroomId.map(async el => {
-          const meetingInfo = await getMeeting(el);
-          const hostInfo = await getUser(meetingInfo.hostId);
-          return {
-            id: meetingInfo.id,
-            ...meetingInfo.data(),
-            hostInfo: {...hostInfo},
-          };
-        }),
-      );
-      const joinedrooms = await Promise.all(
-        userDetail.joinedroomId.map(async el => {
-          const meetingInfo = await getMeeting(el);
-          const hostInfo = await getUser(meetingInfo.hostId);
-          return {
-            id: meetingInfo.id,
-            ...meetingInfo.data(),
-            hostInfo: {...hostInfo},
-          };
-        }),
-      );
-      saveMeeting({
-        createdrooms: createdrooms.sort(
-          (a, b) => b.createdAt.toDate() - a.createdAt.toDate(),
-        ),
-        joinedrooms: joinedrooms.sort(
-          (a, b) => b.createdAt.toDate() - a.createdAt.toDate(),
-        ),
-      });
-      // const meetingIdArray = [
-      //   ...userDetail.createdroomId,
-      //   ...userDetail.joinedroomId,
-      // ];
-      // const meetingRes = await Promise.all(
-      //   meetingIdArray.map(async el => {
+      // const createdrooms = await Promise.all(
+      //   userDetail.createdroomId.map(async el => {
       //     const meetingInfo = await getMeeting(el);
       //     const hostInfo = await getUser(meetingInfo.hostId);
       //     return {
@@ -142,6 +110,25 @@ function App() {
       //     };
       //   }),
       // );
+      // const joinedrooms = await Promise.all(
+      //   userDetail.joinedroomId.map(async el => {
+      //     const meetingInfo = await getMeeting(el);
+      //     const hostInfo = await getUser(meetingInfo.hostId);
+      //     return {
+      //       id: meetingInfo.id,
+      //       ...meetingInfo.data(),
+      //       hostInfo: {...hostInfo},
+      //     };
+      //   }),
+      // );
+      // saveMeeting({
+      //   createdrooms: createdrooms.sort(
+      //     (a, b) => b.createdAt.toDate() - a.createdAt.toDate(),
+      //   ),
+      //   joinedrooms: joinedrooms.sort(
+      //     (a, b) => b.createdAt.toDate() - a.createdAt.toDate(),
+      //   ),
+      // });
 
       // saveMeeting(meetingRes);
 
@@ -160,8 +147,8 @@ function App() {
         tokenAmount: userDetail.tokenAmount,
         klayAmount: userDetail.klayAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,
-        createdroomId: userDetail.createdroomId,
-        joinedroomId: userDetail.joinedroomId,
+        // createdroomId: userDetail.createdroomId,
+        // joinedroomId: userDetail.joinedroomId,
         nftProfile: userDetail.nftProfile.toString(),
         alcoholType: userProperty[0].alcoholType,
         drinkCapa: userProperty[0].drinkCapa,
@@ -173,7 +160,7 @@ function App() {
       console.log(e);
     }
   };
-  // console.log(userInfo);
+
   const [initializing, setInitializing] = useState(true);
   useEffect(() => {
     try {
@@ -181,11 +168,32 @@ function App() {
       setTimeout(() => {
         SplashScreen.hide();
       }, 2000);
+      checkApplicationPermission();
     } catch (e) {
       console.wanr('Error occured');
       console.warn(e);
     }
   }, []);
+
+  async function checkApplicationPermission() {
+    const authorizationStatus = await messaging().requestPermission();
+
+    if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED) {
+      console.log('User has notification permissions enabled.');
+      return true;
+    } else if (
+      authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL
+    ) {
+      console.log('User has provisional notification permissions.');
+      return true;
+    } else {
+      console.log('User has notification permissions disabled');
+      return false;
+    }
+  }
+  async function registerAppWithFCM() {
+    await messaging().registerDeviceForRemoteMessages();
+  }
 
   useEffect(() => {
     const unsubscribe = subscribeAuth(user => {
@@ -194,6 +202,21 @@ function App() {
           id: user.uid,
           email: user.email,
         });
+        //push notification
+        //get the device token
+        registerAppWithFCM().then(() => {
+          messaging()
+            .getToken()
+            .then(token => {
+              return saveTokenToDatabase(token, user.uid);
+            });
+
+          //listen to whether the token changes
+          messaging().onTokenRefresh(token => {
+            saveTokenToDatabase(token, user.uid);
+          });
+        });
+
         saveUserInfo(user);
         setInitialRouteName('Main');
       } else {
@@ -208,6 +231,20 @@ function App() {
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(() => {
+  //   //get the device token
+  //   messaging()
+  //     .getToken()
+  //     .then(token => {
+  //       return saveTokenToDatabase(token);
+  //     });
+
+  //     //listen to whether the token changes
+  //   return messaging().onTokenRefresh(token => {
+  //     saveTokenToDatabase(token);
+  //   });
+  // },[]);
 
   if (initializing) {
     return null;

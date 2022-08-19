@@ -26,6 +26,7 @@ import DoubleModal from '../../components/common/DoubleModal';
 import {sendFeedback} from '../../lib/Meeting';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';
+import {notification} from '../../lib/api/notification';
 
 function FeedbackSendPage({route}) {
   const owner = useUser();
@@ -185,6 +186,10 @@ function FeedbackSendPage({route}) {
                     meetingId: data.id,
                     emotion: form.emotion,
                   });
+                notification({
+                  receiver: person[2],
+                  message: '미팅 후기 메시지가 도착했습니다!',
+                });
               }
               showToast('success', '후기를 전송하였습니다.');
               navigation.navigate('FeedbackChoicePage', {data, userInfo});

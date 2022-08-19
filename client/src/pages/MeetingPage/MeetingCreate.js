@@ -146,17 +146,17 @@ function MeetingCreate({route}) {
         res._documentPath._parts[1],
       );
       const newMeeting = await getMeeting(res._documentPath._parts[1]);
-      saveInfo({
-        ...userInfo,
-        createdroomId: [...userInfo.createdroomId, res._documentPath._parts[1]],
-      });
-      saveMeeting({
-        ...rooms,
-        createdrooms: [
-          {id: newMeeting.id, ...newMeeting.data()},
-          ...rooms.createdrooms,
-        ],
-      });
+      // saveInfo({
+      //   ...userInfo,
+      //   createdroomId: [...userInfo.createdroomId, res._documentPath._parts[1]],
+      // });
+      // saveMeeting({
+      //   ...rooms,
+      //   createdrooms: [
+      //     {id: newMeeting.id, ...newMeeting.data()},
+      //     ...rooms.createdrooms,
+      //   ],
+      // });
       setConfirmModalVisible(false);
       showToast('success', '미팅이 생성되었습니다');
       navigation.navigate('MeetingMarket');
