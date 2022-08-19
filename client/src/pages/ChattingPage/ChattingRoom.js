@@ -8,6 +8,7 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import ChatText from '../../components/chattingComponents/chatText';
 import RoomHeader from '../../components/chattingComponents/roomHeader';
@@ -20,6 +21,7 @@ import {useToast} from '../../utils/hooks/useToast';
 import {changeMeetingState} from '../../lib/Chatting';
 import useUser from '../../utils/hooks/UseUser';
 import {useNavigation} from '@react-navigation/native';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -136,11 +138,18 @@ function ChattingRoom({route}) {
           setModalVisible={setModalVisible}
           data={route.params.data}
         />
-        <ChatText
-          data={route.params.data}
-          roomINfo={roomInfo}
-          userDetail={userDetail}
-        />
+        <Pressable
+          style={{flex: 1}}
+          onPress={() => {
+            Keyboard.dismiss();
+            setRoomInfo(false);
+          }}>
+          <ChatText
+            data={route.params.data}
+            roomINfo={roomInfo}
+            userDetail={userDetail}
+          />
+        </Pressable>
 
         {roomInfoExist ? (
           <Animated.View
