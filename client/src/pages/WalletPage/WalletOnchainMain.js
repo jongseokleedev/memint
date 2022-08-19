@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import WalletAccountElement from '../../components/walletComponents/WalletAccountElement';

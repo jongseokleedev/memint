@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, SafeAreaView, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import WalletCustomButton from '../../components/walletComponents/WalletCustomButton';
 import {useToast} from '../../utils/hooks/useToast';
@@ -23,50 +31,52 @@ const WalletOffchainTrade = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.view}>
-      <BackButton />
-      <View style={styles.accountWrapper}>
-        <Image
-          source={require('../../assets/icons/lovechain.png')}
-          style={styles.icon}
-        />
-        <View style={styles.accountTextWrapper}>
-          <Text style={styles.balanceText}>{user.tokenAmount}</Text>
-          <Text style={styles.lcnText}> LCN</Text>
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonWrapper}>
-          <WalletCustomButton
-            style={styles.buttonWrapper}
-            width={140}
-            height={50}
-            textSize={17}
-            margin={[5, 0, 5, 5]}
-            text="가져오기"
-            hasMarginBottom
-            onPress={handleRecieveSelect}
-            selected={recieveSelected}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView style={styles.view}>
+        <BackButton />
+        <View style={styles.accountWrapper}>
+          <Image
+            source={require('../../assets/icons/lovechain.png')}
+            style={styles.icon}
           />
-          <WalletCustomButton
-            style={styles.buttonWrapper}
-            width={140}
-            height={50}
-            textSize={17}
-            margin={[5, 5, 5, 0]}
-            text="내보내기"
-            hasMarginBottom
-            onPress={handleTransferSelect}
-            selected={transferSelected}
-          />
+          <View style={styles.accountTextWrapper}>
+            <Text style={styles.balanceText}>{user.tokenAmount}</Text>
+            <Text style={styles.lcnText}> LCN</Text>
+          </View>
         </View>
-        {recieveSelected ? (
-          <WalletOffchainRecieve />
-        ) : (
-          <WalletOffchainTransfer />
-        )}
-      </View>
-    </SafeAreaView>
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonWrapper}>
+            <WalletCustomButton
+              style={styles.buttonWrapper}
+              width={140}
+              height={50}
+              textSize={17}
+              margin={[5, 0, 5, 5]}
+              text="가져오기"
+              hasMarginBottom
+              onPress={handleRecieveSelect}
+              selected={recieveSelected}
+            />
+            <WalletCustomButton
+              style={styles.buttonWrapper}
+              width={140}
+              height={50}
+              textSize={17}
+              margin={[5, 5, 5, 0]}
+              text="내보내기"
+              hasMarginBottom
+              onPress={handleTransferSelect}
+              selected={transferSelected}
+            />
+          </View>
+          {recieveSelected ? (
+            <WalletOffchainRecieve />
+          ) : (
+            <WalletOffchainTransfer />
+          )}
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
