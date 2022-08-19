@@ -203,7 +203,11 @@ function StatusMessage({item}) {
         }}>
         <Text>
           {item.data().nickName} 님이{' '}
-          {item.data().status === 'out' ? '퇴장하셨습니다.' : '입장하셨습니다.'}
+          {item.data().status === 'out'
+            ? '나가셨습니다.'
+            : 'in'
+            ? '입장하셨습니다.'
+            : '퇴장당하셨습니다.'}
         </Text>
       </View>
     </View>

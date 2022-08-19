@@ -58,7 +58,13 @@ export const updateMembersOut = (meetingId, userId) => {
 };
 
 //미팅 멤버 삭제 - merber의 status가 accepted, fixed일 때
-export const memberOut = async (meetingId, members, userId, status) => {
+export const memberOut = async (
+  meetingId,
+  members,
+  userId,
+  status,
+  nickName,
+) => {
   const theRestMember = members.filter(el => {
     return Object.keys(el)[0] !== userId;
   });
@@ -72,6 +78,17 @@ export const memberOut = async (meetingId, members, userId, status) => {
       members: theRestMember,
     });
   }
+
+  const obj = {
+    createdAt: firestore.FieldValue.serverTimestamp(),
+    status: 'banned',
+    nickName,
+  };
+  await firestore()
+    .collection('Meeting')
+    .doc(meetingId)
+    .collection('Messages')
+    .add(obj);
 
   return await userCollection
     .doc(userId)

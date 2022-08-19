@@ -66,20 +66,14 @@ function MeetingSet({route}) {
     navigation.navigate('Report');
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     //미팅이 full, open 일때만 삭제 가능
     if (meetingInfo.status !== 'full' && meetingInfo.status !== 'open') {
       showToast('error', '미팅 확정 이후에는 삭제할 수 없습니다');
       return;
     }
 
-    updateUserMeetingOut(
-      userInfo.id,
-      'createdroomId',
-      meetingInfo.id,
-      userInfo.nickName,
-      meetingInfo.id,
-    )
+    updateUserMeetingOut(userInfo.id, 'createdroomId', meetingInfo.id)
       .then(() => {
         route.params.userInfo.map(el => {
           if (el[2] !== meetingInfo.hostId) {
@@ -113,7 +107,7 @@ function MeetingSet({route}) {
       });
   };
 
-  const handleMeetingOut = () => {
+  const handleMeetingOut = async () => {
     //미팅이 확정상태라면 나가지 못함
     console.log();
     if (
@@ -126,9 +120,16 @@ function MeetingSet({route}) {
       showToast('error', '미팅 확정 이후에는 나갈 수 없습니다');
       return;
     }
+
     updateMembersOut(meetingInfo.id, userInfo.id)
       .then(() => {
-        updateUserMeetingOut(userInfo.id, 'joinedroomId', meetingInfo.id);
+        updateUserMeetingOut(
+          userInfo.id,
+          'joinedroomId',
+          meetingInfo.id,
+          userInfo.nickName,
+          'out',
+        );
       })
       .then(() => {
         if (meetingInfo.status === 'full') {

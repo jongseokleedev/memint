@@ -93,29 +93,35 @@ export function updateTokenAmount(userId, balance) {
 //userId, 'createdroomId', meetingId
 //userId, 'joinedroomId', meetingId
 //userId, 'likesroomId', meetingId
-export function updateUserMeetingIn(id, field, value) {
+export async function updateUserMeetingIn(id, field, value, nickName, status) {
+  if (nickName && status) {
+    const obj = {
+      createdAt: firestore.FieldValue.serverTimestamp(),
+      status,
+      nickName,
+    };
+    await firestore()
+      .collection('Meeting')
+      .doc(value)
+      .collection('Messages')
+      .add(obj);
+  }
   return usersCollection
     .doc(id)
     .update({[field]: firestore.FieldValue.arrayUnion(value)});
 }
 
-export async function updateUserMeetingOut(
-  id,
-  field,
-  value,
-  nickName,
-  meetingId,
-) {
+export async function updateUserMeetingOut(id, field, value, nickName, status) {
   // 나가기 전에 메시지 보내고 나가기
-  if (nickName && meetingId) {
+  if (nickName && status) {
     const obj = {
       createdAt: firestore.FieldValue.serverTimestamp(),
-      status: 'out',
+      status,
       nickName,
     };
     await firestore()
       .collection('Meeting')
-      .doc(meetingId)
+      .doc(value)
       .collection('Messages')
       .add(obj);
   }

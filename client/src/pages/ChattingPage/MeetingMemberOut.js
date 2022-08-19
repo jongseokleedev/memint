@@ -91,12 +91,6 @@ function MeetingMemberOut({route}) {
           margin={[30, 3, 3, 3]}
           borderRadius={10}
           onPress={() => {
-            // memberOut(
-            //   route.params.meetingData.id,
-            //   route.params.meetingData.members,
-            //   form.receiver,
-            // );
-
             form.receiver && form.text && setModalVisible(true);
           }}
           border={false}
@@ -114,6 +108,7 @@ function MeetingMemberOut({route}) {
             route.params.meetingData.members,
             form.receiver,
             route.params.meetingData.status,
+            form.nickName,
           )
             .then(() => {
               createMeetingBanned({
