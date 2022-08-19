@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text, Keyboard} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -24,6 +24,7 @@ function RoomHeader({title, roomInfo, setRoomInfo, setRoomInfoExist}) {
       {title === '채팅목록' && (
         <TouchableOpacity
           onPress={() => {
+            Keyboard.dismiss();
             setRoomInfo(!roomInfo);
             setRoomInfoExist(true);
           }}>
