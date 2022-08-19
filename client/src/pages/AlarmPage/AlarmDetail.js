@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -60,7 +60,13 @@ function AlarmDetail({route}) {
     updateWaitingOut(alarm.meetingId, alarm.sender); //신청 메시지의 sender
     updateMembersIn(alarm.meetingId, alarm.sender); //신청 메시지의 sender
     // updateMeetingProposal(alarm.id); //신청 알림 완료로 update
-    updateUserMeetingIn(alarm.sender, 'joinedroomId', alarm.meetingId); //User에 room 추가하기
+    updateUserMeetingIn(
+      alarm.sender,
+      'joinedroomId',
+      alarm.meetingId,
+      alarm.senderInfo.nickName,
+      'in',
+    ); //User에 room 추가하기
     if (
       alarm.meetingInfo.peopleNum * 2 - 1 ===
       alarm.meetingInfo.members.length
