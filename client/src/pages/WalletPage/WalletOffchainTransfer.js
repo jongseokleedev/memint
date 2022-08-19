@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, SafeAreaView, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import WalletCustomButton from '../../components/walletComponents/WalletCustomButton';
 import LargeLcnButton from '../../components/walletComponents/LargeLcnButton';
@@ -52,87 +60,89 @@ const WalletOffchainTransfer = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <SmallLcnButton
-          text={'To'}
-          width={330}
-          height={100}
-          margin={[10, 0, 10, 0]}
-          backgroundColor={'lightblue'}
-          amount={amount}
-        />
-        <Icon name="arrow-upward" size={50} />
-        <LargeLcnButton
-          balance={userInfo.tokenAmount}
-          width={330}
-          height={100}
-          margin={[10, 0, 0, 0]}
-          text={'From'}
-          amount={amount}
-          setAmount={setAmount}
-        />
-        <BasicButton
-          margin={[40, 0, 0, 0]}
-          width={330}
-          height={45}
-          text={'내보내기'}
-          textSize={18}
-          onPress={() => {
-            setModalVisible(true);
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <SmallLcnButton
+            text={'To'}
+            width={330}
+            height={100}
+            margin={[10, 0, 10, 0]}
+            backgroundColor={'lightblue'}
+            amount={amount}
+          />
+          <Icon name="arrow-upward" size={50} />
+          <LargeLcnButton
+            balance={userInfo.tokenAmount}
+            width={330}
+            height={100}
+            margin={[10, 0, 0, 0]}
+            text={'From'}
+            amount={amount}
+            setAmount={setAmount}
+          />
+          <BasicButton
+            margin={[40, 0, 0, 0]}
+            width={330}
+            height={45}
+            text={'내보내기'}
+            textSize={18}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          />
+        </View>
+        <DoubleModal
+          text="LCN을 외부 지갑으로 내보내시겠습니까?"
+          //body={<Text>정말로?</Text>}
+          nButtonText="아니요"
+          pButtonText="네"
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          nFunction={() => {
+            setModalVisible(false);
+          }}
+          pFunction={() => {
+            sendToOnChain().then(result => {
+              if (result.data.message === 'success') {
+                showToast('success', 'LCN을 보냈습니다!');
+                getUser(userInfo.id).then(userDetail => {
+                  console.log(userDetail);
+                  updateTokenInfo({
+                    tokenAmount: Number(userDetail.tokenAmount),
+                    klayAmount: userInfo.klayAmount,
+                    onChainTokenAmount: Number(result.data.LCNBalance),
+                  });
+                  // createSpendOffTxLg(
+                  //   userInfo.id,
+                  //   amount,
+                  //   '온체인 지갑 전송',
+                  //   userDetail.tokenAmount,
+                  // ).then(
+                  //   getOffchainTokenLog(userInfo.id).then(res => {
+                  //     // console.log({res});
+                  //     const logs = res.docs.map(el => {
+                  //       return {...el.data()};
+                  //     });
+                  //     addLog(logs);
+                  //   }),
+                  // );
+                  getOnchainTokenLog(userInfo.id).then(res => {
+                    console.log({res});
+                    const logs = res.docs.map(el => {
+                      return {...el.data()};
+                    });
+                    addLcnLog(logs);
+                  });
+                });
+              }
+            });
+
+            setModalVisible(false);
           }}
         />
       </View>
-      <DoubleModal
-        text="LCN을 외부 지갑으로 내보내시겠습니까?"
-        //body={<Text>정말로?</Text>}
-        nButtonText="아니요"
-        pButtonText="네"
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        nFunction={() => {
-          setModalVisible(false);
-        }}
-        pFunction={() => {
-          sendToOnChain().then(result => {
-            if (result.data.message === 'success') {
-              showToast('success', 'LCN을 보냈습니다!');
-              getUser(userInfo.id).then(userDetail => {
-                console.log(userDetail);
-                updateTokenInfo({
-                  tokenAmount: Number(userDetail.tokenAmount),
-                  klayAmount: userInfo.klayAmount,
-                  onChainTokenAmount: Number(result.data.LCNBalance),
-                });
-                // createSpendOffTxLg(
-                //   userInfo.id,
-                //   amount,
-                //   '온체인 지갑 전송',
-                //   userDetail.tokenAmount,
-                // ).then(
-                //   getOffchainTokenLog(userInfo.id).then(res => {
-                //     // console.log({res});
-                //     const logs = res.docs.map(el => {
-                //       return {...el.data()};
-                //     });
-                //     addLog(logs);
-                //   }),
-                // );
-                getOnchainTokenLog(userInfo.id).then(res => {
-                  console.log({res});
-                  const logs = res.docs.map(el => {
-                    return {...el.data()};
-                  });
-                  addLcnLog(logs);
-                });
-              });
-            }
-          });
-
-          setModalVisible(false);
-        }}
-      />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

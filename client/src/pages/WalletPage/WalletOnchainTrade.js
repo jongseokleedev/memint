@@ -7,6 +7,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import LargeLcnButton from '../../components/walletComponents/LargeLcnButton';
@@ -66,112 +68,118 @@ const WalletOnchainTrade = () => {
     }
   };
   return (
-    <SafeAreaView style={styles.view}>
-      <BackButton />
-      <Text style={styles.tradeText}>Trade</Text>
-      <View style={styles.buttonContainer}>
-        <LargeLcnButton
-          amount={amount.fromAmount}
-          setAmount={createChangeAmountHandler('fromAmount')}
-          balance={fromKlay ? userInfo.klayAmount : userInfo.onChainTokenAmount}
-          width={330}
-          height={110}
-          margin={[30, 0, 30, 0]}
-          text="From"
-          content={fromKlay ? 'KLAY' : 'LCN'}
-          //   backgroundColor={'lightblue'}
-        />
-        <TouchableOpacity onPress={() => setFromKlay(!fromKlay)}>
-          <Icon name="autorenew" size={50} />
-        </TouchableOpacity>
-        <SmallLcnButton
-          amount={amount.toAmount}
-          width={330}
-          height={110}
-          margin={[30, 0, 0, 0]}
-          text="To (Estimated)"
-          content={fromKlay ? 'LCN' : 'KLAY'}
-        />
-        <BasicButton
-          margin={[80, 0, 0, 0]}
-          width={330}
-          height={50}
-          text={'교환하기'}
-          textSize={18}
-          onPress={() => {
-            setModalVisible(true);
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView style={styles.view}>
+        <BackButton />
+
+        <Text style={styles.tradeText}>Trade</Text>
+        <View style={styles.buttonContainer}>
+          <LargeLcnButton
+            amount={amount.fromAmount}
+            setAmount={createChangeAmountHandler('fromAmount')}
+            balance={
+              fromKlay ? userInfo.klayAmount : userInfo.onChainTokenAmount
+            }
+            width={330}
+            height={110}
+            margin={[30, 0, 30, 0]}
+            text="From"
+            content={fromKlay ? 'KLAY' : 'LCN'}
+            //   backgroundColor={'lightblue'}
+          />
+          <TouchableOpacity onPress={() => setFromKlay(!fromKlay)}>
+            <Icon name="autorenew" size={50} />
+          </TouchableOpacity>
+          <SmallLcnButton
+            amount={amount.toAmount}
+            width={330}
+            height={110}
+            margin={[30, 0, 0, 0]}
+            text="To (Estimated)"
+            content={fromKlay ? 'LCN' : 'KLAY'}
+          />
+          <BasicButton
+            margin={[80, 0, 0, 0]}
+            width={330}
+            height={50}
+            text={'교환하기'}
+            textSize={18}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          />
+        </View>
+        <DoubleModal
+          text="교환하시겠습니까?"
+          nButtonText="아니요"
+          pButtonText="네"
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          nFunction={() => {
+            setModalVisible(false);
+          }}
+          pFunction={() => {
+            fromKlay
+              ? transferKlayToLCN().then(result => {
+                  console.log(result.data);
+                  if (result.data.message === 'success') {
+                    showToast('success', '토큰 교환이 완료되었습니다!');
+                    getUser(userInfo.id).then(userDetail => {
+                      updateTokenInfo({
+                        tokenAmount: Number(userDetail.tokenAmount),
+                        klayAmount: Number(result.data.KlayBalance),
+                        onChainTokenAmount: Number(result.data.LCNBalance),
+                      });
+                      getOnchainKlayLog(userInfo.id).then(res => {
+                        console.log({res});
+                        const logs = res.docs.map(el => {
+                          return {...el.data()};
+                        });
+                        addKlayLog(logs);
+                      });
+                      getOnchainTokenLog(userInfo.id).then(res => {
+                        console.log({res});
+                        const logs = res.docs.map(el => {
+                          return {...el.data()};
+                        });
+                        addLcnLog(logs);
+                      });
+                    });
+                  }
+                })
+              : transferLCNToKlay().then(result => {
+                  console.log(result.data);
+                  if (result.data.message === 'success') {
+                    showToast('success', '토큰 교환이 완료되었습니다!');
+                    getUser(userInfo.id).then(userDetail => {
+                      updateTokenInfo({
+                        tokenAmount: Number(userDetail.tokenAmount),
+                        klayAmount: Number(result.data.KlayBalance),
+                        onChainTokenAmount: Number(result.data.LCNBalance),
+                      });
+                      getOnchainKlayLog(userInfo.id).then(res => {
+                        console.log({res});
+                        const logs = res.docs.map(el => {
+                          return {...el.data()};
+                        });
+                        addKlayLog(logs);
+                      });
+                      getOnchainTokenLog(userInfo.id).then(res => {
+                        console.log({res});
+                        const logs = res.docs.map(el => {
+                          return {...el.data()};
+                        });
+                        addLcnLog(logs);
+                      });
+                    });
+                  }
+                });
+            setModalVisible(false);
           }}
         />
-      </View>
-      <DoubleModal
-        text="교환하시겠습니까?"
-        nButtonText="아니요"
-        pButtonText="네"
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        nFunction={() => {
-          setModalVisible(false);
-        }}
-        pFunction={() => {
-          fromKlay
-            ? transferKlayToLCN().then(result => {
-                console.log(result.data);
-                if (result.data.message === 'success') {
-                  showToast('success', '토큰 교환이 완료되었습니다!');
-                  getUser(userInfo.id).then(userDetail => {
-                    updateTokenInfo({
-                      tokenAmount: Number(userDetail.tokenAmount),
-                      klayAmount: Number(result.data.KlayBalance),
-                      onChainTokenAmount: Number(result.data.LCNBalance),
-                    });
-                    getOnchainKlayLog(userInfo.id).then(res => {
-                      console.log({res});
-                      const logs = res.docs.map(el => {
-                        return {...el.data()};
-                      });
-                      addKlayLog(logs);
-                    });
-                    getOnchainTokenLog(userInfo.id).then(res => {
-                      console.log({res});
-                      const logs = res.docs.map(el => {
-                        return {...el.data()};
-                      });
-                      addLcnLog(logs);
-                    });
-                  });
-                }
-              })
-            : transferLCNToKlay().then(result => {
-                console.log(result.data);
-                if (result.data.message === 'success') {
-                  showToast('success', '토큰 교환이 완료되었습니다!');
-                  getUser(userInfo.id).then(userDetail => {
-                    updateTokenInfo({
-                      tokenAmount: Number(userDetail.tokenAmount),
-                      klayAmount: Number(result.data.KlayBalance),
-                      onChainTokenAmount: Number(result.data.LCNBalance),
-                    });
-                    getOnchainKlayLog(userInfo.id).then(res => {
-                      console.log({res});
-                      const logs = res.docs.map(el => {
-                        return {...el.data()};
-                      });
-                      addKlayLog(logs);
-                    });
-                    getOnchainTokenLog(userInfo.id).then(res => {
-                      console.log({res});
-                      const logs = res.docs.map(el => {
-                        return {...el.data()};
-                      });
-                      addLcnLog(logs);
-                    });
-                  });
-                }
-              });
-          setModalVisible(false);
-        }}
-      />
-    </SafeAreaView>
+        {/* </TouchableWithoutFeedback> */}
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

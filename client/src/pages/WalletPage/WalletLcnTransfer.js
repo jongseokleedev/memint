@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
@@ -52,81 +53,83 @@ const WalletLcnTransfer = () => {
     }
   };
   return (
-    <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
-      behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
-        <BackButton />
-        <View style={styles.container}>
-          <Text style={styles.transferText}>Transfer</Text>
-          <View style={styles.imageContainer}>
-            <Image source={lcnIcon} style={styles.icon} />
-          </View>
-          <Text style={styles.text}>To Address</Text>
-          <TextInput
-            style={styles.input}
-            value={form.address}
-            onChangeText={createChangeTextHandler('address')}
-            onPress={onSubmit}
-          />
-          <Text style={styles.text}>Amount</Text>
-          <TextInput
-            style={styles.input}
-            value={form.amount}
-            onChangeText={createChangeTextHandler('amount')}
-            placeholder="LCN"
-            keyboardType="numeric"
-            // returnKeyType={'done'}
-            onPress={onSubmit}
-          />
-          <View style={styles.buttonContainer}>
-            <BasicButton
-              margin={[30, 0, 0, 0]}
-              width={330}
-              height={50}
-              text={'보내기'}
-              textSize={18}
-              onPress={() => {
-                setModalVisible(true);
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={Platform.select({ios: 'padding'})}>
+        <SafeAreaView style={styles.fullscreen}>
+          <BackButton />
+          <View style={styles.container}>
+            <Text style={styles.transferText}>Transfer</Text>
+            <View style={styles.imageContainer}>
+              <Image source={lcnIcon} style={styles.icon} />
+            </View>
+            <Text style={styles.text}>To Address</Text>
+            <TextInput
+              style={styles.input}
+              value={form.address}
+              onChangeText={createChangeTextHandler('address')}
+              onPress={onSubmit}
+            />
+            <Text style={styles.text}>Amount</Text>
+            <TextInput
+              style={styles.input}
+              value={form.amount}
+              onChangeText={createChangeTextHandler('amount')}
+              placeholder="LCN"
+              keyboardType="numeric"
+              // returnKeyType={'done'}
+              onPress={onSubmit}
+            />
+            <View style={styles.buttonContainer}>
+              <BasicButton
+                margin={[30, 0, 0, 0]}
+                width={330}
+                height={50}
+                text={'보내기'}
+                textSize={18}
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+              />
+            </View>
+            <DoubleModal
+              text="보내시겠습니까?"
+              nButtonText="아니요"
+              pButtonText="네"
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+              nFunction={() => {
+                setModalVisible(false);
+              }}
+              pFunction={() => {
+                sendLCN().then(result => {
+                  if (result.data.message === 'success') {
+                    showToast('success', 'LCN 전송이 완료되었습니다!');
+                    getUser(userInfo.id).then(userDetail => {
+                      updateTokenInfo({
+                        tokenAmount: Number(userDetail.tokenAmount),
+                        klayAmount: userInfo.klayAmount,
+                        onChainTokenAmount: Number(result.data.balance),
+                      });
+                      getOnchainTokenLog(userInfo.id).then(res => {
+                        console.log({res});
+                        const logs = res.docs.map(el => {
+                          return {...el.data()};
+                        });
+                        addLcnLog(logs);
+                      });
+                    });
+                  }
+                });
+
+                setModalVisible(false);
               }}
             />
           </View>
-          <DoubleModal
-            text="보내시겠습니까?"
-            nButtonText="아니요"
-            pButtonText="네"
-            modalVisible={modalVisible}
-            setModalVisible={setModalVisible}
-            nFunction={() => {
-              setModalVisible(false);
-            }}
-            pFunction={() => {
-              sendLCN().then(result => {
-                if (result.data.message === 'success') {
-                  showToast('success', 'LCN 전송이 완료되었습니다!');
-                  getUser(userInfo.id).then(userDetail => {
-                    updateTokenInfo({
-                      tokenAmount: Number(userDetail.tokenAmount),
-                      klayAmount: userInfo.klayAmount,
-                      onChainTokenAmount: Number(result.data.balance),
-                    });
-                    getOnchainTokenLog(userInfo.id).then(res => {
-                      console.log({res});
-                      const logs = res.docs.map(el => {
-                        return {...el.data()};
-                      });
-                      addLcnLog(logs);
-                    });
-                  });
-                }
-              });
-
-              setModalVisible(false);
-            }}
-          />
-        </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
