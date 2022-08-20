@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Modal, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Modal,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import BasicButton from './BasicButton';
 
 /*
@@ -30,18 +36,23 @@ function SingleModal({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <View style={[styles.centeredView, styles.backgroudDim]}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>{text}</Text>
-            {body}
-            <BasicButton
-              text={buttonText}
-              width={100}
-              height={40}
-              onPress={pFunction}
-            />
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModalVisible(false);
+          }}>
+          <View style={[styles.centeredView, styles.backgroudDim]}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{text}</Text>
+              {body}
+              <BasicButton
+                text={buttonText}
+                width={100}
+                height={40}
+                onPress={pFunction}
+              />
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );

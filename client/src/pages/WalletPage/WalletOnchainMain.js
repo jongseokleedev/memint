@@ -53,118 +53,126 @@ const WalletOnchainMain = ({navigation}) => {
     Clipboard.setString(text);
   };
   return (
-    <View>
-      <View style={styles.container}>
-        <View style={styles.iconContainer}>
-          <Image source={imgSrc} style={styles.icon} />
-          <Text style={styles.balanceText}>
-            {currentBalance} {ticker}
-          </Text>
-        </View>
-        <View style={styles.address}>
-          <Text style={styles.addressText}>{slicedAddress}</Text>
-        </View>
-        <View style={styles.iconContainer}>
-          <View style={styles.iconWrapper}>
-            <TouchableOpacity
-              style={styles.iconCircle}
-              onPress={() => {
-                setModalVisible(true);
-              }}>
-              <Image
-                style={styles.icon}
-                source={require('../../assets/icons/receive.png')}
-              />
-            </TouchableOpacity>
-            <Text>Receive</Text>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        console.log('pressed');
+        setModalVisible(false);
+        setTransferModalVisible(false);
+      }}>
+      <View>
+        <View style={styles.container}>
+          <View style={styles.iconContainer}>
+            <Image source={imgSrc} style={styles.icon} />
+            <Text style={styles.balanceText}>
+              {currentBalance} {ticker}
+            </Text>
           </View>
-          <View style={styles.iconWrapper}>
-            <TouchableOpacity
-              style={styles.iconCircle}
-              onPress={() => {
-                setTransferModalVisible(true);
-              }}>
-              <Image
-                style={styles.icon}
-                source={require('../../assets/icons/money-transfer.png')}
-              />
-            </TouchableOpacity>
-            <Text>Transfer</Text>
-          </View>
-          <View style={styles.iconWrapper}>
-            <TouchableOpacity
-              style={styles.iconCircle}
-              onPress={goToOnchainTrade}>
-              <Image
-                style={styles.icon}
-                source={require('../../assets/icons/transfer.png')}
-              />
-            </TouchableOpacity>
-            <Text>Trade</Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setCurrentTab('account')}>
-          <Text style={styles.walletText}>Wallet Account</Text>
-        </TouchableOpacity>
-        {currentTab === 'KLAY' ? (
-          <View style={styles.contentContainer}>
-            <WalletKlayHistory />
-          </View>
-        ) : currentTab === 'LCN' ? (
-          <WalletLcnHistory />
-        ) : (
-          <View style={styles.contentContainer}>
-            <WalletAccountElement
-              content="KLAY"
-              balance={
-                Math.round((userInfo.klayAmount + Number.EPSILON) * 10000) /
-                10000
-              }
-              onPress={setCurrentTab}
-            />
-            <WalletAccountElement
-              content="LCN"
-              balance={
-                Math.round(
-                  (userInfo.onChainTokenAmount + Number.EPSILON) * 10000,
-                ) / 10000
-              }
-              onPress={setCurrentTab}
-            />
-          </View>
-        )}
-      </View>
-      <SingleModal
-        text="Recieve KLAY"
-        buttonText="주소 복사하기"
-        body={
           <View style={styles.address}>
             <Text style={styles.addressText}>{slicedAddress}</Text>
           </View>
-        }
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        pFunction={() => {
-          setModalVisible(false);
-          copyToClipboard(userInfo.address);
-          showToast('success', '주소가 복사되었습니다!');
-        }}
-      />
-      <WalletCustomModal
-        modalVisible={transferModalVisible}
-        setModalVisible={setTransferModalVisible}
-        nFunction={() => {
-          setTransferModalVisible(false);
-          navigation.navigate('WalletKlayTransfer');
-        }}
-        pFunction={() => {
-          setTransferModalVisible(false);
-          navigation.navigate('WalletLcnTransfer');
-        }}
-      />
-    </View>
+          <View style={styles.iconContainer}>
+            <View style={styles.iconWrapper}>
+              <TouchableOpacity
+                style={styles.iconCircle}
+                onPress={() => {
+                  setModalVisible(true);
+                }}>
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icons/receive.png')}
+                />
+              </TouchableOpacity>
+              <Text>Receive</Text>
+            </View>
+            <View style={styles.iconWrapper}>
+              <TouchableOpacity
+                style={styles.iconCircle}
+                onPress={() => {
+                  setTransferModalVisible(true);
+                }}>
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icons/money-transfer.png')}
+                />
+              </TouchableOpacity>
+              <Text>Transfer</Text>
+            </View>
+            <View style={styles.iconWrapper}>
+              <TouchableOpacity
+                style={styles.iconCircle}
+                onPress={goToOnchainTrade}>
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icons/transfer.png')}
+                />
+              </TouchableOpacity>
+              <Text>Trade</Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setCurrentTab('account')}>
+            <Text style={styles.walletText}>Wallet Account</Text>
+          </TouchableOpacity>
+          {currentTab === 'KLAY' ? (
+            <View style={styles.contentContainer}>
+              <WalletKlayHistory />
+            </View>
+          ) : currentTab === 'LCN' ? (
+            <WalletLcnHistory />
+          ) : (
+            <View style={styles.contentContainer}>
+              <WalletAccountElement
+                content="KLAY"
+                balance={
+                  Math.round((userInfo.klayAmount + Number.EPSILON) * 10000) /
+                  10000
+                }
+                onPress={setCurrentTab}
+              />
+              <WalletAccountElement
+                content="LCN"
+                balance={
+                  Math.round(
+                    (userInfo.onChainTokenAmount + Number.EPSILON) * 10000,
+                  ) / 10000
+                }
+                onPress={setCurrentTab}
+              />
+            </View>
+          )}
+        </View>
+
+        <SingleModal
+          text="Recieve KLAY"
+          buttonText="주소 복사하기"
+          body={
+            <View style={styles.address}>
+              <Text style={styles.addressText}>{slicedAddress}</Text>
+            </View>
+          }
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          pFunction={() => {
+            setModalVisible(false);
+            copyToClipboard(userInfo.address);
+            showToast('success', '주소가 복사되었습니다!');
+          }}
+        />
+        <WalletCustomModal
+          modalVisible={transferModalVisible}
+          setModalVisible={setTransferModalVisible}
+          nFunction={() => {
+            setTransferModalVisible(false);
+            navigation.navigate('WalletKlayTransfer');
+          }}
+          pFunction={() => {
+            setTransferModalVisible(false);
+            navigation.navigate('WalletLcnTransfer');
+          }}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -174,7 +182,6 @@ const styles = StyleSheet.create({
     // marginTop: 80,
     // justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
   },
   contentContainer: {
     // flex: 1,

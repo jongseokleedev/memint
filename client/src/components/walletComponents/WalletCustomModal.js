@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import klayIcon from '../../assets/icons/klaytn-klay-logo.png';
 import lcnIcon from '../../assets/icons/lovechain.png';
@@ -40,18 +41,23 @@ function WalletCustomModal({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <View style={[styles.centeredView, styles.backgroudDim]}>
-          <View style={styles.modalView}>
-            <TouchableOpacity style={styles.tokenWrapper} onPress={nFunction}>
-              <Image source={klayIcon} style={styles.icon} />
-              <Text style={styles.contentText}>KLAY</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.tokenWrapper} onPress={pFunction}>
-              <Image source={lcnIcon} style={styles.icon} />
-              <Text style={styles.contentText}>LCN</Text>
-            </TouchableOpacity>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModalVisible(false);
+          }}>
+          <View style={[styles.centeredView, styles.backgroudDim]}>
+            <View style={styles.modalView}>
+              <TouchableOpacity style={styles.tokenWrapper} onPress={nFunction}>
+                <Image source={klayIcon} style={styles.icon} />
+                <Text style={styles.contentText}>KLAY</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.tokenWrapper} onPress={pFunction}>
+                <Image source={lcnIcon} style={styles.icon} />
+                <Text style={styles.contentText}>LCN</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
