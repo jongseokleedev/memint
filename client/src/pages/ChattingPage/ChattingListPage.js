@@ -12,11 +12,13 @@ import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
 import WalletButton from '../../components/common/WalletButton';
+import {useIsFocused} from '@react-navigation/native';
 
 function ChattingListPage({navigation}) {
   const [chatLog, setChatLog] = useState('');
   const [refresh, setRefresh] = useState(false);
   const user = useUser();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const getChatLogs = async () => {
@@ -66,7 +68,7 @@ function ChattingListPage({navigation}) {
 
     console.log('hi');
     getChatLogs();
-  }, [user, refresh]);
+  }, [user, refresh, isFocused]);
 
   return (
     <SafeAreaView style={styles.view}>
