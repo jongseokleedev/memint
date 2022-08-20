@@ -146,6 +146,10 @@ function MetaData({item, navigation, refresh, setRefresh}) {
               result.docChanges()[result.docChanges().length - 1].doc._data
                 .createdAt
             ) {
+              if (result.docs[0].data().status) {
+                return;
+              }
+              console.log('hihi');
               setRefresh(!refresh);
               setLastMsg(result.docs[0].data().text);
               setLastTime(
