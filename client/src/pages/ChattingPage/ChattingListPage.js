@@ -12,14 +12,11 @@ import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
 import WalletButton from '../../components/common/WalletButton';
-import {useIsFocused} from '@react-navigation/native';
 
 function ChattingListPage({navigation}) {
   const [chatLog, setChatLog] = useState('');
   const [refresh, setRefresh] = useState(false);
   const user = useUser();
-
-  const isFocused = useIsFocused();
 
   useEffect(() => {
     const getChatLogs = async () => {
@@ -64,33 +61,12 @@ function ChattingListPage({navigation}) {
         }),
       );
 
-      // const findAndIn = (id, value) => {
-      //   meetingInfos.forEach(el => {
-      //     if (el.id === id) {
-      //       el = value;
-      //     }
-      //   });
-      // };
-
-      // meetingList.forEach(el => {
-      //   firestore()
-      //     .collection('Meeting')
-      //     .doc(el)
-      //     .collection('Messages')
-      //     .orderBy('createdAt', 'desc')
-      //     .limit(1)
-      //     .onSnapshot(result => {
-      //       if (result.docs.length !== 0) {
-      //         console.log(result.docs[0].data());
-      //         findAndIn(el, result.docs[0].data());
-      //       }
-      //     });
-      // });
       setChatLog(meetingInfos);
     };
+
     console.log('hi');
     getChatLogs();
-  }, [user, isFocused, refresh]);
+  }, [user, refresh]);
 
   return (
     <SafeAreaView style={styles.view}>
@@ -130,43 +106,46 @@ function ChattingListPage({navigation}) {
 function MetaData({item, navigation, refresh, setRefresh}) {
   const [lastMsg, setLastMsg] = useState('');
   const [lastTime, setLastTime] = useState('');
-  const MessageRef = useMemo(
-    () => firestore().collection('Meeting').doc(item.id).collection('Messages'),
-    [item.id],
-  );
+  // const MessageRef = useMemo(
+  //   () => ,
+  //   [item.id],
+  // );
   useEffect(() => {
     const getContent = async () => {
-      MessageRef.orderBy('createdAt', 'desc')
+      firestore()
+        .collection('Meeting')
+        .doc(item.id)
+        .collection('Messages')
+        .orderBy('createdAt', 'desc')
         .limit(1)
-        .onSnapshot(
-          result => {
-            if (result.docs.length === 0) {
+        .onSnapshot(result => {
+          if (result.docs.length === 0) {
+            return;
+          } else if (
+            result.docChanges()[result.docChanges().length - 1].doc._data
+              .createdAt
+          ) {
+            if (result.docs[0].data().status) {
               return;
-            } else if (
-              result.docChanges()[result.docChanges().length - 1].doc._data
-                .createdAt
-            ) {
-              if (result.docs[0].data().status) {
-                return;
-              }
-              console.log('hihi');
-              setRefresh(!refresh);
-              setLastMsg(result.docs[0].data().text);
-              setLastTime(
-                result.docs[0]
-                  .data()
-                  .createdAt.toDate()
-                  .toLocaleString()
-                  .slice(6, 20),
-              );
             }
-          },
-          [MessageRef],
-        );
+            console.log('hihi');
+
+            setLastMsg(result.docs[0].data().text);
+            setLastTime(
+              result.docs[0]
+                .data()
+                .createdAt.toDate()
+                .toLocaleString()
+                .slice(6, 20),
+            );
+          }
+        });
     };
+    console.log('re-rendering');
+    setRefresh(!refresh);
     getContent();
     return () => getContent();
-  }, [MessageRef]);
+  }, [lastMsg]);
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('ChattingRoom', {data: item})}>
