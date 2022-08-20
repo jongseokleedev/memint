@@ -65,8 +65,6 @@ function ChattingListPage({navigation}) {
 
       setChatLog(meetingInfos);
     };
-
-    console.log('hi');
     getChatLogs();
   }, [user, refresh, isFocused]);
 
@@ -130,8 +128,6 @@ function MetaData({item, navigation, refresh, setRefresh}) {
             if (result.docs[0].data().status) {
               return;
             }
-            console.log('hihi');
-
             setLastMsg(result.docs[0].data().text);
             setLastTime(
               result.docs[0]
@@ -143,7 +139,6 @@ function MetaData({item, navigation, refresh, setRefresh}) {
           }
         });
     };
-    console.log('re-rendering');
     setRefresh(!refresh);
     getContent();
     return () => getContent();
