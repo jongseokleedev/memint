@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     width: 1,
     height: 9,
     marginHorizontal: 4,
-    backgroundColor: '#000000',
+    backgroundColor: '#3C3D43',
   },
   imageNickname: {
     flexDirection: 'row',

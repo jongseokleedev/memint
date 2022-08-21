@@ -56,7 +56,6 @@ function AlarmElement({alarm}) {
           setChattingConfirmModal(!chattingConfirmModal);
         }}
       />
-      <Icon name="notifications" size={30} style={styles.icon} />
       <View style={styles.content}>
         <View style={styles.messageHead}>
           <Text style={styles.message}>{renderByType()}</Text>
@@ -89,7 +88,7 @@ function AlarmElement({alarm}) {
               </View>
             </>
           ) : (
-            <Text>삭제된 미팅입니다</Text>
+            <Text style={styles.deleteText}>삭제된 미팅입니다</Text>
           )}
         </View>
       </View>
@@ -100,27 +99,26 @@ function AlarmElement({alarm}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(241, 255, 245, 0.9)',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
     paddingVertical: 15,
     height: 110,
     borderColor: 'black',
     borderRadius: 30,
     borderWidth: 1,
-    marginHorizontal: 10,
     marginVertical: 6,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.23,
+    // shadowRadius: 2.62,
 
-    elevation: 4,
+    // elevation: 4,
   },
   icon: {
     marginRight: 13,
@@ -136,11 +134,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   message: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
   },
   createdAt: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#767676',
   },
   meetingArea: {
@@ -152,16 +150,23 @@ const styles = StyleSheet.create({
   },
   bar: {
     width: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#3C3D43',
     marginVertical: 1,
     marginHorizontal: 5,
   },
   meetingElement: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '500',
+    color: '#3C3D43',
   },
   meetingTitle: {
     fontWeight: '500',
+    color: '#3C3D43',
+  },
+  deleteText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#3C3D43',
   },
 });
 
