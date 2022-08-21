@@ -73,8 +73,8 @@ function BasicButton({
 BasicButton.defaultProps = {
   width: 100,
   height: 40,
-  backgroundColor: 'black',
-  textColor: 'white',
+  backgroundColor: '#AEFFC1',
+  textColor: 'black',
   text: '버튼',
   textSize: 14,
   margin: [5, 5, 5, 5],
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   border: {
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#AEFFC1',
   },
 });
 

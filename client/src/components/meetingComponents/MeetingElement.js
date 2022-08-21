@@ -79,11 +79,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   titleArea: {
-    marginTop: 15,
-    marginBottom: 7.5,
+    marginTop: 16,
+    marginBottom: 4,
   },
   title: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '400',
     height: 43,
     width: 260,
@@ -98,18 +98,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tagText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '500',
-    color: '#767676',
+    color: '#3C3D43',
   },
   infoList: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 6.5,
+    marginBottom: 5,
   },
   infoEl: {
-    fontSize: 12,
-    color: '#000000',
+    fontSize: 13,
+    color: '#3C3D43',
     fontWeight: '500',
   },
   bar: {
@@ -124,12 +124,12 @@ const styles = StyleSheet.create({
   },
   userImage: {
     borderRadius: 100,
-    width: 32,
-    height: 32,
+    width: 30,
+    height: 30,
     marginRight: 5,
   },
   username: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
     textAlign: 'right',
   },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     elevation: 18,
   },
   buttonText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600',
   },
 });

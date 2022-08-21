@@ -39,7 +39,7 @@ function Main() {
           borderColor: '#33ED96',
           height: 64,
           marginHorizontal: 15,
-          marginBottom: 20,
+          marginBottom: 15,
           position: 'absolute',
         }}
         // style={{backgroundColor: 'rgba(0,0,0,0.0)'}}

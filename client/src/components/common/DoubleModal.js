@@ -40,28 +40,36 @@ function DoubleModal({
               {nFunction !== undefined ? (
                 <BasicButton
                   text={nButtonText}
-                  width={80}
-                  height={40}
+                  textSize={16}
+                  width={100}
+                  height={45}
                   backgroundColor="white"
                   textColor="black"
                   border={true}
+                  margin={[0, 5, 0, 5]}
                   onPress={nFunction}
                 />
               ) : (
                 <BasicButton
                   text={nButtonText}
-                  width={80}
-                  height={40}
+                  textSize={16}
+                  width={100}
+                  height={45}
                   backgroundColor="white"
                   textColor="black"
                   border={true}
+                  margin={[0, 5, 0, 5]}
                   onPress={() => setModalVisible(!modalVisible)}
                 />
               )}
               <BasicButton
                 text={pButtonText}
-                width={80}
-                height={40}
+                textSize={16}
+                width={100}
+                height={45}
+                margin={[0, 5, 0, 5]}
+                backgroundColor="#AEFFC1"
+                textColor="black"
                 onPress={pFunction}
               />
             </View>
@@ -93,30 +101,32 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   modalView: {
-    margin: 20,
-    width: 300,
+    width: 290,
     backgroundColor: 'white',
-    borderRadius: 30,
-    padding: 35,
+    borderRadius: 12,
+    padding: 25,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    borderColor: '#AEFFC1',
+    borderWidth: 1,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
   },
   modalText: {
-    fontWeight: 'bold',
-    margin: 15,
+    fontWeight: '500',
+    marginBottom: 20,
     textAlign: 'center',
     lineHeight: 20,
+    fontSize: 17,
   },
   backgroudDim: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   buttonRow: {
     justifyContent: 'space-around',

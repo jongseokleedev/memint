@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 function TagElement({tag, meetingInfo, setMeetingInfo}) {
   const [colored, setColored] = useState(
@@ -26,13 +25,9 @@ function TagElement({tag, meetingInfo, setMeetingInfo}) {
       // style={[styles.tag, colored ? styles.coloredTag : '']
       onPress={handleClick}>
       {colored ? (
-        <LinearGradient
-          colors={['#A7BFEB', '#FBC2EA']}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 1}}
-          style={styles.tag}>
+        <View style={[styles.tag, styles.coloredTag]}>
           <Text style={styles.coloredtext}>{tag}</Text>
-        </LinearGradient>
+        </View>
       ) : (
         <View style={styles.tag}>
           <Text style={styles.text}>{tag}</Text>
@@ -44,21 +39,28 @@ function TagElement({tag, meetingInfo, setMeetingInfo}) {
 
 const styles = StyleSheet.create({
   tag: {
-    backgroundColor: 'lightgray',
+    backgroundColor: '#3C3D43',
     paddingHorizontal: 10,
     paddingVertical: 8,
-    marginHorizontal: 8,
-    borderRadius: 10,
+    borderRadius: 99,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    marginHorizontal: 5,
+    marginVertical: 3,
   },
   coloredTag: {
-    backgroundColor: 'blue',
+    borderColor: '#AEFFC1',
+    borderWidth: 1,
   },
   coloredtext: {
-    color: 'white',
-    fontWeight: '700',
+    fontSize: 15,
+    color: '#AEFFC1',
+    fontWeight: '400',
   },
   text: {
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '400',
+    color: '#EAFFEF',
   },
 });
 

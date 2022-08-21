@@ -265,8 +265,6 @@ function MeetingMarket({navigation}) {
               />
             </Pressable>
             <Pressable style={styles.listfilter}>
-              <Icon name="swap-vert" size={18} color={'#ffffff'} />
-
               <RNPickerSelect
                 placeholder={{}}
                 onValueChange={value => {
@@ -278,6 +276,16 @@ function MeetingMarket({navigation}) {
                   inputIOS: {
                     color: 'white',
                   },
+                }}
+                Icon={() => {
+                  return (
+                    <Icon
+                      name="swap-vert"
+                      size={20}
+                      color={'#ffffff'}
+                      style={styles.icon}
+                    />
+                  );
                 }}
               />
             </Pressable>
@@ -379,10 +387,13 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     position: 'absolute',
-    top: 400,
-    left: 75,
+    top: '50%',
+    left: '19%',
     width: 250,
     height: 250,
+  },
+  icon: {
+    width: 45,
   },
 });
 
