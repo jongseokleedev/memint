@@ -147,7 +147,7 @@ function MeetingCreate({route}) {
         'createdroomId',
         res._documentPath._parts[1],
       );
-      const newMeeting = await getMeeting(res._documentPath._parts[1]);
+      // const newMeeting = await getMeeting(res._documentPath._parts[1]);
       // saveInfo({
       //   ...userInfo,
       //   createdroomId: [...userInfo.createdroomId, res._documentPath._parts[1]],
@@ -280,7 +280,7 @@ function MeetingCreate({route}) {
                   },
                   placeholder: {
                     fontSize: 16,
-                    color: '#EAFFEF',
+                    color: '#c',
                   },
                 }}
                 Icon={() => {
@@ -332,8 +332,8 @@ function MeetingCreate({route}) {
             </Pressable>
             <ScrollView style={styles.invitedFriends} horizontal={true}>
               {friendsNames.map((el, idx) => (
-                <View key={idx} style={styles.invitedFriend}>
-                  <Text>{el}</Text>
+                <View key={idx}>
+                  <Text style={styles.invitedFriend}>{el}</Text>
                 </View>
               ))}
             </ScrollView>
@@ -543,6 +543,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   invitedFriends: {
+    marginLeft: 20,
     flexDirection: 'row',
   },
   leftMargin: {
@@ -564,6 +565,9 @@ const styles = StyleSheet.create({
   },
   activeLine: {
     backgroundColor: '#AEFFC1',
+  },
+  invitedFriend: {
+    color: '#ffffff',
   },
 });
 
