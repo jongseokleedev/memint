@@ -13,6 +13,8 @@ import useUser from '../../utils/hooks/UseUser';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
 import WalletButton from '../../components/common/WalletButton';
 import {useIsFocused} from '@react-navigation/native';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
+import LinearGradient from 'react-native-linear-gradient';
 
 function ChattingListPage({navigation}) {
   const [chatLog, setChatLog] = useState('');
@@ -84,26 +86,34 @@ function ChattingListPage({navigation}) {
   }, [user, isFocused]);
 
   return (
-    <SafeAreaView style={styles.view}>
-      <View style={styles.header}>
-        <Text style={styles.title}>채팅</Text>
-      </View>
-      {chatLog.length === 0 ? (
-        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-          <Text style={{color: 'lightgray'}}>채팅이 없습니다</Text>
+    <View style={styles.view}>
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        <View style={styles.header}>
+          <Text style={styles.title}>채팅</Text>
         </View>
-      ) : (
-        <FlatList
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          data={chatLog}
-          renderItem={({item}) => (
-            <MetaData item={item} navigation={navigation} />
-          )}
-        />
-      )}
-
+        {chatLog.length === 0 ? (
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <Text style={{color: 'lightgray'}}>채팅이 없습니다</Text>
+          </View>
+        ) : (
+          <FlatList
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            data={chatLog}
+            renderItem={({item}) => (
+              <MetaData item={item} navigation={navigation} />
+            )}
+            contentContainerStyle={styles.chattingContainer}
+          />
+        )}
+      </LinearGradient>
       <WalletButton />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -151,10 +161,12 @@ function MetaData({item, navigation}) {
         <View style={styles.chatInfo}>
           <View>
             <Text style={styles.titleText}>{item.title}</Text>
-            <Text>{lastMsg ? lastMsg : '채팅을 시작해보세요!'}</Text>
+            <Text style={styles.plainText}>
+              {lastMsg ? lastMsg : '채팅을 시작해보세요!'}
+            </Text>
           </View>
-          <View style={{justifyContent: 'center'}}>
-            <Text>{lastTime ? lastTime : ''}</Text>
+          <View style={styles.date}>
+            <Text style={styles.dateText}>{lastTime ? lastTime : ''}</Text>
           </View>
         </View>
       </View>
@@ -165,7 +177,10 @@ function MetaData({item, navigation}) {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: 'white',
+  },
+  gradientBackground: {
+    flex: 1,
+    paddingHorizontal: 15,
   },
   header: {
     height: 80,
@@ -173,43 +188,59 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 31,
+    fontSize: 24,
     fontWeight: '500',
-    marginLeft: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
   },
   container: {
     flexDirection: 'row',
-    height: 70,
+    height: 60,
     // paddingLeft: 8,
     alignItems: 'center',
     flexWrap: 'wrap',
+    marginBottom: 12,
+    marginTop: 8,
     // justifyContent: 'space-between',
-    paddingHorizontal: 10,
   },
   image: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    marginLeft: 7,
+    borderColor: '#58FF7D',
+    borderWidth: 1,
   },
   chatInfo: {
     flexDirection: 'row',
     height: '100%',
     width: '80%',
     justifyContent: 'space-between',
-    paddingLeft: 10,
+    paddingLeft: 16,
+    paddingTop: 6,
     flexWrap: 'wrap',
   },
   separator: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#AEFFC1',
     height: 1,
   },
   titleText: {
-    marginTop: 10,
-    paddingBottom: 12,
+    marginBottom: 12,
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    color: '#ffffff',
   },
+  chattingContainer: {
+    paddingBottom: 70,
+  },
+  plainText: {
+    fontSize: 15,
+    color: '#ffffff',
+  },
+  dateText: {
+    fontSize: 12,
+    color: '#ffffff',
+  },
+  date: {alignItems: 'flex-start'},
 });
 
 export default ChattingListPage;

@@ -69,25 +69,33 @@ function SpendingModal({
                 width: '100%',
               }}>
               <View style={styles.calcText}>
-                <Text style={{fontWeight: 'bold'}}>현재 보유 LCN</Text>
-                <Text style={{fontWeight: 'bold'}}>{user.tokenAmount}</Text>
+                <Text style={{fontWeight: '500', fontSize: 17}}>
+                  현재 보유 LCN
+                </Text>
+                <Text style={{fontWeight: '500', fontSize: 17}}>
+                  {user.tokenAmount}
+                </Text>
               </View>
               <View style={styles.calcText}>
-                <Text style={{fontWeight: 'bold'}}>필요 LCN</Text>
-                <Text style={{fontWeight: 'bold'}}>{amount}개</Text>
+                <Text style={{fontWeight: '500', fontSize: 17}}>필요 LCN</Text>
+                <Text style={{fontWeight: '500', fontSize: 17}}>
+                  {amount}개
+                </Text>
               </View>
               {
                 user.tokenAmount > amount ? (
                   <View style={styles.calcText}>
-                    <Text style={{fontWeight: 'bold'}}>차감 후 LCN</Text>
-                    <Text style={{fontWeight: 'bold'}}>
+                    <Text style={{fontWeight: '500', fontSize: 17}}>
+                      차감 후 LCN
+                    </Text>
+                    <Text style={{fontWeight: '500', fontSize: 17}}>
                       {user.tokenAmount - amount}개
                     </Text>
                   </View>
                 ) : null
                 // (
                 //   <View style={styles.warnText}>
-                //     <Text style={{fontWeight: 'bold'}}>LCN이 부족합니다!</Text>
+                //     <Text style={{fontWeight: '500', fontSize:17}}>LCN이 부족합니다!</Text>
                 //   </View>
                 // )
               }
@@ -96,17 +104,23 @@ function SpendingModal({
               <View style={styles.buttonRow}>
                 <BasicButton
                   text="아니오"
-                  size="small"
-                  variant="disable"
+                  textSize={16}
+                  width={100}
+                  height={45}
                   backgroundColor="white"
                   textColor="black"
-                  margin={[20, 8, 5, 8]}
+                  border={true}
+                  margin={[12, 5, 0, 5]}
                   onPress={() => setSpendingModalVisible(false)}
                 />
                 <BasicButton
                   text="네"
-                  size="small"
-                  margin={[20, 8, 5, 8]}
+                  textSize={16}
+                  width={100}
+                  height={45}
+                  margin={[12, 5, 0, 5]}
+                  backgroundColor="#AEFFC1"
+                  textColor="black"
                   onPress={() => {
                     pFunction();
                     transactionMade();
@@ -116,9 +130,13 @@ function SpendingModal({
             ) : (
               <BasicButton
                 text="돌아가기"
+                textSize={16}
                 width={100}
-                height={40}
-                variant="disable"
+                height={45}
+                backgroundColor="#AEFFC1"
+                textColor="black"
+                border={true}
+                margin={[12, 5, 0, 5]}
                 onPress={() => setSpendingModalVisible(false)}
               />
             )}
@@ -130,34 +148,35 @@ function SpendingModal({
 }
 const styles = StyleSheet.create({
   centeredView: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
   },
   modalView: {
-    margin: 20,
-    width: 300,
+    width: 290,
     backgroundColor: 'white',
-    borderRadius: 30,
-    padding: 35,
+    borderRadius: 12,
+    padding: 25,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    position: 'absolute',
+    borderColor: '#AEFFC1',
+    borderWidth: 1,
   },
   modalText: {
-    fontWeight: 'bold',
-    margin: 15,
+    fontWeight: '500',
+    marginBottom: 20,
     textAlign: 'center',
+    lineHeight: 20,
+    fontSize: 17,
   },
   backgroudDim: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   buttonRow: {
     justifyContent: 'space-around',

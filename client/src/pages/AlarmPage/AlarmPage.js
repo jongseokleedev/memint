@@ -108,7 +108,7 @@ function AlarmPage({navigation}) {
                 onRefresh={getAlarmPage}
               />
             }
-            style={styles.alarmContainer}
+            contentContainerStyle={styles.alarmContainer}
           />
         )}
       </LinearGradient>
@@ -135,6 +135,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#ffffff',
     fontFamily: 'NeoDunggeunmoPro-Regular',
+  },
+  alarmContainer: {
+    paddingBottom: 70,
   },
   emptyView: {
     justifyContent: 'center',
