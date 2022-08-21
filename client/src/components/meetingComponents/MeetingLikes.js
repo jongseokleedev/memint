@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useUser from '../../utils/hooks/UseUser';
-import {TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {updateUserMeetingIn, updateUserMeetingOut} from '../../lib/Users';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
+import likesInactive from '../../assets/icons/likesInactive.png';
+import likesActive from '../../assets/icons/likesActive.png';
 
 function MeetingLikes({meetingId}) {
   const [likes, setLikes] = useState(false);
@@ -51,12 +53,19 @@ function MeetingLikes({meetingId}) {
   return (
     <TouchableOpacity onPress={handleLikes}>
       {likes ? (
-        <Icon name="star" size={20} />
+        <Image source={likesActive} style={styles.image} />
       ) : (
-        <Icon name="star-border" size={20} />
+        <Image source={likesInactive} style={styles.image} />
       )}
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  image: {
+    width: 27,
+    height: 27,
+  },
+});
 
 export default MeetingLikes;

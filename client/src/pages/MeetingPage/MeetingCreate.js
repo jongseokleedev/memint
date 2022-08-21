@@ -7,8 +7,8 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  TextInput,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
 import BackButton from '../../components/common/BackButton';
 import RNPickerSelect from 'react-native-picker-select';
 import {useNavigation} from '@react-navigation/native';
@@ -24,6 +24,8 @@ import useAuthActions from '../../utils/hooks/UseAuthActions';
 import useMeetingActions from '../../utils/hooks/UseMeetingActions';
 import {useMeeting} from '../../utils/hooks/UseMeeting';
 import SpendingModal from '../../components/common/UserInfoModal/SpendingModal';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
+import LinearGradient from 'react-native-linear-gradient';
 
 function MeetingCreate({route}) {
   const userInfo = useUser();
@@ -172,55 +174,70 @@ function MeetingCreate({route}) {
   };
 
   return (
-    <SafeAreaView style={styles.view}>
-      <View style={styles.headerBar}>
-        <View style={styles.flexRow}>
-          <BackButton />
-          <Text style={styles.title}>미팅 글쓰기</Text>
-        </View>
+    <View style={styles.view}>
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        <View style={styles.headerBar}>
+          <View style={styles.flexRow}>
+            <BackButton />
+          </View>
 
-        <Pressable onPress={handleSubmit}>
-          <Text style={submittable ? styles.title : styles.grayButton}>
-            완료
-          </Text>
-        </Pressable>
-      </View>
-      <DoubleModal
-        text="미팅 생성 시 LCN이 차감됩니다.    미팅을 생성하시겠습니까?"
-        buttonText="네"
-        modalVisible={confirmModalVisible}
-        setModalVisible={setConfirmModalVisible}
-        nFunction={() => {
-          setConfirmModalVisible(!confirmModalVisible);
-        }}
-        pFunction={() => {
-          setConfirmModalVisible(!confirmModalVisible);
-          setCreateSpendingModalVisible(true);
-        }}
-      />
-      <SpendingModal
-        spendingModalVisible={createSpendingModalVisible}
-        setSpendingModalVisible={setCreateSpendingModalVisible}
-        pFunction={handleCreateMeeting}
-        amount={1}
-        txType="미팅 생성"
-      />
-      <View style={styles.createContainer}>
-        <View>
+          <Pressable onPress={handleSubmit}>
+            <Text
+              style={
+                submittable ? styles.completeButton : styles.incompleteButton
+              }>
+              완료
+            </Text>
+          </Pressable>
+        </View>
+        <DoubleModal
+          text="미팅 생성 시 LCN이 차감됩니다.    미팅을 생성하시겠습니까?"
+          buttonText="네"
+          modalVisible={confirmModalVisible}
+          setModalVisible={setConfirmModalVisible}
+          nFunction={() => {
+            setConfirmModalVisible(!confirmModalVisible);
+          }}
+          pFunction={() => {
+            setConfirmModalVisible(!confirmModalVisible);
+            setCreateSpendingModalVisible(true);
+          }}
+        />
+        <SpendingModal
+          spendingModalVisible={createSpendingModalVisible}
+          setSpendingModalVisible={setCreateSpendingModalVisible}
+          pFunction={handleCreateMeeting}
+          amount={1}
+          txType="미팅 생성"
+        />
+        <ScrollView style={styles.createContainer}>
+          <Text style={styles.title}>미팅 생성</Text>
+
           <TextInput
-            style={styles.textInput}
+            style={styles.textInputTitle}
             placeholder="제목"
+            placeholderTextColor="#EAFFEF"
             onChangeText={text => {
               setMeetingInfo({...meetingInfo, title: text});
             }}
             autoComplete={false}
             autoCorrect={false}
           />
-        </View>
-        <View>
+          <View
+            style={[
+              styles.line,
+              meetingInfo.title.length > 0 ? styles.activeLine : null,
+            ]}
+          />
           <TextInput
-            style={styles.textInput}
+            style={styles.textInputDes}
             placeholder="설명"
+            placeholderTextColor="#EAFFEF"
             multiline={true}
             onChangeText={text => {
               setMeetingInfo({...meetingInfo, description: text});
@@ -228,181 +245,241 @@ function MeetingCreate({route}) {
             autoComplete={false}
             autoCorrect={false}
           />
-        </View>
-        <View style={[styles.createElement, styles.flexRow]}>
-          <Text style={styles.text}>날짜</Text>
-          <RNDateTimePicker
-            value={meetingInfo.meetDate}
-            mode="datetime"
-            locale="ko"
-            style={styles.datepicker}
-            onChange={(event, date) =>
-              setMeetingInfo({...meetingInfo, meetDate: date})
-            }
+          <View
+            style={[
+              styles.line,
+              meetingInfo.description.length > 0 ? styles.activeLine : null,
+            ]}
           />
-        </View>
-        <View style={[styles.createElement, styles.flexRow]}>
-          <Pressable style={styles.selectButton}>
-            <RNPickerSelect
-              placeholder={{label: '지역'}}
-              onValueChange={value => {
-                setMeetingInfo({...meetingInfo, region: value});
-              }}
-              items={RegionDropDownData}
-              value={meetingInfo.region}
-              style={{
-                inputIOS: {
-                  fontSize: 16,
-                  color: 'black',
-                },
-                placeholder: {
-                  fontSize: 16,
-                  color: 'gray',
-                },
-              }}
-            />
-            <Icon name="arrow-drop-down" size={19} color={'gray'} />
-          </Pressable>
-        </View>
-        <View style={[styles.createElement, styles.flexRow]}>
-          <Pressable style={[styles.selectButton, styles.rightMargin]}>
-            <RNPickerSelect
-              placeholder={{label: '인원'}}
-              onValueChange={value => {
-                setMeetingInfo({...meetingInfo, peopleNum: value});
-              }}
-              items={PeopleDropDownData}
-              value={meetingInfo.peopleNum}
-              style={{
-                inputIOS: {
-                  fontSize: 16,
-                  color: 'black',
-                },
-                placeholder: {
-                  fontSize: 16,
-                  color: 'gray',
-                },
-              }}
-            />
-            <Icon name="arrow-drop-down" size={19} color={'gray'} />
-          </Pressable>
-          <ScrollView style={styles.invitedFriends} horizontal={true}>
-            {friendsNames.map((el, idx) => (
-              <View key={idx} style={styles.invitedFriend}>
-                <Text>{el}</Text>
-              </View>
-            ))}
-          </ScrollView>
-
-          <Pressable
-            onPress={() => {
-              if (meetingInfo.friends.length + 1 >= meetingInfo.peopleNum) {
-                showToast(
-                  'error',
-                  '설정한 인원의 과반수 이상 초대할 수 없습니다',
-                );
-                return;
+          <View style={[styles.createElement, styles.flexRow]}>
+            <Text style={styles.text}>날짜</Text>
+            <RNDateTimePicker
+              value={meetingInfo.meetDate}
+              mode="datetime"
+              textColor="#EAFFEF"
+              themeVariant="dark"
+              style={styles.datepicker}
+              onChange={(event, date) =>
+                setMeetingInfo({...meetingInfo, meetDate: date})
               }
-              setInviteModalVisible(true);
-            }}>
-            <Text style={[styles.text, styles.leftMargin]}>친구 초대하기</Text>
-          </Pressable>
-        </View>
-        <DoubleModal
-          text="친구 초대 시 LCN이 차감됩니다.    초대하시겠습니까?"
-          nButtonText="아니요"
-          pButtonText="네"
-          modalVisible={inviteModalVisible}
-          setModalVisible={setInviteModalVisible}
-          pFunction={() => {
-            setInviteModalVisible(!inviteModalVisible);
-            setInviteSpendingModalVisible(true);
-          }}
-          nFunction={() => {
-            setInviteModalVisible(!inviteModalVisible);
-          }}
-        />
-        <SpendingModal
-          spendingModalVisible={inviteSpendingModalVisible}
-          setSpendingModalVisible={setInviteSpendingModalVisible}
-          pFunction={handleNavigate}
-          amount={1}
-          txType="친구 초대"
-        />
-        <View style={styles.tagElement}>
-          <Text style={[styles.text, styles.tagTitle]}>태그</Text>
-          <View style={styles.tagsContainer}>
-            <View style={styles.tagCategory}>
-              <Text style={styles.tagCategoryTitle}>분위기</Text>
-              <ScrollView style={styles.tags} horizontal={true}>
-                {tagData.mood.map((tag, idx) => (
-                  <TagElement
-                    key={idx}
-                    tag={tag}
-                    meetingInfo={meetingInfo}
-                    setMeetingInfo={setMeetingInfo}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-            <View style={styles.tagCategory}>
-              <Text style={styles.tagCategoryTitle}>주제</Text>
-              <ScrollView style={styles.tags} horizontal={true}>
-                {tagData.topic.map((tag, idx) => (
-                  <TagElement
-                    key={idx}
-                    tag={tag}
-                    meetingInfo={meetingInfo}
-                    setMeetingInfo={setMeetingInfo}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-            <View style={styles.tagCategory}>
-              <Text style={styles.tagCategoryTitle}>술</Text>
-              <ScrollView style={styles.tags} horizontal={true}>
-                {tagData.alcohol.map((tag, idx) => (
-                  <TagElement
-                    key={idx}
-                    tag={tag}
-                    meetingInfo={meetingInfo}
-                    setMeetingInfo={setMeetingInfo}
-                  />
-                ))}
-              </ScrollView>
+            />
+          </View>
+          <View style={[styles.createElement, styles.flexRow]}>
+            <Pressable style={styles.selectButton}>
+              <RNPickerSelect
+                placeholder={{label: '지역'}}
+                onValueChange={value => {
+                  setMeetingInfo({...meetingInfo, region: value});
+                }}
+                items={RegionDropDownData}
+                value={meetingInfo.region}
+                style={{
+                  inputIOS: {
+                    fontSize: 16,
+                    color: '#ffffff',
+                  },
+                  placeholder: {
+                    fontSize: 16,
+                    color: '#EAFFEF',
+                  },
+                }}
+                Icon={() => {
+                  return (
+                    <Icon
+                      name="arrow-drop-down"
+                      size={19}
+                      color={'#EAFFEF'}
+                      style={styles.icon}
+                    />
+                  );
+                }}
+              />
+            </Pressable>
+          </View>
+          <View
+            style={[styles.line, meetingInfo.region ? styles.activeLine : null]}
+          />
+          <View style={[styles.createElement, styles.flexRow]}>
+            <Pressable style={[styles.selectButton, styles.rightMargin]}>
+              <RNPickerSelect
+                placeholder={{label: '인원'}}
+                onValueChange={value => {
+                  setMeetingInfo({...meetingInfo, peopleNum: value});
+                }}
+                items={PeopleDropDownData}
+                value={meetingInfo.peopleNum}
+                style={{
+                  inputIOS: {
+                    fontSize: 16,
+                    color: '#ffffff',
+                  },
+                  placeholder: {
+                    fontSize: 16,
+                    color: '#EAFFEF',
+                  },
+                }}
+                Icon={() => {
+                  return (
+                    <Icon
+                      name="arrow-drop-down"
+                      size={19}
+                      color={'#EAFFEF'}
+                      style={styles.icon}
+                    />
+                  );
+                }}
+              />
+            </Pressable>
+            <ScrollView style={styles.invitedFriends} horizontal={true}>
+              {friendsNames.map((el, idx) => (
+                <View key={idx} style={styles.invitedFriend}>
+                  <Text>{el}</Text>
+                </View>
+              ))}
+            </ScrollView>
+
+            <Pressable
+              onPress={() => {
+                if (meetingInfo.friends.length + 1 >= meetingInfo.peopleNum) {
+                  showToast(
+                    'error',
+                    '설정한 인원의 과반수 이상 초대할 수 없습니다',
+                  );
+                  return;
+                }
+                setInviteModalVisible(true);
+              }}>
+              <Text style={[styles.text, styles.leftMargin]}>
+                친구 초대하기
+              </Text>
+            </Pressable>
+          </View>
+          <View
+            style={[
+              styles.line,
+              meetingInfo.peopleNum ? styles.activeLine : null,
+            ]}
+          />
+          <DoubleModal
+            text="친구 초대 시 LCN이 차감됩니다.    초대하시겠습니까?"
+            nButtonText="아니요"
+            pButtonText="네"
+            modalVisible={inviteModalVisible}
+            setModalVisible={setInviteModalVisible}
+            pFunction={() => {
+              setInviteModalVisible(!inviteModalVisible);
+              setInviteSpendingModalVisible(true);
+            }}
+            nFunction={() => {
+              setInviteModalVisible(!inviteModalVisible);
+            }}
+          />
+          <SpendingModal
+            spendingModalVisible={inviteSpendingModalVisible}
+            setSpendingModalVisible={setInviteSpendingModalVisible}
+            pFunction={handleNavigate}
+            amount={1}
+            txType="친구 초대"
+          />
+          <View style={styles.tagElement}>
+            <Text style={[styles.text, styles.tagTitle]}>태그</Text>
+            <View style={styles.tagsContainer}>
+              <View style={styles.tagCategory}>
+                <Icon
+                  name="circle"
+                  size={8}
+                  color={'#EAFFEF'}
+                  style={styles.tagIcon}
+                />
+                <View style={styles.tags}>
+                  {tagData.mood.map((tag, idx) => (
+                    <TagElement
+                      key={idx}
+                      tag={tag}
+                      meetingInfo={meetingInfo}
+                      setMeetingInfo={setMeetingInfo}
+                    />
+                  ))}
+                </View>
+              </View>
+              <View style={styles.tagCategory}>
+                <Icon
+                  name="circle"
+                  size={8}
+                  color={'#EAFFEF'}
+                  style={styles.tagIcon}
+                />
+                <View style={styles.tags} horizontal={true}>
+                  {tagData.topic.map((tag, idx) => (
+                    <TagElement
+                      key={idx}
+                      tag={tag}
+                      meetingInfo={meetingInfo}
+                      setMeetingInfo={setMeetingInfo}
+                    />
+                  ))}
+                </View>
+              </View>
+              <View style={styles.tagCategory}>
+                <Icon
+                  name="circle"
+                  size={8}
+                  color={'#EAFFEF'}
+                  style={styles.tagIcon}
+                />
+                <View style={styles.tags} horizontal={true}>
+                  {tagData.alcohol.map((tag, idx) => (
+                    <TagElement
+                      key={idx}
+                      tag={tag}
+                      meetingInfo={meetingInfo}
+                      setMeetingInfo={setMeetingInfo}
+                    />
+                  ))}
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-      </View>
-    </SafeAreaView>
+        </ScrollView>
+      </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   view: {
-    backgroundColor: 'white',
     flex: 1,
+  },
+  gradientBackground: {
+    flex: 1,
+  },
+  createContainer: {
+    paddingHorizontal: 15,
   },
   headerBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingRight: 20,
     alignItems: 'center',
-    height: 60,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
+    height: 35,
+    // borderBottomColor: 'gray',
+    // borderBottomWidth: 1,
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    margin: 5,
-    marginLeft: 10,
+    fontWeight: '400',
+    fontSize: 24,
+    marginVertical: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
   },
-  grayButton: {
+  completeButton: {
     fontWeight: 'bold',
     fontSize: 18,
-    margin: 5,
-    marginLeft: 10,
+    color: '#ffffff',
+  },
+  incompleteButton: {
+    fontWeight: 'bold',
+    fontSize: 18,
     color: 'gray',
   },
   flexRow: {
@@ -411,8 +488,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   createElement: {
-    borderBottomColor: 'lightgray',
-    borderBottomWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 10,
     height: 60,
@@ -423,13 +498,29 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: 'gray',
+    color: '#EAFFEF',
   },
   datepicker: {
     width: 240,
   },
-  textInput: {
-    backgroundColor: 'white',
+  textInputTitle: {
+    backgroundColor: 'transparent',
+    color: '#ffffff',
+    // borderBottomColor: '#EAFFEF',
+    // borderBottomWidth: 1,
+    height: 60,
+    padding: 10,
+    fontSize: 16,
+  },
+  textInputDes: {
+    backgroundColor: 'transparent',
+    color: '#ffffff',
+    minHeight: 60,
+    paddingTop: 20,
+    paddingLeft: 10,
+    paddingBottom: 20,
+    paddingRight: 10,
+    fontSize: 16,
   },
   selectButton: {
     flexDirection: 'row',
@@ -443,30 +534,36 @@ const styles = StyleSheet.create({
   },
   tags: {
     flexDirection: 'row',
-  },
-  tagCategoryTitle: {
-    marginTop: 5,
-    marginBottom: 10,
-    color: 'gray',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   tagCategory: {
+    flexDirection: 'row',
     marginVertical: 5,
+    alignItems: 'flex-start',
   },
   invitedFriends: {
     flexDirection: 'row',
-  },
-  invitedFriend: {
-    borderRadius: 10,
-    backgroundColor: 'lightgray',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginHorizontal: 8,
   },
   leftMargin: {
     marginLeft: 5,
   },
   rightMargin: {
     marginRight: 5,
+  },
+  icon: {
+    position: 'absolute',
+  },
+  tagIcon: {
+    marginTop: 15,
+    marginRight: 3,
+  },
+  line: {
+    borderWidth: 0.7,
+    borderColor: '#EAFFEF',
+  },
+  activeLine: {
+    borderColor: '#AEFFC1',
   },
 });
 
