@@ -196,3 +196,12 @@ export const saveTokenToDatabase = async (token, userId) => {
     console.log(e, 'There is no doc in user collection');
   }
 };
+
+export const deleteTokenFromDatabase = async (token, userId) => {
+  await firestore()
+    .collection('User')
+    .doc(userId)
+    .update({
+      deviceTokens: firestore.FieldValue.arrayRemove(token),
+    });
+};

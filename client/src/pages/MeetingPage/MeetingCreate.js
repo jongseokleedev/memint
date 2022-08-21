@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tagsContainer: {
-    marginBottom: 10,
+    marginBottom: 70,
   },
   tags: {
     flexDirection: 'row',
@@ -559,11 +559,11 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   line: {
-    borderWidth: 0.7,
-    borderColor: '#EAFFEF',
+    height: 1,
+    backgroundColor: '#EAFFEF',
   },
   activeLine: {
-    borderColor: '#AEFFC1',
+    backgroundColor: '#AEFFC1',
   },
 });
 
