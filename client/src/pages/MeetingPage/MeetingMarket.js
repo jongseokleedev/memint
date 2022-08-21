@@ -372,6 +372,7 @@ const styles = StyleSheet.create({
   },
   meetingLists: {
     marginBottom: 40,
+    paddingBottom: 65,
   },
   emptyView: {
     justifyContent: 'center',

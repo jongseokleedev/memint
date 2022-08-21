@@ -176,3 +176,12 @@ export const saveTokenToDatabase = async (token, userId) => {
       deviceTokens: firestore.FieldValue.arrayUnion(token),
     });
 };
+
+export const deleteTokenFromDatabase = async (token, userId) => {
+  await firestore()
+    .collection('User')
+    .doc(userId)
+    .update({
+      deviceTokens: firestore.FieldValue.arrayRemove(token),
+    });
+};

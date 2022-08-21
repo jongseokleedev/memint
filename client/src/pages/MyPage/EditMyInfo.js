@@ -19,8 +19,12 @@ import {useNavigation} from '@react-navigation/native';
 import {useToast} from '../../utils/hooks/useToast';
 import {signOut} from '../../lib/Auth';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
+import messaging from '@react-native-firebase/messaging';
+import useUser from '../../utils/hooks/UseUser';
+import {deleteTokenFromDatabase} from '../../lib/Users';
 
 const EditMyInfo = ({route}) => {
+  const userInfo = useUser();
   const [drinkInfo, setDrinkInfo] = useState({
     drink: [],
     drinkStyle: [],
@@ -46,13 +50,15 @@ const EditMyInfo = ({route}) => {
     try {
       logout();
       await signOut();
+      const token = await messaging().getToken();
+      await deleteTokenFromDatabase(token, userInfo.id);
     } catch (e) {
       console.log(e);
     } finally {
       navigation.reset({routes: [{name: 'SignIn'}]});
       // navigation.navigate('SignIn');
     }
-  }, [navigation, logout]);
+  }, [navigation, logout, userInfo.id]);
 
   return (
     <KeyboardAvoidingView

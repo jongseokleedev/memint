@@ -108,6 +108,7 @@ function AlarmPage({navigation}) {
                 onRefresh={getAlarmPage}
               />
             }
+            style={styles.alarmContainer}
           />
         )}
       </LinearGradient>
