@@ -2,12 +2,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {
   Text,
   View,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Pressable,
-  Button,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MeetingElement from '../../components/meetingComponents/MeetingElement';
@@ -20,6 +19,9 @@ import FilterModal from '../../components/meetingComponents/FilterModal';
 import {getUser} from '../../lib/Users';
 import {signOut} from '../../lib/Auth';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
+import LinearGradient from 'react-native-linear-gradient';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
+import Sauropod from '../../assets/icons/Sauropod.png';
 
 function MeetingMarket({navigation}) {
   const [meetings, setMeetings] = useState([]);
@@ -164,7 +166,7 @@ function MeetingMarket({navigation}) {
     [filter.meetingTags],
   );
   const RegionDropDownData = [
-    {label: '서울 전체', value: '서울 전체'},
+    {label: 'SEOUL', value: '서울 전체'},
     {label: '강남', value: '강남'},
     {label: '신사', value: '신사'},
     {label: '홍대', value: '홍대'},
@@ -202,118 +204,148 @@ function MeetingMarket({navigation}) {
       navigation.navigate('SignIn');
     }
   }, [navigation, logout]);
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <Button title="로그아웃 하기" color="red" onPress={handleSignOut} /> */}
-      <ScrollView>
-        <Pressable style={styles.areaEnd}>
-          <RNPickerSelect
-            placeholder={{}}
-            onValueChange={value => {
-              setFilter({...filter, region: value});
+    <View style={styles.container}>
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        {/* <Button title="로그아웃 하기" color="red" onPress={handleSignOut} /> */}
+        <Image source={Sauropod} style={styles.backgroundImage} />
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.titleArea}>
+            <Text style={styles.title}>새로운 친구들과 술 한잔 어때?</Text>
+            <Pressable style={styles.areaEnd}>
+              <RNPickerSelect
+                placeholder={{}}
+                onValueChange={value => {
+                  setFilter({...filter, region: value});
+                }}
+                items={RegionDropDownData}
+                value={filter.region}
+                style={{
+                  inputIOS: {
+                    color: 'white',
+                    fontFamily: 'NeoDunggeunmoPro-Regular',
+                  },
+                }}
+              />
+            </Pressable>
+          </View>
+
+          <View style={styles.areaEnd}>
+            <TouchableOpacity
+              style={styles.createButton}
+              onPress={() => {
+                setConfirmModalVisible(true);
+              }}>
+              <Icon name="add-box" size={35} color={'#ffffff'} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.listfilterArea}>
+            <Pressable
+              style={styles.listfilter}
+              onPress={() => {
+                setFilterModalVisible(true);
+              }}>
+              <Icon name="filter-alt" size={20} color={'#ffffff'} />
+              <Text style={styles.smallText}> 조건 설정</Text>
+              <FilterModal
+                setFilter={setFilter}
+                FilterPeopleDropDownData={FilterPeopleDropDownData}
+                filter={filter}
+                filterModalVisible={filterModalVisible}
+                setFilterModalVisible={setFilterModalVisible}
+                // handleFilter={()=>{}}
+              />
+            </Pressable>
+            <Pressable style={styles.listfilter}>
+              <Icon name="swap-vert" size={18} color={'#ffffff'} />
+
+              <RNPickerSelect
+                placeholder={{}}
+                onValueChange={value => {
+                  setSortSelect(value);
+                }}
+                items={SortDropDownData}
+                value={sortSelect}
+                style={{
+                  inputIOS: {
+                    color: 'white',
+                  },
+                }}
+              />
+            </Pressable>
+          </View>
+          {shownMeetings.length === 0 ? (
+            <View style={styles.emptyView}>
+              <Text style={styles.emptyText}>해당하는 미팅이 없습니다</Text>
+            </View>
+          ) : (
+            <View style={styles.meetingLists}>
+              {shownMeetings.map((meeting, idx) => {
+                return <MeetingElement key={idx} item={meeting} />;
+              })}
+            </View>
+          )}
+
+          <SingleModal
+            text="미팅을 생성하시겠습니까?"
+            //body={<Text>정말로?</Text>}
+            buttonText="네"
+            modalVisible={confirmModalVisible}
+            setModalVisible={setConfirmModalVisible}
+            pFunction={() => {
+              setConfirmModalVisible(!confirmModalVisible);
+              navigation.navigate('MeetingCreate');
             }}
-            items={RegionDropDownData}
-            value={filter.region}
           />
-
-          <Icon name="check-circle" size={19} style={styles.checkicon} />
-        </Pressable>
-        <View style={styles.titleArea}>
-          <Text style={styles.title}>새로운 친구들과 술 한잔 어때?</Text>
-        </View>
-
-        <View style={styles.areaEnd}>
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={() => {
-              setConfirmModalVisible(true);
-            }}>
-            <Icon name="add-box" size={35} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.listfilterArea}>
-          <Pressable
-            style={styles.listfilter}
-            onPress={() => {
-              setFilterModalVisible(true);
-            }}>
-            <Icon name="filter-alt" size={20} />
-            <Text> 조건 설정</Text>
-            <FilterModal
-              setFilter={setFilter}
-              FilterPeopleDropDownData={FilterPeopleDropDownData}
-              filter={filter}
-              filterModalVisible={filterModalVisible}
-              setFilterModalVisible={setFilterModalVisible}
-              // handleFilter={()=>{}}
-            />
-          </Pressable>
-          <Pressable style={styles.listfilter}>
-            <RNPickerSelect
-              placeholder={{}}
-              onValueChange={value => {
-                setSortSelect(value);
-              }}
-              items={SortDropDownData}
-              value={sortSelect}
-            />
-            <Icon name="arrow-drop-down" size={18} />
-          </Pressable>
-        </View>
-        {shownMeetings.length === 0 ? (
-          <View style={styles.emptyView}>
-            <Text style={styles.emptyText}>해당하는 미팅이 없습니다</Text>
-          </View>
-        ) : (
-          <View style={styles.meetingLists}>
-            {shownMeetings.map((meeting, idx) => {
-              return <MeetingElement key={idx} item={meeting} />;
-            })}
-          </View>
-        )}
-
-        <SingleModal
-          text="미팅을 생성하시겠습니까?"
-          //body={<Text>정말로?</Text>}
-          buttonText="네"
-          modalVisible={confirmModalVisible}
-          setModalVisible={setConfirmModalVisible}
-          pFunction={() => {
-            setConfirmModalVisible(!confirmModalVisible);
-            navigation.navigate('MeetingCreate');
-          }}
-        />
-      </ScrollView>
-      <WalletButton />
-    </SafeAreaView>
+        </ScrollView>
+        <WalletButton />
+      </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    // height: '100%',
+    // backgroundColor: 'white',
+  },
+  gradientBackground: {
+    flex: 1,
+  },
+  scrollView: {
+    paddingHorizontal: 15,
   },
   areaEnd: {
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingRight: 10,
-  },
-  checkicon: {
-    marginLeft: 5,
+    // paddingRight: 10,
   },
   createButton: {},
   titleArea: {
-    width: 230,
-    paddingLeft: 20,
+    width: '100%',
     paddingTop: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
   title: {
-    fontSize: 31,
-    fontWeight: '500',
+    fontSize: 24,
+    fontWeight: '400',
+    color: '#ffffff',
+    width: 200,
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: 0,
+    lineHeight: 30,
   },
   listfilterArea: {
     marginTop: 20,
@@ -323,7 +355,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listfilter: {
-    paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -338,6 +369,16 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: 'lightgray',
+  },
+  smallText: {
+    color: 'white',
+  },
+  backgroundImage: {
+    position: 'absolute',
+    top: 400,
+    left: 75,
+    width: 250,
+    height: 250,
   },
 });
 

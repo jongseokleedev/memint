@@ -14,6 +14,7 @@
 		1D9D82B608DA0ACC74620A0F /* Pods_memint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41D9EE98082AAF5BE281C81 /* Pods_memint.framework */; };
 		4A3D51B6288694CF00665BE0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A3D51B5288694CF00665BE0 /* GoogleService-Info.plist */; };
 		5CF1672B4869E488272872DE /* Pods_memint_memintTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7857FB971653DC8FE7F59393 /* Pods_memint_memintTests.framework */; };
+		7E3932A10E544D2DA13FD20F /* NeoDunggeunmoPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AD96B450F984D0B8B08D7CC /* NeoDunggeunmoPro-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8A52A3E628B094BE00ED62D9 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8A52A3E528B094BE00ED62D9 /* MaterialIcons.ttf */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-memint.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memint.release.xcconfig"; path = "Target Support Files/Pods-memint/Pods-memint.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-memint-memintTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memint-memintTests.debug.xcconfig"; path = "Target Support Files/Pods-memint-memintTests/Pods-memint-memintTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7857FB971653DC8FE7F59393 /* Pods_memint_memintTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_memint_memintTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AD96B450F984D0B8B08D7CC /* NeoDunggeunmoPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NeoDunggeunmoPro-Regular.ttf"; path = "../src/assets/fonts/NeoDunggeunmoPro-Regular.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = memint/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-memint-memintTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memint-memintTests.release.xcconfig"; path = "Target Support Files/Pods-memint-memintTests/Pods-memint-memintTests.release.xcconfig"; sourceTree = "<group>"; };
 		8A52A3E528B094BE00ED62D9 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -112,6 +114,43 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		45153CD528AF6D1700FB908E /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				45153CD628AF6D9D00FB908E /* MaterialIcons.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4548C2B328AF638A00636AAA /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				8A43849028AE34B0008ABC49 /* FontAwesome5_Solid.ttf */,
+				8A43848A28AE34B0008ABC49 /* Ionicons.ttf */,
+				8A43849128AE34B0008ABC49 /* MaterialIcons.ttf */,
+				8A43848728AE34B0008ABC49 /* Fontisto.ttf */,
+				8A43848828AE34B0008ABC49 /* Entypo.ttf */,
+				8A43849228AE34B0008ABC49 /* FontAwesome5_Brands.ttf */,
+				8A43849428AE34B0008ABC49 /* EvilIcons.ttf */,
+				8A43848D28AE34B0008ABC49 /* SimpleLineIcons.ttf */,
+				8A43848E28AE34B0008ABC49 /* AntDesign.ttf */,
+				8A43848F28AE34B0008ABC49 /* Octicons.ttf */,
+				8A43849628AE34B0008ABC49 /* FontAwesome.ttf */,
+				8A43849528AE34B0008ABC49 /* MaterialCommunityIcons.ttf */,
+				8A43848C28AE34B0008ABC49 /* Feather.ttf */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		66A45208E6AB4C28B41B0154 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7AD96B450F984D0B8B08D7CC /* NeoDunggeunmoPro-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +169,8 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				4548C2B328AF638A00636AAA /* Recovered References */,
+				66A45208E6AB4C28B41B0154 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -261,6 +302,8 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8A52A3E628B094BE00ED62D9 /* MaterialIcons.ttf in Resources */,
 				4A3D51B6288694CF00665BE0 /* GoogleService-Info.plist in Resources */,
+				45153CD728AF6D9D00FB908E /* MaterialIcons.ttf in Resources */,
+				7E3932A10E544D2DA13FD20F /* NeoDunggeunmoPro-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
