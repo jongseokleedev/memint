@@ -12,9 +12,10 @@ import AlarmElement from '../../components/alarmComponents/AlarmElement';
 import {getAlarmsById} from '../../lib/Alarm';
 import {getMeeting} from '../../lib/Meeting';
 import {getUser} from '../../lib/Users';
-
+import LinearGradient from 'react-native-linear-gradient';
 import useUser from '../../utils/hooks/UseUser';
 import WalletButton from '../../components/common/WalletButton';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 
 function AlarmPage({navigation}) {
   const userInfo = useUser();
@@ -80,36 +81,48 @@ function AlarmPage({navigation}) {
   }, [userInfo]);
 
   return (
-    <SafeAreaView style={styles.view}>
-      <View style={styles.header}>
-        <Text style={styles.title}>알림</Text>
-      </View>
-      {alarms.length === 0 ? (
-        <View style={styles.emptyView}>
-          <Text style={styles.emptyText}>알림이 없습니다</Text>
+    <View style={styles.view}>
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        <View style={styles.header}>
+          <Text style={styles.title}>알림</Text>
         </View>
-      ) : (
-        <FlatList
-          data={alarms}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => {
-            return <AlarmElement alarm={item} />;
-          }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={getAlarmPage} />
-          }
-        />
-      )}
-
+        {alarms.length === 0 ? (
+          <View style={styles.emptyView}>
+            <Text style={styles.emptyText}>알림이 없습니다</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={alarms}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => {
+              return <AlarmElement alarm={item} />;
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={getAlarmPage}
+              />
+            }
+          />
+        )}
+      </LinearGradient>
       <WalletButton />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: 'white',
+  },
+  gradientBackground: {
+    flex: 1,
+    paddingHorizontal: 15,
   },
   header: {
     height: 80,
@@ -117,9 +130,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 31,
+    fontSize: 24,
     fontWeight: '500',
-    marginLeft: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
   },
   emptyView: {
     justifyContent: 'center',
