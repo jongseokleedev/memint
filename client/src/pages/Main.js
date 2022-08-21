@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, View} from 'react-native';
+import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -31,12 +31,19 @@ function Main() {
     <>
       <Tab.Navigator
         initialRouteName="Mypage"
-        screenOptions={{
-          tabBarIndicatorStyle: {
-            backgroundColor: '#009688',
-          },
-          tabBarActiveTintColor: '#009688',
-        }}>
+        barStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          paddingHorizontal: 8,
+          borderRadius: 99,
+          borderWidth: 2,
+          borderColor: '#33ED96',
+          height: 64,
+          marginHorizontal: 15,
+          marginBottom: 20,
+          position: 'absolute',
+        }}
+        // style={{backgroundColor: 'rgba(0,0,0,0.0)'}}
+      >
         <Tab.Screen
           name="meeting"
           component={MeetingScreen}
@@ -45,7 +52,7 @@ function Main() {
             tabBarIcon: ({color}) => (
               <Icon name="home" color={color} size={24} />
             ),
-            tabBarColor: 'black',
+            tabBarColor: 'transparent',
           }}
         />
         <Tab.Screen
@@ -56,7 +63,7 @@ function Main() {
             tabBarIcon: ({color}) => (
               <Icon name="notifications" color={color} size={24} />
             ),
-            tabBarColor: 'black',
+            tabBarColor: 'transparent',
           }}
         />
         <Tab.Screen
@@ -67,7 +74,7 @@ function Main() {
             tabBarIcon: ({color}) => (
               <Icon name="message" color={color} size={24} />
             ),
-            tabBarColor: 'black',
+            tabBarColor: 'transparent',
           }}
         />
         <Tab.Screen
@@ -78,7 +85,7 @@ function Main() {
             tabBarIcon: ({color}) => (
               <Icon name="person" color={color} size={24} />
             ),
-            tabBarColor: 'black',
+            tabBarColor: 'transparent',
           }}
         />
       </Tab.Navigator>

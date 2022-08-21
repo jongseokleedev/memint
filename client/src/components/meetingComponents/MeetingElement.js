@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import {handleBirth, handleDateInFormat} from '../../utils/common/Functions';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import MeetingLikes from './MeetingLikes';
 
 function MeetingElement({item}) {
@@ -11,118 +12,111 @@ function MeetingElement({item}) {
   };
 
   return (
-    <TouchableOpacity onPress={handleNavigate}>
+    <View style={styles.wrapper}>
       <View style={styles.container}>
-        <View style={styles.meetingArea}>
-          <View style={styles.meetingInfo}>
-            <View style={styles.infoList}>
-              <Text style={[styles.infoEl]}>{item.region}</Text>
-              <View style={styles.bar} />
-              <Text style={[styles.infoEl]}>
-                {item.peopleNum + ':' + item.peopleNum}
-              </Text>
-              <View style={styles.bar} />
-              <Text style={[styles.infoEl]}>
-                {handleBirth(item.hostInfo.birth)}
-              </Text>
-              <View style={styles.bar} />
-              <Text style={[styles.infoEl]}>
-                {handleDateInFormat(item.meetDate)}
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.title}>{item.title}</Text>
-            </View>
-          </View>
-          <MeetingLikes meetingId={item.id} />
-        </View>
-
-        <View style={styles.userInfo}>
-          <View style={styles.meetingTags}>
-            {item.meetingTags?.map((tag, idx) => (
-              <View key={idx} style={styles.tag}>
-                <Text style={styles.tagText}>{'# ' + tag}</Text>
-              </View>
-            ))}
-          </View>
+        <View style={styles.usernamelikes}>
           <View style={styles.imageNickname}>
-            <Text style={styles.username}>{item.hostInfo.nickName}</Text>
             <Image
               source={{uri: item.hostInfo.nftProfile}}
               style={styles.userImage}
             />
+            <Text style={styles.username}>{item.hostInfo.nickName}</Text>
           </View>
+          <MeetingLikes meetingId={item.id} />
+        </View>
+        <View style={styles.titleArea}>
+          <Text style={styles.title}>{item.title}</Text>
+        </View>
+        <View style={styles.infoList}>
+          <Text style={[styles.infoEl]}>{item.region}</Text>
+          <View style={styles.bar} />
+          <Text style={[styles.infoEl]}>
+            {item.peopleNum + ':' + item.peopleNum}
+          </Text>
+          <View style={styles.bar} />
+          <Text style={[styles.infoEl]}>
+            {handleBirth(item.hostInfo.birth)}
+          </Text>
+          <View style={styles.bar} />
+          <Text style={[styles.infoEl]}>
+            {handleDateInFormat(item.meetDate)}
+          </Text>
+        </View>
+        <View style={styles.meetingTags}>
+          {item.meetingTags?.map((tag, idx) => (
+            <View key={idx} style={styles.tag}>
+              <Text style={styles.tagText}>{'#' + tag}</Text>
+            </View>
+          ))}
         </View>
       </View>
-    </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleNavigate}>
+        <Text style={styles.buttonText}> 함께하기 </Text>
+        <Icon name="play-arrow" size={20} color={'#58FF7D'} />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginBottom: 5,
-    paddingLeft: 35,
-    paddingRight: 30,
-    paddingVertical: 20,
-    height: 115,
-    borderRadius: 30,
-    marginHorizontal: 10,
-    marginVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-
-    elevation: 5,
+  wrapper: {
+    marginTop: 10,
+    height: 220,
   },
-  meetingArea: {
-    flexDirection: 'row',
+  container: {
+    backgroundColor: 'rgba(234, 255, 239, 0.8)',
+    flexDirection: 'column',
+    marginBottom: 5,
+    paddingHorizontal: 30,
+    paddingVertical: 25,
+    height: 185,
+    borderRadius: 30,
+    marginVertical: 8,
+  },
+  usernamelikes: {
     width: '100%',
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  meetingInfo: {
-    flexDirection: 'column',
+  titleArea: {
+    marginTop: 15,
+    marginBottom: 7.5,
   },
   title: {
-    fontSize: 14,
-    fontWeight: '700',
-    height: 42,
-    width: 250,
+    fontSize: 17,
+    fontWeight: '400',
+    height: 43,
+    width: 260,
+    fontFamily: 'NeoDunggeunmoPro-Regular',
   },
   meetingTags: {
     flexDirection: 'row',
   },
   tag: {
-    marginHorizontal: 3,
+    marginRight: 3,
     flexDirection: 'row',
     alignItems: 'center',
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '500',
     color: '#767676',
   },
   infoList: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 6.5,
   },
   infoEl: {
-    fontSize: 10,
-    color: 'black',
+    fontSize: 12,
+    color: '#000000',
     fontWeight: '500',
   },
   bar: {
     width: 1,
     height: 9,
     marginHorizontal: 4,
-    backgroundColor: 'black',
+    backgroundColor: '#000000',
   },
   imageNickname: {
     flexDirection: 'row',
@@ -130,21 +124,39 @@ const styles = StyleSheet.create({
   },
   userImage: {
     borderRadius: 100,
-    width: 21,
-    height: 21,
-    marginLeft: 4,
-    // borderColor: 'black',
-    // borderWidth:1
-  },
-  userInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    width: 32,
+    height: 32,
+    marginRight: 5,
   },
   username: {
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: '500',
     textAlign: 'right',
+  },
+  button: {
+    backgroundColor: '#ffffff',
+    width: 120,
+    height: 50,
+    borderRadius: 99,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 30,
+    bottom: 0,
+    shadowColor: 'rgba(174, 255, 192, 0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+
+    elevation: 18,
+  },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: '600',
   },
 });
 

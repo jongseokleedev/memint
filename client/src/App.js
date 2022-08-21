@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Text} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {Alert, StatusBar, Text} from 'react-native';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 // import {createStore} from 'redux';
@@ -258,127 +258,131 @@ function App() {
   //   console.log('welcome' + user.email);
   // }
   return (
-    <NavigationContainer style={{backgroundColor: 'white'}}>
-      <ToastProvider>
-        <ChatContextProvider>
-          <Stack.Navigator initialRouteName={initialRouteName}>
-            <Stack.Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUpScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="VerifyMobile"
-              component={VerifyMobileScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUpUserInfo"
-              component={SignUpUserInfoScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUpUserDetail"
-              component={SignUpUserDetailScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUpServeNFT"
-              component={SignUpServeNFTScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUpAgreement"
-              component={SignUpAgreementScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUpAlarm"
-              component={SignUpAlarmScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="FindIdVerifyMobile"
-              component={FindIdVerifyMobileScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="FindIdShowId"
-              component={FindIdShowIdScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="FindPWVerify"
-              component={FindPWVerifyScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SetNewPW"
-              component={SetNewPWScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="Main"
-              component={Main}
-              options={{headerShown: false}}
-            />
+    <SafeAreaProvider>
+      <StatusBar barStyle="light-content" />
 
-            <Stack.Screen
-              name="Wallet"
-              component={WalletOffchainScreen}
-              options={{title: null, headerShown: false}}
-            />
-            <Stack.Screen
-              name="ChattingRoom"
-              component={ChattingRoom}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="FeedbackChoicePage"
-              component={FeedbackChoicePage}
-              options={{headerShown: false}}
-              // options={{animation: 'none'}}
-            />
-            <Stack.Screen
-              name="MeetingSet"
-              component={MeetingSet}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="FeedbackSendPage"
-              component={FeedbackSendPage}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="MeetingMemberOut"
-              component={MeetingMemberOut}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="EditMeetingInfo"
-              component={EditMeetingInfo}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="Report"
-              component={Report}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="MeetingConfirm"
-              component={MeetingConfirm}
-              options={{headerShown: false}}
-            />
-          </Stack.Navigator>
-          <Toast />
-        </ChatContextProvider>
-      </ToastProvider>
-    </NavigationContainer>
+      <NavigationContainer>
+        <ToastProvider>
+          <ChatContextProvider>
+            <Stack.Navigator initialRouteName={initialRouteName}>
+              <Stack.Screen
+                name="SignIn"
+                component={SignInScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SignUp"
+                component={SignUpScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="VerifyMobile"
+                component={VerifyMobileScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SignUpUserInfo"
+                component={SignUpUserInfoScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SignUpUserDetail"
+                component={SignUpUserDetailScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SignUpServeNFT"
+                component={SignUpServeNFTScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SignUpAgreement"
+                component={SignUpAgreementScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SignUpAlarm"
+                component={SignUpAlarmScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FindIdVerifyMobile"
+                component={FindIdVerifyMobileScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FindIdShowId"
+                component={FindIdShowIdScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FindPWVerify"
+                component={FindPWVerifyScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="SetNewPW"
+                component={SetNewPWScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Main"
+                component={Main}
+                options={{headerShown: false}}
+              />
+
+              <Stack.Screen
+                name="Wallet"
+                component={WalletOffchainScreen}
+                options={{title: null, headerShown: false}}
+              />
+              <Stack.Screen
+                name="ChattingRoom"
+                component={ChattingRoom}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FeedbackChoicePage"
+                component={FeedbackChoicePage}
+                options={{headerShown: false}}
+                // options={{animation: 'none'}}
+              />
+              <Stack.Screen
+                name="MeetingSet"
+                component={MeetingSet}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FeedbackSendPage"
+                component={FeedbackSendPage}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="MeetingMemberOut"
+                component={MeetingMemberOut}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="EditMeetingInfo"
+                component={EditMeetingInfo}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Report"
+                component={Report}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="MeetingConfirm"
+                component={MeetingConfirm}
+                options={{headerShown: false}}
+              />
+            </Stack.Navigator>
+            <Toast />
+          </ChatContextProvider>
+        </ToastProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

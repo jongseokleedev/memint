@@ -9,6 +9,7 @@ import {
   View,
   Image,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
@@ -62,7 +63,7 @@ const SignUpScreen = ({navigation}) => {
     <KeyboardAvoidingView
       style={styles.KeyboardAvoidingView}
       behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
+      <ScrollView style={styles.fullscreen}>
         <BackButton />
         <View style={styles.fullscreenSub}>
           <Image source={logo} style={styles.logo} />
@@ -133,7 +134,7 @@ const SignUpScreen = ({navigation}) => {
             onPress={onSubmitSignUp}
           /> */}
         </View>
-      </SafeAreaView>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
