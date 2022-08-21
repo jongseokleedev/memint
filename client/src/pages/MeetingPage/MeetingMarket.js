@@ -22,6 +22,7 @@ import useAuthActions from '../../utils/hooks/UseAuthActions';
 import LinearGradient from 'react-native-linear-gradient';
 import SafeStatusBar from '../../components/common/SafeStatusBar';
 import Sauropod from '../../assets/icons/Sauropod.png';
+import DoubleModal from '../../components/common/DoubleModal';
 
 function MeetingMarket({navigation}) {
   const [meetings, setMeetings] = useState([]);
@@ -293,7 +294,7 @@ function MeetingMarket({navigation}) {
             </View>
           )}
 
-          <SingleModal
+          <DoubleModal
             text="미팅을 생성하시겠습니까?"
             //body={<Text>정말로?</Text>}
             buttonText="네"
@@ -302,6 +303,9 @@ function MeetingMarket({navigation}) {
             pFunction={() => {
               setConfirmModalVisible(!confirmModalVisible);
               navigation.navigate('MeetingCreate');
+            }}
+            nFunction={() => {
+              setConfirmModalVisible(!confirmModalVisible);
             }}
           />
         </ScrollView>

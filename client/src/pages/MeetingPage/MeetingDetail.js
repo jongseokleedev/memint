@@ -98,6 +98,11 @@ function MeetingDetail({route}) {
   };
 
   const handleCreateProposal = () => {
+    if (textMessage.length === 0) {
+      setModalVisible_2(!modalVisible_2);
+      showToast('error', '메시지를 작성해주세요');
+      return;
+    }
     try {
       const createData = {
         sender: loginUser, //로그인된 유저
