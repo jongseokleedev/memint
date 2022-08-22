@@ -9,6 +9,7 @@ import {
   Text,
   View,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -28,7 +29,7 @@ import {createWallet} from '../../lib/api/wallet';
 // const url = await reference.getDownloadURL();
 
 const SignUpUserInfoScreen = ({navigation, route}) => {
-  const {uid, email} = route.params || {};
+  let {userInfo} = route.params || {};
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [form, setForm] = useState({
@@ -44,40 +45,60 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
   };
   const onSubmit = async () => {
     try {
-      Keyboard.dismiss();
-      setLoading(true);
-      let photoURL = null;
-      if (response) {
-        const asset = response.assets[0];
-        const extension = asset.fileName.split('.').pop(); //확장자 추출
-        const reference = storage().ref(`/profile/${uid}.${extension}`);
+      if (
+        response === null ||
+        form.nickName === '' ||
+        form.birthYear === '' ||
+        form.birthMonth === '' ||
+        form.birthMonth === '' ||
+        form.gender === ''
+      ) {
+        Alert.alert('실패', '회원 정보를 올바르게 입력해주세요');
+      } else {
+        Keyboard.dismiss();
+        setLoading(true);
+        userInfo = {
+          ...userInfo,
+          photoRes: response,
+          nickName: form.nickName,
+          birthYear: form.birthYear,
+          birthMonth: form.birthMonth,
+          birthDay: form.birthMonth,
+          gender: form.gender,
+        };
+        // let photoURL = null;
+        // if (response) {
+        //   const asset = response.assets[0];
+        //   const extension = asset.fileName.split('.').pop(); //확장자 추출
+        //   const reference = storage().ref(`/profile/${uid}.${extension}`);
 
-        if (Platform.OS === 'android') {
-          await reference.putString(asset.base64, 'base64', {
-            contentType: asset.type,
-          });
-        } else {
-          await reference.putFile(asset.uri);
-        }
+        //   if (Platform.OS === 'android') {
+        //     await reference.putString(asset.base64, 'base64', {
+        //       contentType: asset.type,
+        //     });
+        //   } else {
+        //     await reference.putFile(asset.uri);
+        //   }
 
-        photoURL = response ? await reference.getDownloadURL() : null;
+        //   photoURL = response ? await reference.getDownloadURL() : null;
+        // }
+
+        // createUser({
+        //   userId: uid,
+        //   email: email,
+        //   nickName: form.nickName,
+        //   gender: form.gender,
+        //   birth: `${form.birthYear}년 ${form.birthMonth}월 ${form.birthDay}일`,
+        //   picture: photoURL,
+        // });
+        // //create Wallet
+        // const body = {
+        //   id: uid,
+        // };
+        // console.log(body);
+        // await createWallet(body);
+        navigation.push('VerifyMobile', {userInfo});
       }
-
-      createUser({
-        userId: uid,
-        email: email,
-        nickName: form.nickName,
-        gender: form.gender,
-        birth: `${form.birthYear}년 ${form.birthMonth}월 ${form.birthDay}일`,
-        picture: photoURL,
-      });
-      //create Wallet
-      const body = {
-        id: uid,
-      };
-      console.log(body);
-      await createWallet(body);
-      navigation.push('VerifyMobile', {uid: uid, nickName: form.nickName});
     } catch (e) {
       console.log(e);
     } finally {
@@ -85,42 +106,6 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
     }
   };
 
-  const onSubmitSignUp = async () => {
-    Keyboard.dismiss();
-    const {email, password, confirmPassword} = form;
-    const info = {email, password};
-    setLoading(true);
-
-    if (password !== confirmPassword) {
-      Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
-    } else {
-      try {
-        const {user} = await signUp(info);
-        console.log(user);
-        let photoURL = null;
-        if (response) {
-          const asset = response.assets[0];
-          const extension = asset.fileName.split('.').pop(); //확장자 추출
-          const reference = storage().ref(`/profile/${uid}.${extension}`);
-
-          if (Platform.OS === 'android') {
-            await reference.putString(asset.base64, 'base64', {
-              contentType: asset.type,
-            });
-          } else {
-            await reference.putFile(asset.uri);
-          }
-
-          photoURL = response ? await reference.getDownloadURL() : null;
-        }
-        navigation.navigate('SignUpUserDetail');
-      } catch (e) {
-        Alert.alert('실패');
-        console.log(e);
-      } finally {
-      }
-    }
-  };
   if (loading) {
     return (
       <SafeAreaView style={styles.fullscreenSub}>
@@ -131,137 +116,134 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
     );
   }
   return (
-    <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
-      behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
-        <BackButton />
-        <View style={styles.fullscreenSub}>
-          <CameraButton
-            response={response}
-            setResponse={setResponse}
-            uid={uid}
-          />
-          <View style={styles.form}>
-            <Text style={styles.infoText}>닉네임</Text>
-            <BorderedInput
-              size="large"
-              placeholder="닉네임"
-              value={form.nickName}
-              onChangeText={createChangeTextHandler('nickName')}
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType={'next'}
-            />
-          </View>
-          <View style={styles.form}>
-            <Text style={styles.infoText}>생년월일: </Text>
-            <SelectDropdown
-              data={[
-                '1992',
-                '1993',
-                '1994',
-                '1995',
-                '1996',
-                '1997',
-                '1998',
-                '1999',
-                '2000',
-                '2001',
-                '2002',
-                '2003',
-              ]}
-              onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
-                setForm({...form, birthYear: selectedItem});
-              }}
-              defaultButtonText=" "
-              buttonStyle={styles.dropdown}
-            />
-            <Text style={styles.infoText}> 년 </Text>
-            <SelectDropdown
-              data={[
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7',
-                '8',
-                '9',
-                '10',
-                '11',
-                '12',
-              ]}
-              onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
-                setForm({...form, birthMonth: selectedItem});
-              }}
-              defaultButtonText=" "
-              buttonStyle={styles.dropdownSmall}
-            />
-            <Text style={styles.infoText}> 월 </Text>
-            <SelectDropdown
-              data={[
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7',
-                '8',
-                '9',
-                '10',
-                '11',
-                '12',
-                '13',
-                '14',
-                '15',
-                '16',
-                '17',
-                '18',
-                '19',
-                '20',
-                '21',
-                '22',
-                '23',
-                '24',
-                '25',
-                '26',
-                '27',
-                '28',
-                '29',
-                '30',
-                '31',
-              ]}
-              onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
-                setForm({...form, birthDay: selectedItem});
-              }}
-              defaultButtonText=" "
-              buttonStyle={styles.dropdownSmall}
-            />
-            <Text style={styles.infoText}> 일 </Text>
-          </View>
-          <View style={styles.genderForm}>
-            <Text style={styles.infoText}>성별: </Text>
-            <SelectDropdown
-              data={['남자', '여자']}
-              onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
-                setForm({...form, gender: selectedItem});
-              }}
-              defaultButtonText=" "
-              buttonStyle={styles.dropdown}
-            />
-          </View>
-          <Text style={styles.alertText}>
-            {'\n'} ❗️닉네임, 생년월일, 성별 등 개인을 식별할 수 있는 정보는
-            추후 수정이 불가능합니다. {'\n'}
-          </Text>
-          {/* <BasicButton
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={Platform.select({ios: 'padding'})}>
+        <SafeAreaView style={styles.fullscreen}>
+          <BackButton />
+          <View style={styles.fullscreenSub}>
+            <CameraButton response={response} setResponse={setResponse} />
+            <View style={styles.form}>
+              <Text style={styles.infoText}>닉네임</Text>
+              <BorderedInput
+                size="large"
+                placeholder="닉네임"
+                value={form.nickName}
+                onChangeText={createChangeTextHandler('nickName')}
+                autoCapitalize="none"
+                autoCorrect={false}
+                returnKeyType={'next'}
+              />
+            </View>
+            <View style={styles.form}>
+              <Text style={styles.infoText}>생년월일: </Text>
+              <SelectDropdown
+                data={[
+                  '1992',
+                  '1993',
+                  '1994',
+                  '1995',
+                  '1996',
+                  '1997',
+                  '1998',
+                  '1999',
+                  '2000',
+                  '2001',
+                  '2002',
+                  '2003',
+                ]}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index);
+                  setForm({...form, birthYear: selectedItem});
+                }}
+                defaultButtonText=" "
+                buttonStyle={styles.dropdown}
+              />
+              <Text style={styles.infoText}> 년 </Text>
+              <SelectDropdown
+                data={[
+                  '1',
+                  '2',
+                  '3',
+                  '4',
+                  '5',
+                  '6',
+                  '7',
+                  '8',
+                  '9',
+                  '10',
+                  '11',
+                  '12',
+                ]}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index);
+                  setForm({...form, birthMonth: selectedItem});
+                }}
+                defaultButtonText=" "
+                buttonStyle={styles.dropdownSmall}
+              />
+              <Text style={styles.infoText}> 월 </Text>
+              <SelectDropdown
+                data={[
+                  '1',
+                  '2',
+                  '3',
+                  '4',
+                  '5',
+                  '6',
+                  '7',
+                  '8',
+                  '9',
+                  '10',
+                  '11',
+                  '12',
+                  '13',
+                  '14',
+                  '15',
+                  '16',
+                  '17',
+                  '18',
+                  '19',
+                  '20',
+                  '21',
+                  '22',
+                  '23',
+                  '24',
+                  '25',
+                  '26',
+                  '27',
+                  '28',
+                  '29',
+                  '30',
+                  '31',
+                ]}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index);
+                  setForm({...form, birthDay: selectedItem});
+                }}
+                defaultButtonText=" "
+                buttonStyle={styles.dropdownSmall}
+              />
+              <Text style={styles.infoText}> 일 </Text>
+            </View>
+            <View style={styles.genderForm}>
+              <Text style={styles.infoText}>성별: </Text>
+              <SelectDropdown
+                data={['남자', '여자']}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index);
+                  setForm({...form, gender: selectedItem});
+                }}
+                defaultButtonText=" "
+                buttonStyle={styles.dropdown}
+              />
+            </View>
+            <Text style={styles.alertText}>
+              {'\n'} ❗️닉네임, 생년월일, 성별 등 개인을 식별할 수 있는 정보는
+              추후 수정이 불가능합니다. {'\n'}
+            </Text>
+            {/* <BasicButton
             style={styles.button}
             width={300}
             height={40}
@@ -271,18 +253,19 @@ const SignUpUserInfoScreen = ({navigation, route}) => {
             hasMarginBottom
             onPress={onSubmit}
           /> */}
-          <GradientButton
-            style={styles.button}
-            width={300}
-            height={40}
-            textSize={17}
-            margin={[5, 5, 5, 5]}
-            text="다음 단계"
-            onPress={onSubmit}
-          />
-        </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+            <GradientButton
+              style={styles.button}
+              width={300}
+              height={40}
+              textSize={17}
+              margin={[5, 5, 5, 5]}
+              text="다음 단계"
+              onPress={onSubmit}
+            />
+          </View>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

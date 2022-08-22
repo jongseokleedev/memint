@@ -8,6 +8,8 @@ import {
   Text,
   View,
   Image,
+  TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
@@ -15,9 +17,9 @@ import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
 import memintLogo from '../../assets/icons/logo.png';
 import {createPhoneNumber, getUserByPhoneNumber} from '../../lib/Users';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const VerifyMobileScreen = ({navigation, route}) => {
-  const {uid} = route.params || {};
+  let {userInfo} = route.params || {};
   const [buttonReady, setButtonReady] = useState(false);
   const [validNumber, setValidNumber] = useState(
     '11자리 숫자 전화번호를 입력해주세요',
@@ -60,15 +62,24 @@ const VerifyMobileScreen = ({navigation, route}) => {
   };
 
   async function verifyPhoneNumber(phoneNumber) {
-    const userEmail = await getUserByPhoneNumber(form.mobileNumber);
-    console.log({userEmail});
-    if (userEmail === 'NA') {
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      setFiexedPhoneNumber(form.mobileNumber);
-      setConfirm(confirmation);
-    } else {
-      setValidNumber('이미 해당 전화번호로 가입한 회원이 있습니다');
-      setTextColor('red');
+    try {
+      const userEmail = await getUserByPhoneNumber(form.mobileNumber);
+      console.log({userEmail});
+      if (userEmail === 'NA') {
+        const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+        setFiexedPhoneNumber(form.mobileNumber);
+        setConfirm(confirmation);
+      } else {
+        setValidNumber('이미 해당 전화번호로 가입한 회원이 있습니다');
+        setTextColor('red');
+      }
+    } catch (e) {
+      const messages = {
+        'auth/too-many-requests': `인증 번호 요청을 너무 많이했습니다. ${'\n'} 잠시 후 다시 시도해주세요.`,
+      };
+      const msg = messages[e.code];
+      Alert.alert('실패', msg);
+      console.log(e);
     }
   }
 
@@ -90,110 +101,116 @@ const VerifyMobileScreen = ({navigation, route}) => {
   }
 
   const goToNextPage = () => {
-    createPhoneNumber({userId: uid, phoneNumber: fixedPhoneNumber});
-    navigation.push('SignUpUserDetail', {uid: uid});
+    // createPhoneNumber({userId: uid, phoneNumber: fixedPhoneNumber});
+    userInfo = {...userInfo, phoneNumber: fixedPhoneNumber};
+    navigation.push('SignUpUserDetail', {userInfo});
   };
   return (
-    <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
-      behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
-        <BackButton />
-        <View style={styles.fullscreenSub}>
-          <Image source={memintLogo} style={styles.logo} />
-          <Text style={styles.contentText}>전화번호를 인증해주세요</Text>
-          <Text style={styles.contentTextSub}>
-            안전한 미팅주선을 위해 사용됩니다
-          </Text>
-          <View style={styles.form}>
-            <BorderedInput
-              size="large"
-              placeholder="전화번호를 입력해주세요"
-              hasMarginBottom
-              value={form.mobileNumber}
-              onChangeText={createChangeTextHandler('mobileNumber')}
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType={'done'}
-              // onSubmitEditing={() => passwordRef.current.focus()}
-            />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      {/* <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={Platform.select({ios: 'padding'})}> */}
+      <KeyboardAwareScrollView style={styles.KeyboardAvoidingView}>
+        <SafeAreaView style={styles.fullscreen}>
+          <BackButton />
+          <View style={styles.fullscreenSub}>
+            <Image source={memintLogo} style={styles.logo} />
+            <Text style={styles.contentText}>전화번호를 인증해주세요</Text>
+            <Text style={styles.contentTextSub}>
+              안전한 미팅주선을 위해 사용됩니다
+            </Text>
+            <View style={styles.form}>
+              <BorderedInput
+                size="large"
+                placeholder="전화번호를 입력해주세요"
+                hasMarginBottom
+                value={form.mobileNumber}
+                onChangeText={createChangeTextHandler('mobileNumber')}
+                autoCapitalize="none"
+                keyboardType="numeric"
+                autoCorrect={false}
+                returnKeyType={'done'}
+                // onSubmitEditing={() => passwordRef.current.focus()}
+              />
+              <BasicButton
+                style={styles.button}
+                width={70}
+                height={35}
+                textSize={13}
+                margin={[5, 5, 5, 5]}
+                disabled={!buttonReady}
+                border={false}
+                backgroundColor={buttonReady ? 'black' : 'lightgray'}
+                text="인증번호받기"
+                hasMarginBottom
+                onPress={async () =>
+                  verifyPhoneNumber(
+                    `+82 ${form.mobileNumber.slice(
+                      0,
+                      3,
+                    )}-${form.mobileNumber.slice(
+                      3,
+                      7,
+                    )}-${form.mobileNumber.slice(7, 11)}`,
+                  ).then(setValidNumber('인증번호가 발송되었습니다'))
+                }
+              />
+            </View>
+            <Text style={[styles.invalidNumber, {color: textColor}]}>
+              {validNumber}
+            </Text>
+            <Text style={styles.contentTextVerify}>인증번호</Text>
+            <View style={styles.secondForm} hasMarginBottom>
+              <BorderedInput
+                size="large"
+                placeholder="인증번호를 입력해주세요"
+                value={form.code}
+                onChangeText={createChangeTextHandler('code')}
+                // secureTextEntry
+                // ref={passwordRef}
+                keyboardType="numeric"
+                // returnKeyType={'done'}
+                onSubmitEditing={() => {
+                  onSubmit();
+                }}
+              />
+              <BasicButton
+                style={styles.button}
+                width={70}
+                height={35}
+                textSize={13}
+                margin={[5, 5, 5, 5]}
+                border={false}
+                text="인증"
+                hasMarginBottom
+                onPress={() => confirmCode()}
+              />
+            </View>
+            <Text style={[styles.invalidNumber, {color: verifyTextColor}]}>
+              {verified === null
+                ? ''
+                : verified
+                ? '성공적으로 인증되었습니다'
+                : '인증번호가 유효하지 않습니다.'}
+            </Text>
             <BasicButton
               style={styles.button}
-              width={70}
-              height={35}
-              textSize={13}
-              margin={[5, 5, 5, 5]}
-              disabled={!buttonReady}
+              width={300}
+              height={40}
+              textSize={17}
+              margin={[50, 5, 5, 5]}
               border={false}
-              backgroundColor={buttonReady ? 'black' : 'lightgray'}
-              text="인증번호받기"
+              disabled={!verified}
+              backgroundColor={verified ? 'black' : 'lightgray'}
+              text="다음 단계"
               hasMarginBottom
-              onPress={async () =>
-                verifyPhoneNumber(
-                  `+82 ${form.mobileNumber.slice(
-                    0,
-                    3,
-                  )}-${form.mobileNumber.slice(3, 7)}-${form.mobileNumber.slice(
-                    7,
-                    11,
-                  )}`,
-                ).then(setValidNumber('인증번호가 발송되었습니다'))
-              }
+              onPress={goToNextPage}
             />
           </View>
-          <Text style={[styles.invalidNumber, {color: textColor}]}>
-            {validNumber}
-          </Text>
-          <Text style={styles.contentTextVerify}>인증번호</Text>
-          <View style={styles.secondForm} hasMarginBottom>
-            <BorderedInput
-              size="large"
-              placeholder="인증번호를 입력해주세요"
-              value={form.code}
-              onChangeText={createChangeTextHandler('code')}
-              // secureTextEntry
-              // ref={passwordRef}
-              keyboardType="numeric"
-              // returnKeyType={'done'}
-              onSubmitEditing={() => {
-                onSubmit();
-              }}
-            />
-            <BasicButton
-              style={styles.button}
-              width={70}
-              height={35}
-              textSize={13}
-              margin={[5, 5, 5, 5]}
-              border={false}
-              text="인증"
-              hasMarginBottom
-              onPress={() => confirmCode()}
-            />
-          </View>
-          <Text style={[styles.invalidNumber, {color: verifyTextColor}]}>
-            {verified === null
-              ? ''
-              : verified
-              ? '성공적으로 인증되었습니다'
-              : '인증번호가 유효하지 않습니다.'}
-          </Text>
-          <BasicButton
-            style={styles.button}
-            width={300}
-            height={40}
-            textSize={17}
-            margin={[50, 5, 5, 5]}
-            border={false}
-            disabled={!verified}
-            backgroundColor={verified ? 'black' : 'lightgray'}
-            text="다음 단계"
-            hasMarginBottom
-            onPress={goToNextPage}
-          />
-        </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+        </SafeAreaView>
+      </KeyboardAwareScrollView>
+      {/* </KeyboardAvoidingView> */}
+    </TouchableWithoutFeedback>
   );
 };
 

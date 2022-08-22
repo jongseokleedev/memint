@@ -13,7 +13,8 @@ import {createUserNFT} from '../../lib/Users';
 import GradientButton from '../../components/common/GradientButton';
 let interval = undefined;
 
-const SignUpServeNFTScreen = ({navigation: {navigate}, route}) => {
+const SignUpServeNFTScreen = ({navigation, route}) => {
+  let {userInfo} = route.params || {};
   const [running, setRunning] = useState(true);
   const [progress, setProgress] = useState(0);
   const {setNftProfile} = useNftActions();
@@ -56,27 +57,29 @@ const SignUpServeNFTScreen = ({navigation: {navigate}, route}) => {
   //   console.log(profileImg);
 
   const onSubmit = async () => {
-    try {
-      const res = await createNFT({userId: uid, nftImg: profileImg});
-      const newNFTId = res._documentPath._parts[1];
-      setNftProfile(profileImg);
-      createUserNFT({userId: uid, nftProfile: profileImg, nftId: newNFTId});
-    } catch (e) {
-      Alert.alert('실패');
-      console.log(e);
-    } finally {
-      navigate('SignUpAgreement');
-    }
+    // try {
+    userInfo = {...userInfo, nftImg: profileImg};
+    navigation.push('SignUpAgreement', {userInfo});
+    // const res = await createNFT({userId: uid, nftImg: profileImg});
+    // const newNFTId = res._documentPath._parts[1];
+    // setNftProfile(profileImg);
+    // createUserNFT({userId: uid, nftProfile: profileImg, nftId: newNFTId});
+    // } catch (e) {
+    //   Alert.alert('실패');
+    //   console.log(e);
+    // } finally {
+    //   navigate('SignUpAgreement');
+    // }
   };
 
   return (
     <SafeAreaView style={styles.fullscreen}>
-      <BackButton />
+      {/* <BackButton /> */}
       <View style={styles.fullscreenSub}>
         {progress === 100 ? (
           <>
             <Text style={styles.textMain}>
-              {nickName}님만을 위한 프로필 입니다.
+              {userInfo.nickName}님만을 위한 프로필 입니다.
             </Text>
             <Image style={styles.nftImg} source={{uri: profileImg}} />
             <Text style={styles.textSub}>귀엽네요</Text>
@@ -93,7 +96,7 @@ const SignUpServeNFTScreen = ({navigation: {navigate}, route}) => {
         ) : (
           <>
             <Text style={styles.textMain}>
-              {nickName}님만을 위한 프로필 이미지를 만들고 있습니다.
+              {userInfo.nickName}님만을 위한 프로필 이미지를 만들고 있습니다.
             </Text>
             <Progress.Pie
               size={100}

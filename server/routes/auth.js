@@ -15,12 +15,14 @@ auth.route("/register").post(async (req, res) => {
 		// const account = await web3.eth.accounts.create();
 		const account = await caver.klay.accounts.create();
 		console.log(account);
-		await app.db.collection("User").doc(req.body.id).update({
-			address: account.address,
-			privateKey: account.privateKey,
-		});
-
-		res.status(200).send(account);
+		await app.db
+			.collection("User")
+			.doc(req.body.id)
+			.update({
+				address: account.address,
+				privateKey: account.privateKey,
+			})
+			.then(res.status(200).send(account));
 	} catch (error) {
 		res.status(400).send(error);
 	}

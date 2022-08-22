@@ -2,23 +2,34 @@ import firestore from '@react-native-firebase/firestore';
 
 export const usersCollection = firestore().collection('User');
 
-export function createUser({userId, email, nickName, gender, birth, picture}) {
+export function createUser({
+  userId,
+  email,
+  nickName,
+  gender,
+  birth,
+  picture,
+  phoneNumber,
+  drinkCapa,
+  drinkStyle,
+  alcoholType,
+}) {
   // return usersCollection.doc(id).get();
   // console.log(usersCollection);
-  const newNickName = nickName ? nickName : '';
-  const newGender = gender ? gender : '';
-  const newBirth = birth ? birth : '';
-  const newPicture = picture ? picture : '';
+  // const newNickName = nickName ? nickName : '';
+  // const newGender = gender ? gender : '';
+  // const newBirth = birth ? birth : '';
+  // const newPicture = picture ? picture : '';
   return usersCollection.doc(userId).set({
     userId,
     email: email,
-    nickName: newNickName,
-    gender: newGender,
-    birth: newBirth,
+    nickName: nickName,
+    gender: gender,
+    birth: birth,
     createdAt: firestore.FieldValue.serverTimestamp(),
-    picture: newPicture,
+    picture: picture,
     nftProfile: null,
-    phoneNumber: '',
+    phoneNumber: phoneNumber,
     nftIds: [],
     address: null,
     privateKey: null,
@@ -29,6 +40,11 @@ export function createUser({userId, email, nickName, gender, birth, picture}) {
     createdroomId: [],
     joinedroomId: [],
     likesroomId: [],
+    property: {
+      drinkCapa: drinkCapa,
+      drinkStyle: drinkStyle,
+      alcoholType: alcoholType,
+    },
   });
 }
 
@@ -169,10 +185,14 @@ export async function addVisibleUser(id, value) {
 }
 
 export const saveTokenToDatabase = async (token, userId) => {
-  await firestore()
-    .collection('User')
-    .doc(userId)
-    .update({
-      deviceTokens: firestore.FieldValue.arrayUnion(token),
-    });
+  try {
+    await firestore()
+      .collection('User')
+      .doc(userId)
+      .update({
+        deviceTokens: firestore.FieldValue.arrayUnion(token),
+      });
+  } catch (e) {
+    console.log(e, 'There is no doc in user collection');
+  }
 };

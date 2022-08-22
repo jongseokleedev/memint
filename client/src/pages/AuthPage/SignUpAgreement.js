@@ -8,7 +8,8 @@ import CheckBox from '@react-native-community/checkbox';
 import {signUp} from '../../lib/Auth';
 import GradientButton from '../../components/common/GradientButton';
 
-const SignUpAgreementScreen = ({navigation: {navigate}, route}) => {
+const SignUpAgreementScreen = ({navigation, route}) => {
+  let {userInfo} = route.params || {};
   const [checkInfo, setCheckInfo] = useState({
     service: '',
     privacy: '',
@@ -19,19 +20,25 @@ const SignUpAgreementScreen = ({navigation: {navigate}, route}) => {
   const [loading, setLoading] = useState();
 
   const onSubmitSignUp = async () => {
+    if (!(serviceCheck && ageCheck && useCheck)) {
+      console.log(serviceCheck, ageCheck, useCheck);
+      Alert.alert('실패', '약관에 동의해주세요');
+    } else {
+      navigation.push('SignUpAlarm', {userInfo});
+    }
     // const {email, password} = route.params;
     // const info = {email, password};
     // setLoading(true);
-    try {
-      // const {user} = await signUp(info);
-      // console.log(user);
-    } catch (e) {
-      Alert.alert('실패');
-      console.log(e);
-    } finally {
-      setLoading(false);
-      navigate('SignUpAlarm');
-    }
+    // try {
+    //   // const {user} = await signUp(info);
+    //   // console.log(user);
+    // } catch (e) {
+    //   Alert.alert('실패');
+    //   console.log(e);
+    // } finally {
+    //   setLoading(false);
+    //   navigate('SignUpAlarm');
+    // }
   };
 
   const [allCheck, setAllCheck] = useState(false);
@@ -102,7 +109,7 @@ const SignUpAgreementScreen = ({navigation: {navigate}, route}) => {
   }, [ageCheck, serviceCheck, useCheck, marketingCheck]);
 
   const goToNextPage = () => {
-    navigate('SignUpAlarm');
+    navigation.push('SignUpAlarm', {userInfo});
   };
 
   return (

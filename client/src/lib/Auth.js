@@ -20,3 +20,15 @@ export function signOut() {
 export function passwordReset(emailAddress) {
   return auth().sendPasswordResetEmail(emailAddress);
 }
+
+export function checkUniqueEmail(emailAddress) {
+  return auth()
+    .fetchSignInMethodsForEmail(emailAddress)
+    .then(providers => {
+      if (providers.length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+}

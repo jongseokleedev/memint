@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import OauthButton from '../../components/AuthComponents/OauthButton';
@@ -85,9 +86,11 @@ const SignInScreen = ({navigation, route}) => {
         klayAmount: userDetail.klayAmount,
         onChainTokenAmount: userDetail.onChainTokenAmount,
         nftProfile: userDetail.nftProfile.toString(),
-        alcoholType: userProperty[0].alcoholType,
-        drinkCapa: userProperty[0].drinkCapa,
-        drinkStyle: userProperty[0].drinkStyle,
+        property: {
+          alcoholType: userDetail.property.alcoholType,
+          drinkCapa: userDetail.property.drinkCapa,
+          drinkStyle: userDetail.property.drinkStyle,
+        },
         visibleUser: userDetail.visibleUser,
       }),
         navigation.navigate('Main');
@@ -115,34 +118,35 @@ const SignInScreen = ({navigation, route}) => {
     );
   }
   return (
-    <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
-      behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
-        <Image source={logo} style={styles.logo} />
-        <View style={styles.form}>
-          <SignForm
-            onSubmit={onSubmitSignIn}
-            form={form}
-            createChangeTextHandler={createChangeTextHandler}
-          />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={Platform.select({ios: 'padding'})}>
+        <SafeAreaView style={styles.fullscreen}>
+          <Image source={logo} style={styles.logo} />
+          <View style={styles.form}>
+            <SignForm
+              onSubmit={onSubmitSignIn}
+              form={form}
+              createChangeTextHandler={createChangeTextHandler}
+            />
 
-          {/* <SignButtons onSubmitSignIn={goToMain} onSubmitSignUp={goToSignUp} /> */}
-          <SignButtons
-            onSubmitSignIn={onSubmitSignIn}
-            onSubmitSignUp={goToSignUp}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.textAsk}>이미 회원이신가요?</Text>
-            {/* <Text style={styles.textFind}>아이디 / 비밀번호 찾기</Text> */}
-            <TouchableOpacity style={styles.textFind} onPress={goToFindId}>
-              <Text> 아이디 찾기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.textFind} onPress={goToFindPW}>
-              <Text> 비밀번호 찾기</Text>
-            </TouchableOpacity>
-          </View>
-          {/* <View style={styles.oauthbutton}>
+            {/* <SignButtons onSubmitSignIn={goToMain} onSubmitSignUp={goToSignUp} /> */}
+            <SignButtons
+              onSubmitSignIn={onSubmitSignIn}
+              onSubmitSignUp={goToSignUp}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.textAsk}>이미 회원이신가요?</Text>
+              {/* <Text style={styles.textFind}>아이디 / 비밀번호 찾기</Text> */}
+              <TouchableOpacity style={styles.textFind} onPress={goToFindId}>
+                <Text> 아이디 찾기</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.textFind} onPress={goToFindPW}>
+                <Text> 비밀번호 찾기</Text>
+              </TouchableOpacity>
+            </View>
+            {/* <View style={styles.oauthbutton}>
             <OauthButton
               style={styles.oauthbutton}
               size="wide"
@@ -159,9 +163,10 @@ const SignInScreen = ({navigation, route}) => {
               vendor="apple"
             />
           </View> */}
-        </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          </View>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -27,6 +27,7 @@ const WalletOnchainMain = ({navigation}) => {
   // const slicedAddress = userInfo.address
   //   ? `${userInfo.address.substr(0, 15)}....${userInfo.address.substr(30)}`
   //   : null;
+  console.log({userInfo});
   const slicedAddress = `${userInfo.address.substr(
     0,
     15,

@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Image,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
@@ -41,45 +42,47 @@ const FindPWVerifyScreen = ({navigation}) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
-      behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
-        <BackButton />
-        <View style={styles.fullscreenSub}>
-          <Image source={logo} style={styles.logo} />
-          <Text style={styles.contentTextVerify}>
-            회원가입시 사용한 이메일을 입력해주세요
-          </Text>
-          <View style={styles.secondForm} hasMarginBottom>
-            <BorderedInput
-              size="wide"
-              placeholder="이메일을 입력해주세요"
-              value={form.email}
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoCompleteType="email"
-              keyboardType="email-address"
-              onChangeText={createChangeTextHandler('email')}
-              returnKeyType={'done'}
-              onSubmitEditing={() => {
-                onSubmit();
-              }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={Platform.select({ios: 'padding'})}>
+        <SafeAreaView style={styles.fullscreen}>
+          <BackButton />
+          <View style={styles.fullscreenSub}>
+            <Image source={logo} style={styles.logo} />
+            <Text style={styles.contentTextVerify}>
+              회원가입시 사용한 이메일을 입력해주세요
+            </Text>
+            <View style={styles.secondForm} hasMarginBottom>
+              <BorderedInput
+                size="wide"
+                placeholder="이메일을 입력해주세요"
+                value={form.email}
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoCompleteType="email"
+                keyboardType="email-address"
+                onChangeText={createChangeTextHandler('email')}
+                returnKeyType={'done'}
+                onSubmitEditing={() => {
+                  onSubmit();
+                }}
+              />
+            </View>
+            <GradientButton
+              style={styles.button}
+              width={300}
+              height={40}
+              textSize={17}
+              margin={[0, 5, 5, 5]}
+              text="이메일 보내기"
+              hasMarginBottom
+              onPress={goToNextPage}
             />
           </View>
-          <GradientButton
-            style={styles.button}
-            width={300}
-            height={40}
-            textSize={17}
-            margin={[0, 5, 5, 5]}
-            text="이메일 보내기"
-            hasMarginBottom
-            onPress={goToNextPage}
-          />
-        </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

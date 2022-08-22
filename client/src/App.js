@@ -150,9 +150,11 @@ function App() {
         // createdroomId: userDetail.createdroomId,
         // joinedroomId: userDetail.joinedroomId,
         nftProfile: userDetail.nftProfile.toString(),
-        alcoholType: userProperty[0].alcoholType,
-        drinkCapa: userProperty[0].drinkCapa,
-        drinkStyle: userProperty[0].drinkStyle,
+        property: {
+          alcoholType: userDetail.property.alcoholType,
+          drinkCapa: userDetail.property.drinkCapa,
+          drinkStyle: userDetail.property.drinkStyle,
+        },
         visibleUser: userDetail.visibleUser,
         likesroomId: userDetail.likesroomId,
       });
@@ -179,7 +181,7 @@ function App() {
     const authorizationStatus = await messaging().requestPermission();
 
     if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED) {
-      console.log('User has notification permissions enabled.');
+      console.log(' permissions enabled.');
       return true;
     } else if (
       authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL
@@ -191,13 +193,26 @@ function App() {
       return false;
     }
   }
+
   async function registerAppWithFCM() {
-    await messaging().registerDeviceForRemoteMessages();
+    try {
+      await messaging().registerDeviceForRemoteMessages();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   useEffect(() => {
     const unsubscribe = subscribeAuth(user => {
-      if (user) {
+      console.log({user});
+      const userProvider = user
+        ? user.additionalUserInfo
+          ? user.additionalUserInfo.providerId
+          : user.providerId
+        : null;
+      console.log({userProvider});
+      if (user && user.email !== null) {
+        console.log('DEBUG');
         authorize({
           id: user.uid,
           email: user.email,

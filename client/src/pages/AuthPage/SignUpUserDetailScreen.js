@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BackButton from '../../components/common/BackButton';
@@ -15,8 +17,8 @@ import TagElement from '../../components/AuthComponents/TagElement';
 import {createProperty} from '../../lib/Users';
 import GradientButton from '../../components/common/GradientButton';
 
-const SignUpUserDetailScreen = ({navigation: {navigate}, route}) => {
-  const {uid} = route.params || {};
+const SignUpUserDetailScreen = ({navigation, route}) => {
+  let {userInfo} = route.params || {};
   const [drinkInfo, setDrinkInfo] = useState({
     drinkCapa: '',
     drinkStyle: [],
@@ -25,13 +27,28 @@ const SignUpUserDetailScreen = ({navigation: {navigate}, route}) => {
   console.log(drinkInfo);
 
   const goToNextPage = () => {
-    createProperty({
-      userId: uid,
-      drinkCapa: drinkInfo.drinkCapa,
-      drinkStyle: drinkInfo.drinkStyle,
-      alcoholType: drinkInfo.alcoholType,
-    });
-    navigate('SignUpServeNFT', route.params);
+    if (
+      drinkInfo.drinkCapa === '' ||
+      drinkInfo.drinkStyle.length === 0 ||
+      drinkInfo.alcoholType.length === 0
+    ) {
+      Alert.alert('실패', '회원 정보를 올바르게 입력해주세요');
+    } else {
+      userInfo = {
+        ...userInfo,
+        drinkCapa: drinkInfo.drinkCapa,
+        drinkStyle: drinkInfo.drinkStyle,
+        alcoholType: drinkInfo.alcoholType,
+      };
+      // createProperty({
+      //   userId: uid,
+      //   drinkCapa: drinkInfo.drinkCapa,
+      //   drinkStyle: drinkInfo.drinkStyle,
+      //   alcoholType: drinkInfo.alcoholType,
+      // });
+      navigation.push('SignUpServeNFT', {userInfo});
+      // navigate('SignUpServeNFT', route.params);
+    }
   };
 
   const tagData = {
@@ -53,63 +70,64 @@ const SignUpUserDetailScreen = ({navigation: {navigate}, route}) => {
     ],
   };
   return (
-    <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
-      behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView style={styles.fullscreen}>
-        <BackButton />
-        <View style={styles.fullscreenSub}>
-          <View style={styles.form}>
-            <Text style={styles.text}>주량을 선택해주세요</Text>
-            <SelectDropdown
-              data={[
-                '한 잔만',
-                '반 병 이하',
-                '한 병 이하',
-                '두 병 이하',
-                '세 병 이하',
-                '세 병 이상',
-              ]}
-              onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
-                setDrinkInfo({...drinkInfo, drinkCapa: selectedItem});
-              }}
-              defaultButtonText=" "
-              buttonStyle={styles.dropdown}
-            />
-          </View>
-          <Text style={styles.contentText}>
-            미팅 매칭 필요 정보로 활용합니다.
-          </Text>
-          <Text style={styles.text}>
-            선호하는 주류를 선택해주세요.(중복가능)
-          </Text>
-          <View style={styles.tagsContainer}>
-            {tagData.alcoholType.map((tag, idx) => (
-              <TagElement
-                key={idx}
-                tag={tag}
-                drinkInfo={drinkInfo}
-                setDrinkInfo={setDrinkInfo}
-                type="alcoholType"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={Platform.select({ios: 'padding'})}>
+        <SafeAreaView style={styles.fullscreen}>
+          <BackButton />
+          <View style={styles.fullscreenSub}>
+            <View style={styles.form}>
+              <Text style={styles.text}>주량을 선택해주세요</Text>
+              <SelectDropdown
+                data={[
+                  '한 잔만',
+                  '반 병 이하',
+                  '한 병 이하',
+                  '두 병 이하',
+                  '세 병 이하',
+                  '세 병 이상',
+                ]}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index);
+                  setDrinkInfo({...drinkInfo, drinkCapa: selectedItem});
+                }}
+                defaultButtonText=" "
+                buttonStyle={styles.dropdown}
               />
-            ))}
-          </View>
-          <Text style={styles.text}>
-            당신의 음주 스타일을 알려주세요.(중복 가능)
-          </Text>
-          <View style={styles.tagsContainer}>
-            {tagData.drinkStyle.map((tag, idx) => (
-              <TagElement
-                key={idx}
-                tag={tag}
-                drinkInfo={drinkInfo}
-                setDrinkInfo={setDrinkInfo}
-                type="drinkStyle"
-              />
-            ))}
-          </View>
-          {/* <BasicButton
+            </View>
+            <Text style={styles.contentText}>
+              미팅 매칭 필요 정보로 활용합니다.
+            </Text>
+            <Text style={styles.text}>
+              선호하는 주류를 선택해주세요.(중복가능)
+            </Text>
+            <View style={styles.tagsContainer}>
+              {tagData.alcoholType.map((tag, idx) => (
+                <TagElement
+                  key={idx}
+                  tag={tag}
+                  drinkInfo={drinkInfo}
+                  setDrinkInfo={setDrinkInfo}
+                  type="alcoholType"
+                />
+              ))}
+            </View>
+            <Text style={styles.text}>
+              당신의 음주 스타일을 알려주세요.(중복 가능)
+            </Text>
+            <View style={styles.tagsContainer}>
+              {tagData.drinkStyle.map((tag, idx) => (
+                <TagElement
+                  key={idx}
+                  tag={tag}
+                  drinkInfo={drinkInfo}
+                  setDrinkInfo={setDrinkInfo}
+                  type="drinkStyle"
+                />
+              ))}
+            </View>
+            {/* <BasicButton
             style={styles.button}
             width={300}
             height={40}
@@ -119,18 +137,19 @@ const SignUpUserDetailScreen = ({navigation: {navigate}, route}) => {
             hasMarginBottom
             onPress={goToNextPage}
           /> */}
-          <GradientButton
-            style={styles.button}
-            width={300}
-            height={40}
-            textSize={17}
-            margin={[30, 5, 5, 5]}
-            text="다음 단계"
-            onPress={goToNextPage}
-          />
-        </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+            <GradientButton
+              style={styles.button}
+              width={300}
+              height={40}
+              textSize={17}
+              margin={[30, 5, 5, 5]}
+              text="다음 단계"
+              onPress={goToNextPage}
+            />
+          </View>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -199,6 +218,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 4,
     height: 30,
+  },
+  spinnerWrapper: {
+    marginTop: 64,
+    height: 104,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

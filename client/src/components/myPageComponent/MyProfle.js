@@ -16,7 +16,7 @@ import MyMeMin from './MyMeMin';
 function MyProfile({User, navigation}) {
   const window = useWindowDimensions();
   const myMemin = useMemin();
-
+  console.log({User});
   return (
     <>
       <View>
@@ -76,17 +76,17 @@ function MyProfile({User, navigation}) {
       <View style={styles.userTags}>
         <View style={styles.userTag}>
           <Text style={styles.tagText}>주량은 </Text>
-          {<Text style={styles.tagFont}>#{User.drinkCapa}</Text>}
+          {<Text style={styles.tagFont}>#{User.property.drinkCapa}</Text>}
         </View>
         <View style={styles.userTag}>
           <Text style={styles.tagText}>선호하는 주종은 </Text>
-          {User.alcoholType.map((el, index) => (
+          {User.property.alcoholType.map((el, index) => (
             <Text style={styles.tagFont} key={index}>
               #{el}{' '}
             </Text>
           ))}
         </View>
-        {User.drinkStyle.map((el, index) => (
+        {User.property.drinkStyle.map((el, index) => (
           <Text style={styles.tagFont} key={index}>
             #{el}
           </Text>
