@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingVertical: 8,
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
 });
 

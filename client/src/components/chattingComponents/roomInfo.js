@@ -6,7 +6,7 @@ import useUser from '../../utils/hooks/UseUser';
 import {useNavigation} from '@react-navigation/native';
 import {useToast} from '../../utils/hooks/useToast';
 import {addFeedbackDoc} from '../../lib/Meeting';
-const crown = require('../../pages/ChattingPage/dummydata/images/crown.png');
+const likesActive = require('../../assets/icons/likesActive.png');
 
 function RoomInfo({chatInfo, userDetail, setModalVisible}) {
   const [states, setStates] = useState('');
@@ -101,6 +101,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
                 fontWeight: '500',
                 color: '#ffffff',
                 marginLeft: 4,
+                letterSpacing: -0.5,
               }}>
               {' '}
               미팅참여 인증하기
@@ -131,6 +132,7 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
                 fontWeight: '500',
                 color: '#ffffff',
                 marginLeft: 4,
+                letterSpacing: -0.5,
               }}>
               {' '}
               미팅 후기 보내기
@@ -160,10 +162,10 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible, chatInfo}) {
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image style={styles.personImage} source={{uri: img}} />
         {isHost && (
-          <View style={{position: 'absolute', height: 95}}>
+          <View style={{height: 28}}>
             <Image
-              source={crown}
-              style={{width: 40, height: 40}}
+              source={likesActive}
+              style={{width: 30, height: 30, tintColor: '#33ED96'}}
               resizeMode="contain"
             />
           </View>
@@ -187,7 +189,13 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible, chatInfo}) {
               }
             : null
         }>
-        <Text style={{color: 'white', fontSize: 14, fontWeight: '500'}}>
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 14,
+            fontWeight: '500',
+            letterSpacing: -0.5,
+          }}>
           확정
         </Text>
       </Pressable>
@@ -213,6 +221,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'left',
     width: '100%',
+    letterSpacing: -0.5,
   },
   person: {
     flexDirection: 'row',
@@ -233,6 +242,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginLeft: 5,
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   isConfirmed: {
     backgroundColor: '#000000',

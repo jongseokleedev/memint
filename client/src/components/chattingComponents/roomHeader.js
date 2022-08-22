@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'black',
+    letterSpacing: -0.5,
   },
 });
 

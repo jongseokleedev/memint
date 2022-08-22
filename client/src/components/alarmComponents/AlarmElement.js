@@ -134,10 +134,12 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 15,
     fontWeight: '600',
+    letterSpacing: -0.5,
   },
   createdAt: {
     fontSize: 12,
-    color: '#767676',
+    color: '#000000',
+    letterSpacing: -0.5,
   },
   meetingArea: {
     height: 40,
@@ -156,15 +158,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
     color: '#3C3D43',
+    letterSpacing: -0.5,
   },
   meetingTitle: {
     fontWeight: '500',
     color: '#3C3D43',
+    letterSpacing: -0.5,
   },
   deleteText: {
     fontSize: 13,
     fontWeight: '500',
     color: '#3C3D43',
+    letterSpacing: -0.5,
   },
 });
 

@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#ffffff',
     fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   alarmContainer: {
     paddingBottom: 70,

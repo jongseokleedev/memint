@@ -152,8 +152,8 @@ function MetaData({item, navigation}) {
         <View style={styles.chatInfo}>
           <View>
             <Text style={styles.titleText}>
-              {item.title.slice(0, 13) +
-                `${item.title.length > 13 ? '...' : ''}`}
+              {item.title.slice(0, 12) +
+                `${item.title.length > 12 ? '...' : ''}`}
             </Text>
             <Text style={styles.plainText}>
               {lastMsg ? lastMsg : '채팅을 시작해보세요!'}
@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#ffffff',
     fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   container: {
     flexDirection: 'row',
@@ -224,6 +225,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   chattingContainer: {
     paddingBottom: 70,
@@ -231,10 +233,12 @@ const styles = StyleSheet.create({
   plainText: {
     fontSize: 15,
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   dateText: {
     fontSize: 12,
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   date: {alignItems: 'flex-start'},
 });

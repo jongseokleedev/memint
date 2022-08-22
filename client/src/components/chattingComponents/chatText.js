@@ -129,7 +129,13 @@ function NotMyChat({item, userDetail, setUserInfoModalVisible, setUserId}) {
             <Text style={{color: '#3C3D43'}}>{item.data().text}</Text>
           </View>
           <View style={styles.date}>
-            <Text style={{marginBottom: 5, fontSize: 11, color: '#ffffff'}}>
+            <Text
+              style={{
+                marginBottom: 5,
+                fontSize: 11,
+                color: '#ffffff',
+                letterSpacing: -0.5,
+              }}>
               {item
                 .data()
                 .createdAt.toDate()
@@ -152,7 +158,13 @@ function MyChat({item}) {
       <View style={[styles.textWrapper, {alignItems: 'flex-end'}]}>
         <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
           <View style={styles.date}>
-            <Text style={{marginBottom: 5, fontSize: 11, color: '#ffffff'}}>
+            <Text
+              style={{
+                marginBottom: 5,
+                fontSize: 11,
+                color: '#ffffff',
+                letterSpacing: -0.5,
+              }}>
               {item
                 .data()
                 .createdAt.toDate()
@@ -168,7 +180,7 @@ function MyChat({item}) {
               styles.messageBody,
               {backgroundColor: 'rgba(234, 255, 239, 0.8)', maxWidth: 300},
             ]}>
-            <Text style={{color: '#3C3D43', fontSize: 15}}>
+            <Text style={{color: '#3C3D43', fontSize: 15, letterSpacing: -0.5}}>
               {item.data().text}
             </Text>
           </View>
@@ -196,7 +208,12 @@ function StatusMessage({item}) {
           borderRadius: 10,
           opacity: 0.7,
         }}>
-        <Text style={{color: 'rgba(234, 255, 239, 0.9)', fontSize: 13}}>
+        <Text
+          style={{
+            color: 'rgba(234, 255, 239, 0.9)',
+            fontSize: 13,
+            letterSpacing: -0.5,
+          }}>
           {item.data().nickName} 님이{' '}
           {item.data().status === 'out'
             ? '나가셨습니다.'
@@ -233,6 +250,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   messageBody: {
     backgroundColor: 'rgba(234, 255, 239, 0.9)',
