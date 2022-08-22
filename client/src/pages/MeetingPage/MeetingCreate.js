@@ -278,10 +278,12 @@ function MeetingCreate({route}) {
                   inputIOS: {
                     fontSize: 16,
                     color: '#ffffff',
+                    letterSpacing: -0.5,
                   },
                   placeholder: {
                     fontSize: 16,
                     color: '#EAFFEF',
+                    letterSpacing: -0.5,
                   },
                 }}
                 Icon={() => {
@@ -313,10 +315,12 @@ function MeetingCreate({route}) {
                   inputIOS: {
                     fontSize: 16,
                     color: '#ffffff',
+                    letterSpacing: -0.5,
                   },
                   placeholder: {
                     fontSize: 16,
                     color: '#EAFFEF',
+                    letterSpacing: -0.5,
                   },
                 }}
                 Icon={() => {
@@ -472,16 +476,19 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     color: '#ffffff',
     fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   completeButton: {
     fontWeight: 'bold',
     fontSize: 18,
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   incompleteButton: {
     fontWeight: 'bold',
     fontSize: 18,
     color: 'gray',
+    letterSpacing: -0.5,
   },
   flexRow: {
     flexDirection: 'row',
@@ -500,6 +507,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#EAFFEF',
+    letterSpacing: -0.5,
   },
   datepicker: {
     width: 240,
@@ -512,6 +520,7 @@ const styles = StyleSheet.create({
     height: 60,
     padding: 10,
     fontSize: 16,
+    letterSpacing: -0.5,
   },
   textInputDes: {
     backgroundColor: 'transparent',
@@ -522,6 +531,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingRight: 10,
     fontSize: 16,
+    letterSpacing: -0.5,
   },
   selectButton: {
     flexDirection: 'row',

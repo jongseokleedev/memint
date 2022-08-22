@@ -48,13 +48,19 @@ function ChattingRoomTopTab({data}) {
                 fontSize: 15,
                 fontWeight: '600',
                 color: '#ffffff',
+                letterSpacing: -0.5,
               }}>
               {roomData &&
-                roomData.title.slice(0, 21) +
+                roomData.title.slice(0, 20) +
                   `${roomData.title.length > 20 ? '...' : ''}`}
             </Text>
             <View style={styles.status}>
-              <Text style={{color: '#ffffff', fontWeight: '500'}}>
+              <Text
+                style={{
+                  color: '#ffffff',
+                  fontWeight: '500',
+                  letterSpacing: -0.5,
+                }}>
                 {roomStatus && roomStatus}
               </Text>
             </View>
@@ -63,7 +69,13 @@ function ChattingRoomTopTab({data}) {
 
         <TouchableOpacity
           onPress={() => navigation.navigate('MeetingDetail', {data: data})}>
-          <Text style={{marginTop: 20, color: '#ffffff', fontSize: 14}}>
+          <Text
+            style={{
+              marginTop: 13,
+              color: '#ffffff',
+              fontSize: 14,
+              letterSpacing: -0.5,
+            }}>
             미팅 정보 보러가기 >
           </Text>
         </TouchableOpacity>
@@ -74,13 +86,14 @@ function ChattingRoomTopTab({data}) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 90,
+    height: 57,
     // borderTopWidth: 0.3,
     flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 3,
   },
   status: {
-    paddingVertical: 3,
+    paddingVertical: 1,
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',

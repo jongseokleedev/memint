@@ -94,8 +94,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     height: 43,
-    width: '90%',
+    width: '100%',
     fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   meetingTags: {
     flexDirection: 'row',
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
     color: '#3C3D43',
+    letterSpacing: -0.5,
   },
   infoList: {
     flexDirection: 'row',
@@ -119,6 +121,7 @@ const styles = StyleSheet.create({
   infoEl: {
     fontSize: 13,
     color: '#3C3D43',
+    letterSpacing: -0.5,
     fontWeight: '500',
   },
   bar: {
@@ -140,6 +143,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 16,
     fontWeight: '500',
+    letterSpacing: -0.5,
     textAlign: 'right',
   },
   button: {
@@ -165,6 +169,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
+    letterSpacing: -0.5,
     fontWeight: '600',
   },
 });

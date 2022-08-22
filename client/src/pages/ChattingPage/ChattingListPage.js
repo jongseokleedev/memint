@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#ffffff',
     fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   container: {
     flexDirection: 'row',
@@ -233,6 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   chattingContainer: {
     paddingBottom: 70,
@@ -245,6 +247,7 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 12,
     color: '#ffffff',
+    letterSpacing: -0.5,
   },
   date: {alignItems: 'flex-start'},
 });

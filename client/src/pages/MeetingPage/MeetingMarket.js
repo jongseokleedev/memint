@@ -231,6 +231,7 @@ function MeetingMarket({navigation}) {
                   inputIOS: {
                     color: 'white',
                     fontFamily: 'NeoDunggeunmoPro-Regular',
+                    letterSpacing: -0.5,
                   },
                 }}
               />
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     width: 200,
     fontFamily: 'NeoDunggeunmoPro-Regular',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
     lineHeight: 30,
   },
   listfilterArea: {
@@ -385,6 +386,7 @@ const styles = StyleSheet.create({
   },
   smallText: {
     color: 'white',
+    letterSpacing: -0.5,
   },
   backgroundImage: {
     position: 'absolute',

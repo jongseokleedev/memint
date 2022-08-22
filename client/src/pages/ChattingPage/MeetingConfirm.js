@@ -20,6 +20,8 @@ import storage from '@react-native-firebase/storage';
 import {getMeeting, updateMeeting} from '../../lib/Meeting';
 import BasicButton from '../../components/common/BasicButton';
 import {createConfirmAlarm} from '../../lib/Alarm';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
+import LinearGradient from 'react-native-linear-gradient';
 const window = Dimensions.get('window');
 
 function MeetingConfirm({route}) {
@@ -239,10 +241,11 @@ function MeetingConfirm({route}) {
                   onPress={handleCamera}>
                   <Icon
                     name="photo-camera"
-                    size={19}
+                    size={30}
                     style={styles.photoIcon}
+                    color="#33ED96"
                   />
-                  <Text style={styles.boldText}>미팅 참여 인증하기</Text>
+                  <Text style={styles.buttonText}>미팅 인증샷</Text>
                 </TouchableOpacity>
               )}
             </>
@@ -269,51 +272,59 @@ function MeetingConfirm({route}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.container}>
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
         <BackButton />
-        <Text style={styles.title}>미팅 참여 인증하기</Text>
-      </View>
-      <ScrollView
-        style={styles.wrapper}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={getMeetingInfo} />
-        }>
-        <View style={styles.section}>
-          <View style={styles.confirmTitleArea}>
-            <Text style={styles.sectionTitle}>미팅 인증샷</Text>
-            <View style={styles.statusArea}>{renderStatus()}</View>
-          </View>
+        <ScrollView
+          style={styles.wrapper}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={getMeetingInfo}
+            />
+          }>
+          <Text style={styles.title}>미팅참여 인증하기</Text>
 
-          {renderByUser()}
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>인증방법 및 주의사항</Text>
-          <View style={styles.warningBox}>
-            <Text style={styles.boldText}>
-              미팅 참여자 전원의 얼굴이 보이게 사진을 찍어주세요!
-            </Text>
+          <View style={styles.section}>
+            <View style={styles.confirmTitleArea}>
+              <View style={styles.statusArea}>{renderStatus()}</View>
+            </View>
+
+            {renderByUser()}
           </View>
-          <View style={styles.guideSection}>
-            <Text style={styles.plainText}>
-              1. 호스트도 사진에 반드시 포함되어야 합니다.
-            </Text>
-            <Text style={styles.plainText}>
-              2. 다음의 경우에는 스탭의 판단에 따라 인증이 반려됩니다.
-            </Text>
-            <Text style={styles.subText}>
-              • 미팅 구성원 전원이 참석하지 않은 경우
-            </Text>
-            <Text style={styles.subText}>
-              • 음식점이 아닌 것 같다고 판단되는 경우
-            </Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>인증 방법 및 주의사항</Text>
+            <View style={styles.warningBox}>
+              <Text style={styles.boldText}>
+                미팅 참여자 전원의 얼굴이 보이게 사진을 찍어주세요!
+              </Text>
+            </View>
+            <View style={styles.guideSection}>
+              <Text style={styles.plainText}>
+                1. 호스트도 사진에 반드시 포함되어야 합니다.
+              </Text>
+              <Text style={styles.plainText}>
+                2. 다음의 경우에는 스탭의 판단에 따라 인증이 반려됩니다.
+              </Text>
+              <Text style={styles.subText}>
+                • 미팅 구성원 전원이 참석하지 않은 경우
+              </Text>
+              <Text style={styles.subText}>
+                • 음식점이 아닌 것 같다고 판단되는 경우
+              </Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-      {loading ? (
-        <ActivityIndicator style={styles.loading} size="large" />
-      ) : null}
-    </SafeAreaView>
+        </ScrollView>
+        {loading ? (
+          <ActivityIndicator style={styles.loading} size="large" />
+        ) : null}
+      </LinearGradient>
+    </View>
   );
 }
 
@@ -322,27 +333,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: 10,
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+  gradientBackground: {
+    flex: 1,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginLeft: 10,
+    fontWeight: '400',
+    fontSize: 24,
+    marginVertical: 20,
+    letterSpacing: -0.5,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
   },
   wrapper: {
     flexDirection: 'column',
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 20,
   },
   warningBox: {
-    backgroundColor: '#EDEDED',
-    borderRadius: 20,
+    backgroundColor: '#rgba(234, 255, 239, 0.8)',
+    borderRadius: 5,
     width: '100%',
     paddingHorizontal: 30,
     paddingVertical: 20,
@@ -351,15 +361,26 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   boldText: {
-    fontWeight: '700',
-    fontSize: 13,
+    fontWeight: '400',
+    fontSize: 14,
+    letterSpacing: -0.5,
+    color: '#1D1E1E',
+  },
+  buttonText: {
+    fontWeight: '600',
+    fontSize: 18,
+    letterSpacing: -0.5,
+    color: '#1D1E1E',
   },
   plainText: {
     fontSize: 13,
     marginVertical: 5,
+    color: '#ffffff',
+    letterSpacing: -0.5,
   },
   bigText: {
     fontSize: 12.5,
+    letterSpacing: -0.5,
     marginTop: 10,
   },
   section: {
@@ -367,28 +388,40 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: '700',
+    color: '#ffffff',
+    fontSize: 16,
+    letterSpacing: -0.5,
+    fontWeight: '500',
   },
   guideSection: {
     marginHorizontal: 25,
   },
   subText: {
-    color: '#646464',
+    color: '#ffffff',
     fontSize: 13,
-    marginHorizontal: 10,
+    letterSpacing: -0.5,
     marginTop: 5,
   },
   photoButton: {
-    borderWidth: 1,
-    borderColor: '#000000',
-    borderRadius: 25,
+    backgroundColor: '#ffffff',
+    borderRadius: 99,
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: 13,
     alignContent: 'flex-start',
     marginTop: 10,
+    marginBottom: 10,
     width: '100%',
+    height: 50,
+    shadowColor: 'rgba(174, 255, 192, 0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+
+    elevation: 18,
   },
   photoIcon: {
     marginRight: 7,
@@ -434,6 +467,7 @@ const styles = StyleSheet.create({
   },
   warningText: {
     fontSize: 13,
+    letterSpacing: -0.5,
     color: '#EE404C',
   },
   loading: {
