@@ -8,6 +8,7 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
+  Pressable,
   Keyboard,
 } from 'react-native';
 import ChatText from '../../components/chattingComponents/chatText';
@@ -21,7 +22,8 @@ import {useToast} from '../../utils/hooks/useToast';
 import {changeMeetingState} from '../../lib/Chatting';
 import useUser from '../../utils/hooks/UseUser';
 import {useNavigation} from '@react-navigation/native';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
+import LinearGradient from 'react-native-linear-gradient';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -122,85 +124,91 @@ function ChattingRoom({route}) {
       // 키보드가 올라온 상태에서 추가적으로 적용할 +값
       // keyboardVerticalOffset={80}
     >
-      <SafeAreaView>
-        <RoomHeader
-          title="채팅목록"
-          roomInfo={roomInfo}
-          setRoomInfo={setRoomInfo}
-          setRoomInfoExist={setRoomInfoExist}
-        />
-      </SafeAreaView>
-      <View style={{flex: 1}}>
-        <ChattingRoomTopTab
-          isConfirmed={isConfirmed}
-          meetingEnd={meetingEnd}
-          setProposeModalVisible={setProposeModalVisible}
-          setModalVisible={setModalVisible}
-          data={route.params.data}
-        />
-        <Pressable
-          style={{flex: 1}}
-          onPress={() => {
-            Keyboard.dismiss();
-            setRoomInfo(false);
-          }}>
-          <ChatText
-            data={route.params.data}
-            roomINfo={roomInfo}
-            userDetail={userDetail}
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        <View>
+          <RoomHeader
+            title="채팅목록"
+            roomInfo={roomInfo}
+            setRoomInfo={setRoomInfo}
+            setRoomInfoExist={setRoomInfoExist}
           />
-        </Pressable>
-
-        {roomInfoExist ? (
-          <Animated.View
-            style={[styles.roomInfo, {transform: [{translateX: animation}]}]}>
-            <RoomInfo
-              chatInfo={route.params.data}
-              setModalVisible={setModalVisible}
-              setMeetingEnd={setMeetingEnd}
+        </View>
+        <View style={{flex: 1, paddingHorizontal: 15}}>
+          <ChattingRoomTopTab
+            isConfirmed={isConfirmed}
+            meetingEnd={meetingEnd}
+            setProposeModalVisible={setProposeModalVisible}
+            setModalVisible={setModalVisible}
+            data={route.params.data}
+          />
+          <Pressable
+            style={{flex: 1}}
+            onPress={() => {
+              Keyboard.dismiss();
+              setRoomInfo(false);
+            }}>
+            <ChatText
+              data={route.params.data}
+              roomINfo={roomInfo}
               userDetail={userDetail}
             />
-          </Animated.View>
-        ) : null}
+          </Pressable>
 
-        <MyDoubleModal
-          body={
-            <>
-              <Text style={{marginTop: 7}}>
-                '미팅 참가를 확정하시겠습니까?'
-              </Text>
-              <View style={{alignItems: 'flex-start'}}>
-                {/* 리덕스에서 받아오는 meeting 정보로 업데이트할 것  */}
+          {roomInfoExist ? (
+            <Animated.View
+              style={[styles.roomInfo, {transform: [{translateX: animation}]}]}>
+              <RoomInfo
+                chatInfo={route.params.data}
+                setModalVisible={setModalVisible}
+                setMeetingEnd={setMeetingEnd}
+                userDetail={userDetail}
+              />
+            </Animated.View>
+          ) : null}
+
+          <MyDoubleModal
+            body={
+              <>
                 <Text style={{marginTop: 7}}>
-                  🗓 날짜:{' '}
-                  {route.params.data.meetDate
-                    .toDate()
-                    .toLocaleString()
-                    .slice(0, 11)}
+                  '미팅 참가를 확정하시겠습니까?'
                 </Text>
-                <Text style={{marginTop: 7}}>
-                  ⏰ 시간:{' '}
-                  {route.params.data.meetDate
-                    .toDate()
-                    .toLocaleString()
-                    .slice(12, 19)}
-                </Text>
-                <Text style={{marginTop: 7}}>
-                  🏖 장소: {route.params.data.region}
-                </Text>
-              </View>
-            </>
-          }
-          nButtonText="아니요"
-          pButtonText="네"
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          setIsConfirmed={setIsConfirmed}
-          meetingStatus={route.params.data.status}
-          isHost={isHost}
-          id={route.params.data.id}
-        />
-        {/* <SpendingModal
+                <View style={{alignItems: 'flex-start'}}>
+                  {/* 리덕스에서 받아오는 meeting 정보로 업데이트할 것  */}
+                  <Text style={{marginTop: 7}}>
+                    🗓 날짜:{' '}
+                    {route.params.data.meetDate
+                      .toDate()
+                      .toLocaleString()
+                      .slice(0, 11)}
+                  </Text>
+                  <Text style={{marginTop: 7}}>
+                    ⏰ 시간:{' '}
+                    {route.params.data.meetDate
+                      .toDate()
+                      .toLocaleString()
+                      .slice(12, 19)}
+                  </Text>
+                  <Text style={{marginTop: 7}}>
+                    🏖 장소: {route.params.data.region}
+                  </Text>
+                </View>
+              </>
+            }
+            nButtonText="아니요"
+            pButtonText="네"
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            setIsConfirmed={setIsConfirmed}
+            meetingStatus={route.params.data.status}
+            isHost={isHost}
+            id={route.params.data.id}
+          />
+          {/* <SpendingModal
           spendingModalVisible={spendingModalVisible}
           setSpendingModalVisible={setSpendingModalVisible}
           txType="미팅 확정"
@@ -212,46 +220,21 @@ function ChattingRoom({route}) {
             showToast('basic', '미팅이 확정되었습니다.');
           }}
         /> */}
-      </View>
+        </View>
+      </LinearGradient>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  gradientBackground: {
+    flex: 1,
+  },
   roomInfo: {
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
     position: 'absolute',
     width: (windowWidth / 5) * 4,
     height: '100%',
-  },
-  headerRapper: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 5,
-    marginBottom: 15,
-  },
-  tabView: {
-    container: {
-      height: 90,
-      borderTopWidth: 0.3,
-      padding: 15,
-      flexDirection: 'row',
-    },
-    status: {
-      height: 20,
-      width: 40,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'blue',
-    },
-    button: {
-      width: 70,
-      height: 40,
-      backgroundColor: 'blue',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
   },
 });
 

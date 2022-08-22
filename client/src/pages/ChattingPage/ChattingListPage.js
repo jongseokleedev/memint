@@ -15,6 +15,7 @@ import WalletButton from '../../components/common/WalletButton';
 import {useIsFocused} from '@react-navigation/native';
 import SafeStatusBar from '../../components/common/SafeStatusBar';
 import LinearGradient from 'react-native-linear-gradient';
+import {handleDate, handleDateInFormat} from '../../utils/common/Functions';
 
 function ChattingListPage({navigation}) {
   const [chatLog, setChatLog] = useState('');
@@ -168,7 +169,9 @@ function MetaData({item, navigation, refresh, setRefresh}) {
             </Text>
           </View>
           <View style={styles.date}>
-            <Text style={styles.dateText}>{lastTime ? lastTime : ''}</Text>
+            <Text style={styles.dateText}>
+              {lastTime ? handleDate(lastTime) : ''}
+            </Text>
           </View>
         </View>
       </View>

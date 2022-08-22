@@ -1,5 +1,7 @@
 export const handleDate = obj => {
-  return obj.toDate().toLocaleString();
+  const date = obj.toDate().toLocaleString();
+  const res = date.slice(5, 11).concat(' ' + date.slice(13, -3));
+  return res;
 };
 
 export const handleDateInFormat = obj => {

@@ -43,12 +43,18 @@ function ChattingRoomTopTab({data}) {
               maxWidth: 270,
             }}>
             <Text
-              style={{paddingRight: 7, fontSize: 16, fontWeight: '700'}}
-              numberOfLines={1}>
-              {roomData && roomData.title}
+              style={{
+                paddingRight: 7,
+                fontSize: 15,
+                fontWeight: '600',
+                color: '#ffffff',
+              }}>
+              {roomData &&
+                roomData.title.slice(0, 21) +
+                  `${roomData.title.length > 20 ? '...' : ''}`}
             </Text>
             <View style={styles.status}>
-              <Text style={{color: 'white', fontWeight: '500'}}>
+              <Text style={{color: '#ffffff', fontWeight: '500'}}>
                 {roomStatus && roomStatus}
               </Text>
             </View>
@@ -57,7 +63,9 @@ function ChattingRoomTopTab({data}) {
 
         <TouchableOpacity
           onPress={() => navigation.navigate('MeetingDetail', {data: data})}>
-          <Text style={{marginTop: 20}}>미팅 정보 보러가기 ></Text>
+          <Text style={{marginTop: 20, color: '#ffffff', fontSize: 14}}>
+            미팅 정보 보러가기 >
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -67,8 +75,7 @@ function ChattingRoomTopTab({data}) {
 const styles = StyleSheet.create({
   container: {
     height: 90,
-    borderTopWidth: 0.3,
-    padding: 20,
+    // borderTopWidth: 0.3,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -78,7 +85,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'black',
-    borderRadius: 10,
+    borderRadius: 99,
+    borderWidth: 1,
+    borderColor: '#58FF7D',
   },
   button: {
     width: 90,

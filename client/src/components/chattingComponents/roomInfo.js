@@ -90,12 +90,18 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
       <View style={styles.wrapper}>
         <Text style={styles.hilightText}>미팅 참여자</Text>
         {people}
-        <View style={{width: '90%'}}>
+        <View style={styles.buttons}>
           <Pressable
             style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}
             onPress={handleNavigateToConfirm}>
-            <Icon name="photo-camera" size={25} color="black" />
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            <Icon name="photo-camera" size={25} color="#ffffff" />
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '500',
+                color: '#ffffff',
+                marginLeft: 4,
+              }}>
               {' '}
               미팅참여 인증하기
             </Text>
@@ -118,34 +124,30 @@ function RoomInfo({chatInfo, userDetail, setModalVisible}) {
               }
             }}
             style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
-            <Icon name="email" size={25} color="black" />
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            <Icon name="email" size={25} color="#ffffff" />
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '500',
+                color: '#ffffff',
+                marginLeft: 4,
+              }}>
               {' '}
               미팅 후기 보내기
             </Text>
           </Pressable>
+          <Pressable
+            style={styles.settingButton}
+            onPress={() => {
+              navigation.navigate('MeetingSet', {
+                meetingInfo: chatInfo,
+                userInfo,
+                meetingStatus,
+              });
+            }}>
+            <Icon name="settings" size={24} color="#ffffff" />
+          </Pressable>
         </View>
-      </View>
-      <View
-        style={{
-          height: '100%',
-          width: '90%',
-          // backgroundColor: 'yellow',
-          alignItems: 'flex-end',
-          justifyContent: 'flex-end',
-          position: 'absolute',
-          zIndex: -1,
-        }}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate('MeetingSet', {
-              meetingInfo: chatInfo,
-              userInfo,
-              meetingStatus,
-            });
-          }}>
-          <Icon name="settings" size={35} color="black" />
-        </Pressable>
       </View>
     </View>
   );
@@ -174,7 +176,8 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible, chatInfo}) {
             ? {...styles.isConfirmed, backgroundColor: 'lightgray'}
             : {
                 ...styles.isConfirmed,
-                backgroundColor: '#609afa',
+                borderColor: '#58FF7D',
+                borderWidth: 1,
               }
         }
         onPress={
@@ -184,7 +187,9 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible, chatInfo}) {
               }
             : null
         }>
-        <Text style={{color: 'white'}}>확정</Text>
+        <Text style={{color: 'white', fontSize: 14, fontWeight: '500'}}>
+          확정
+        </Text>
       </Pressable>
     </View>
   );
@@ -199,46 +204,51 @@ const styles = StyleSheet.create({
   wrapper: {
     width: '85%',
     height: '90%',
-
     alignItems: 'center',
   },
   hilightText: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    margin: 10,
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 30,
+    color: '#ffffff',
+    textAlign: 'left',
+    width: '100%',
   },
   person: {
     flexDirection: 'row',
-    borderColor: 'lightgray',
-    borderTopWidth: 0.1,
-    borderBottomWidth: 1,
-
-    marginLeft: 20,
     width: '100%',
-    height: 70,
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginVertical: 10,
   },
   personImage: {
-    height: 60,
-    width: 60,
+    height: 30,
+    width: 30,
     borderRadius: 30,
-
-    marginLeft: 10,
+    borderWidth: 1,
+    borderColor: '#58FF7D',
   },
   personName: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginLeft: 10,
+    fontSize: 18,
+    fontWeight: '400',
+    marginLeft: 5,
+    color: '#ffffff',
   },
   isConfirmed: {
-    marginRight: 30,
-    backgroundColor: 'yellow',
+    backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 24,
-    width: 40,
-    borderRadius: 5,
+    borderRadius: 99,
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+  },
+  buttons: {
+    width: '100%',
+  },
+  settingButton: {
+    width: '100%',
+    alignItems: 'flex-end',
+    marginTop: 20,
   },
 });
 

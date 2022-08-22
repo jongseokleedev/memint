@@ -14,7 +14,7 @@ function RoomHeader({title, roomInfo, setRoomInfo, setRoomInfoExist}) {
         <Icon
           name="arrow-back-ios"
           size={20}
-          color={'black'}
+          color={'#ffffff'}
           style={{marginLeft: 5}}
         />
         <Text style={styles.buttonText}>{title}</Text>
@@ -28,7 +28,12 @@ function RoomHeader({title, roomInfo, setRoomInfo, setRoomInfoExist}) {
             setRoomInfo(!roomInfo);
             setRoomInfoExist(true);
           }}>
-          <Icon name="menu" size={30} color="black" style={{marginRight: 10}} />
+          <Icon
+            name="menu"
+            size={25}
+            color="#ffffff"
+            style={{marginRight: 10}}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -40,8 +45,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 5,
-    marginBottom: 15,
+    marginBottom: 10,
+    paddingHorizontal: 5,
+    paddingTop: 10,
   },
   buttonText: {
     fontSize: 18,

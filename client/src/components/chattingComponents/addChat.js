@@ -30,6 +30,7 @@ function AddChat({chatId}) {
       <TextInput
         style={styles.input}
         placeholder="메시지를 입력하세요"
+        placeholderTextColor="#ffffff"
         value={text}
         onChangeText={setText}
         autoComplete={false}
@@ -46,7 +47,7 @@ function AddChat({chatId}) {
           text && sendChat(obj);
           setText('');
         }}>
-        <Icon name="send" size={30} color="black" />
+        <Icon name="send" size={30} color="#58FF7D" />
       </TouchableOpacity>
     </View>
   );
@@ -57,19 +58,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 46,
+    height: 50,
     paddingHorizontal: 16,
-    borderColor: 'lightgray',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderColor: '#58FF7D',
+    borderWidth: 1,
     marginBottom: 10,
-    marginTop: 6,
+    marginTop: 20,
+    borderRadius: 99,
   },
   input: {
     width: '90%',
     flexWrap: 'wrap',
     fontSize: 17,
     paddingVertical: 8,
+    color: '#ffffff',
   },
 });
 
