@@ -15,6 +15,7 @@ import WalletButton from '../../components/common/WalletButton';
 import {useIsFocused} from '@react-navigation/native';
 import SafeStatusBar from '../../components/common/SafeStatusBar';
 import LinearGradient from 'react-native-linear-gradient';
+import {handleDate, handleDateInFormat} from '../../utils/common/Functions';
 
 function ChattingListPage({navigation}) {
   const [chatLog, setChatLog] = useState('');
@@ -67,11 +68,7 @@ function ChattingListPage({navigation}) {
               ...meetingInfo.data(),
               id: meetingId,
               lastMsg: lastMsg.docs[0].data().text,
-              lastTime: lastMsg.docs[0]
-                .data()
-                .createdAt.toDate()
-                .toLocaleString()
-                .slice(6),
+              lastTime: lastMsg.docs[0].data().createdAt,
               hostInfo: hostImage.data().nftProfile,
             };
           }
@@ -138,13 +135,7 @@ function MetaData({item, navigation}) {
                 .createdAt
             ) {
               setLastMsg(result.docs[0].data().text);
-              setLastTime(
-                result.docs[0]
-                  .data()
-                  .createdAt.toDate()
-                  .toLocaleString()
-                  .slice(6),
-              );
+              setLastTime(result.docs[0].data().createdAt);
             }
           },
           [MessageRef],
@@ -160,13 +151,18 @@ function MetaData({item, navigation}) {
         <Image style={styles.image} source={{uri: item.hostInfo}} />
         <View style={styles.chatInfo}>
           <View>
-            <Text style={styles.titleText}>{item.title}</Text>
+            <Text style={styles.titleText}>
+              {item.title.slice(0, 13) +
+                `${item.title.length > 13 ? '...' : ''}`}
+            </Text>
             <Text style={styles.plainText}>
               {lastMsg ? lastMsg : '채팅을 시작해보세요!'}
             </Text>
           </View>
           <View style={styles.date}>
-            <Text style={styles.dateText}>{lastTime ? lastTime : ''}</Text>
+            <Text style={styles.dateText}>
+              {lastTime ? handleDate(lastTime) : ''}
+            </Text>
           </View>
         </View>
       </View>

@@ -10,7 +10,6 @@ import {
 import AddChat from './addChat';
 import firestore from '@react-native-firebase/firestore';
 import useUser from '../../utils/hooks/UseUser';
-import LinearGradient from 'react-native-linear-gradient';
 import UserInfoModal from '../common/UserInfoModal';
 import person from '../../assets/icons/person.png';
 
@@ -52,44 +51,38 @@ function ChatText({data, roomInfo, userDetail}) {
 
   return (
     <View style={roomInfo ? {flex: 1, opacity: 0.8} : {flex: 1}}>
-      <LinearGradient
-        colors={['#A7BFEB', '#FBC2EA']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
-        style={roomInfo ? {flex: 1, opacity: 0.8} : {flex: 1}}>
-        <FlatList
-          // horizontal={true}
-          // 플랫리스트에서 하단부터 렌더링을 해주는 설정
-          inverted={true}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'flex-end',
-            flexDirection: 'column-reverse',
-          }}
-          style={styles.container}
-          data={chattings}
-          renderItem={({item}) =>
-            item.data().status ? (
-              <StatusMessage item={item} />
-            ) : item.data().sender === user ? (
-              <MyChat item={item} user={userDesc} userDetail={userDetail} />
-            ) : (
-              <NotMyChat
-                item={item}
-                userDetail={userDetail}
-                setUserId={setUserId}
-                setUserInfoModalVisible={setUserInfoModalVisible}
-              />
-            )
-          }
-        />
-        <UserInfoModal
-          userInfoModalVisible={userInfoModalVisible}
-          setUserInfoModalVisible={setUserInfoModalVisible}
-          userId={userId}
-          visible={checkIsVisible(userId)}
-        />
-      </LinearGradient>
+      <FlatList
+        // horizontal={true}
+        // 플랫리스트에서 하단부터 렌더링을 해주는 설정
+        inverted={true}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'flex-end',
+          flexDirection: 'column-reverse',
+        }}
+        style={styles.container}
+        data={chattings}
+        renderItem={({item}) =>
+          item.data().status ? (
+            <StatusMessage item={item} />
+          ) : item.data().sender === user ? (
+            <MyChat item={item} user={userDesc} userDetail={userDetail} />
+          ) : (
+            <NotMyChat
+              item={item}
+              userDetail={userDetail}
+              setUserId={setUserId}
+              setUserInfoModalVisible={setUserInfoModalVisible}
+            />
+          )
+        }
+      />
+      <UserInfoModal
+        userInfoModalVisible={userInfoModalVisible}
+        setUserInfoModalVisible={setUserInfoModalVisible}
+        userId={userId}
+        visible={checkIsVisible(userId)}
+      />
       <AddChat chatId={data.id} />
     </View>
   );
@@ -133,10 +126,10 @@ function NotMyChat({item, userDetail, setUserInfoModalVisible, setUserId}) {
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
           <View style={styles.messageBody}>
-            <Text style={{padding: 3}}>{item.data().text}</Text>
+            <Text style={{color: '#3C3D43'}}>{item.data().text}</Text>
           </View>
           <View style={styles.date}>
-            <Text style={{marginBottom: 5, fontSize: 10, color: 'gray'}}>
+            <Text style={{marginBottom: 5, fontSize: 11, color: '#ffffff'}}>
               {item
                 .data()
                 .createdAt.toDate()
@@ -159,7 +152,7 @@ function MyChat({item}) {
       <View style={[styles.textWrapper, {alignItems: 'flex-end'}]}>
         <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
           <View style={styles.date}>
-            <Text style={{marginBottom: 5, fontSize: 10, color: 'gray'}}>
+            <Text style={{marginBottom: 5, fontSize: 11, color: '#ffffff'}}>
               {item
                 .data()
                 .createdAt.toDate()
@@ -173,9 +166,11 @@ function MyChat({item}) {
           <View
             style={[
               styles.messageBody,
-              {backgroundColor: 'lightyellow', maxWidth: 300},
+              {backgroundColor: 'rgba(234, 255, 239, 0.8)', maxWidth: 300},
             ]}>
-            <Text style={{padding: 3}}>{item.data().text}</Text>
+            <Text style={{color: '#3C3D43', fontSize: 15}}>
+              {item.data().text}
+            </Text>
           </View>
         </View>
       </View>
@@ -196,12 +191,12 @@ function StatusMessage({item}) {
         style={{
           minWidth: '77%',
           alignItems: 'center',
-          backgroundColor: 'lightgray',
+          // backgroundColor: 'lightgray',
           padding: 2,
           borderRadius: 10,
           opacity: 0.7,
         }}>
-        <Text>
+        <Text style={{color: 'rgba(234, 255, 239, 0.9)', fontSize: 13}}>
           {item.data().nickName} 님이{' '}
           {item.data().status === 'out'
             ? '나가셨습니다.'
@@ -222,12 +217,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
-    width: 60,
-    height: 60,
+    width: 56,
+    height: 56,
     borderRadius: 30,
     // backgroundColor: 'gray',
     marginRight: 7,
-    marginLeft: 7,
   },
   textWrapper: {
     flex: 0,
@@ -236,19 +230,16 @@ const styles = StyleSheet.create({
   senderName: {
     marginTop: 10,
     paddingBottom: 6,
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#ffffff',
   },
   messageBody: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 3,
+    backgroundColor: 'rgba(234, 255, 239, 0.9)',
+    borderRadius: 30,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
     maxWidth: 230,
-  },
-  mymessageBody: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 3,
   },
   date: {
     justifyContent: 'flex-end',
@@ -260,7 +251,6 @@ const styles = StyleSheet.create({
     width: '60%',
     marginLeft: 'auto',
     marginBottom: 10,
-    right: 10,
   },
 });
 

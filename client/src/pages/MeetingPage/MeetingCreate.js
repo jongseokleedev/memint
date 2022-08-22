@@ -227,6 +227,7 @@ function MeetingCreate({route}) {
             }}
             autoComplete={false}
             autoCorrect={false}
+            maxLength={30}
           />
           <View
             style={[
@@ -280,7 +281,7 @@ function MeetingCreate({route}) {
                   },
                   placeholder: {
                     fontSize: 16,
-                    color: '#c',
+                    color: '#EAFFEF',
                   },
                 }}
                 Icon={() => {
@@ -347,7 +348,7 @@ function MeetingCreate({route}) {
                   );
                   return;
                 }
-                setInviteModalVisible(true);
+                handleNavigate();
               }}>
               <Text style={[styles.text, styles.leftMargin]}>
                 친구 초대하기
@@ -360,7 +361,7 @@ function MeetingCreate({route}) {
               meetingInfo.peopleNum ? styles.activeLine : null,
             ]}
           />
-          <DoubleModal
+          {/* <DoubleModal
             text="친구 초대 시 LCN이 차감됩니다.    초대하시겠습니까?"
             nButtonText="아니요"
             pButtonText="네"
@@ -380,7 +381,7 @@ function MeetingCreate({route}) {
             pFunction={handleNavigate}
             amount={1}
             txType="친구 초대"
-          />
+          /> */}
           <View style={styles.tagElement}>
             <Text style={[styles.text, styles.tagTitle]}>태그</Text>
             <View style={styles.tagsContainer}>

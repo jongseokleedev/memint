@@ -43,11 +43,19 @@ function MeetingElement({item}) {
           </Text>
         </View>
         <View style={styles.meetingTags}>
-          {item.meetingTags?.map((tag, idx) => (
+          <Text style={styles.tagText}>
+            {item.meetingTags?.reduce((acc, cur) => {
+              if (acc.length > 24) {
+                return acc;
+              }
+              return acc + '#' + cur + ' ';
+            }, '')}
+          </Text>
+          {/* {item.meetingTags?.map((tag, idx) => (
             <View key={idx} style={styles.tag}>
               <Text style={styles.tagText}>{'#' + tag}</Text>
             </View>
-          ))}
+          ))} */}
         </View>
       </View>
       <TouchableOpacity style={styles.button} onPress={handleNavigate}>
@@ -86,11 +94,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     height: 43,
-    width: 260,
+    width: '90%',
     fontFamily: 'NeoDunggeunmoPro-Regular',
   },
   meetingTags: {
     flexDirection: 'row',
+    width: '100%',
   },
   tag: {
     marginRight: 3,
