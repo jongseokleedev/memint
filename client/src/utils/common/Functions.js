@@ -1,5 +1,7 @@
 export const handleDate = obj => {
+  console.log(obj.toDate().toLocaleString());
   const date = obj.toDate().toLocaleString();
+  // console.log(date);
   const res = date.slice(5, 11).concat(' ' + date.slice(13, -3));
   return res;
 };

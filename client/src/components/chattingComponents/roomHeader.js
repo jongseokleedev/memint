@@ -21,7 +21,7 @@ function RoomHeader({title, roomInfo, setRoomInfo, setRoomInfoExist}) {
       </TouchableOpacity>
       {/* <Text style={{fontWeight: 'bold', fontSize: 18}}>{title}</Text> */}
 
-      {title === '채팅목록' && (
+      {!title && (
         <TouchableOpacity
           onPress={() => {
             Keyboard.dismiss();

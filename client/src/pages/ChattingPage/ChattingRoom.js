@@ -132,7 +132,6 @@ function ChattingRoom({route}) {
         style={styles.gradientBackground}>
         <View>
           <RoomHeader
-            title="채팅목록"
             roomInfo={roomInfo}
             setRoomInfo={setRoomInfo}
             setRoomInfoExist={setRoomInfoExist}

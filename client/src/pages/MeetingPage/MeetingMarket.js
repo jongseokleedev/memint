@@ -7,6 +7,7 @@ import {
   ScrollView,
   Pressable,
   Image,
+  Button,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MeetingElement from '../../components/meetingComponents/MeetingElement';

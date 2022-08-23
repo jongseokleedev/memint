@@ -140,13 +140,7 @@ function MetaData({item, navigation, refresh, setRefresh}) {
               return;
             }
             setLastMsg(result.docs[0].data().text);
-            setLastTime(
-              result.docs[0]
-                .data()
-                .createdAt.toDate()
-                .toLocaleString()
-                .slice(6, 20),
-            );
+            setLastTime(result.docs[0].data().createdAt);
           }
         });
     };
@@ -242,7 +236,7 @@ const styles = StyleSheet.create({
   plainText: {
     fontSize: 15,
     color: '#ffffff',
-    maxWidth: 100,
+    maxWidth: 150,
   },
   dateText: {
     fontSize: 12,
