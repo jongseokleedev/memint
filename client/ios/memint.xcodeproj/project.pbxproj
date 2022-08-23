@@ -114,30 +114,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		45153CD528AF6D1700FB908E /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				45153CD628AF6D9D00FB908E /* MaterialIcons.ttf */,
-			);
-			path = Fonts;
-			sourceTree = "<group>";
-		};
 		4548C2B328AF638A00636AAA /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				8A43849028AE34B0008ABC49 /* FontAwesome5_Solid.ttf */,
-				8A43848A28AE34B0008ABC49 /* Ionicons.ttf */,
-				8A43849128AE34B0008ABC49 /* MaterialIcons.ttf */,
-				8A43848728AE34B0008ABC49 /* Fontisto.ttf */,
-				8A43848828AE34B0008ABC49 /* Entypo.ttf */,
-				8A43849228AE34B0008ABC49 /* FontAwesome5_Brands.ttf */,
-				8A43849428AE34B0008ABC49 /* EvilIcons.ttf */,
-				8A43848D28AE34B0008ABC49 /* SimpleLineIcons.ttf */,
-				8A43848E28AE34B0008ABC49 /* AntDesign.ttf */,
-				8A43848F28AE34B0008ABC49 /* Octicons.ttf */,
-				8A43849628AE34B0008ABC49 /* FontAwesome.ttf */,
-				8A43849528AE34B0008ABC49 /* MaterialCommunityIcons.ttf */,
-				8A43848C28AE34B0008ABC49 /* Feather.ttf */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -302,7 +281,6 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8A52A3E628B094BE00ED62D9 /* MaterialIcons.ttf in Resources */,
 				4A3D51B6288694CF00665BE0 /* GoogleService-Info.plist in Resources */,
-				45153CD728AF6D9D00FB908E /* MaterialIcons.ttf in Resources */,
 				7E3932A10E544D2DA13FD20F /* NeoDunggeunmoPro-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
