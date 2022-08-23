@@ -11,15 +11,19 @@ import {
   Alert,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
 import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
-import logo from '../../assets/icons/logo.png';
 import {signUp, checkUniqueEmail} from '../../lib/Auth';
 import GradientButton from '../../components/common/GradientButton';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
+
 const SignUpScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -88,27 +92,29 @@ const SignUpScreen = ({navigation}) => {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.fullscreenSub}>
+      <View style={styles.fullscreenSub}>
         <View style={styles.spinnerWrapper}>
           <ActivityIndicator size={32} color="#FAC3E9" />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <KeyboardAwareScrollView style={styles.KeyboardAvoidingView}>
-        <SafeAreaView style={styles.fullscreen}>
-          <BackButton />
-          <View style={styles.fullscreenSub}>
-            <Image source={logo} style={styles.logo} />
-            <Text style={styles.contentText}>
-              아이디와 비밀번호를 입력해주세요
-            </Text>
+      <KeyboardAvoidingView
+        style={styles.KeyboardAvoidingView}
+        behavior={'padding'}>
+        <SafeStatusBar />
+
+        <BackButton />
+        <View style={styles.fullscreen}>
+          <Text style={styles.title}>회원가입</Text>
+
+          <ScrollView style={styles.fullscreenSub}>
             <View style={styles.form}>
               <Text style={styles.infoText}>이메일</Text>
               <BorderedInput
-                size="large"
+                size="wide"
                 placeholder="이메일"
                 value={form.email}
                 onChangeText={createChangeTextHandler('email')}
@@ -123,7 +129,7 @@ const SignUpScreen = ({navigation}) => {
             <View style={styles.form}>
               <Text style={styles.infoText}>비밀번호</Text>
               <BorderedInput
-                size="large"
+                size="wide"
                 placeholder="비밀번호"
                 value={form.password}
                 onChangeText={createChangeTextHandler('password')}
@@ -135,10 +141,10 @@ const SignUpScreen = ({navigation}) => {
                 onSubmitEditing={() => confirmPasswordRef.current.focus()}
               />
             </View>
-            <View style={styles.form}>
+            <View style={[styles.form, styles.padding]}>
               <Text style={styles.infoText}>비밀번호 확인 </Text>
               <BorderedInput
-                size="large"
+                size="wide"
                 placeholder="비밀번호 확인"
                 value={form.confirmPassword}
                 onChangeText={createChangeTextHandler('confirmPassword')}
@@ -149,28 +155,22 @@ const SignUpScreen = ({navigation}) => {
                 ref={confirmPasswordRef}
               />
             </View>
-            <GradientButton
+            {/* <BasicButton
               style={styles.button}
-              width={300}
+              width={200}
               height={40}
               textSize={17}
               margin={[30, 5, 5, 5]}
               text="다음 단계"
+              hasMarginBottom
               onPress={onSubmitSignUp}
-            />
-            {/* <BasicButton
-            style={styles.button}
-            width={300}
-            height={40}
-            textSize={17}
-            margin={[30, 5, 5, 5]}
-            text="다음 단계"
-            hasMarginBottom
-            onPress={onSubmitSignUp}
-          /> */}
-          </View>
-        </SafeAreaView>
-      </KeyboardAwareScrollView>
+            /> */}
+          </ScrollView>
+          <TouchableOpacity style={styles.button} onPress={onSubmitSignUp}>
+            <Text style={styles.buttonText}>다음</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -178,47 +178,80 @@ const SignUpScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 1,
-    backgroundColor: 'white',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: '#3C3D43',
   },
   fullscreen: {
     flex: 1,
+    paddingHorizontal: 15,
   },
   fullscreenSub: {
-    // flex: 1,
+    flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'space-between',
+    // paddingHorizontal: 15,
   },
-  logo: {
-    width: 290,
-    height: 200,
-    marginTop: 70,
+  title: {
+    fontWeight: '400',
+    fontSize: 24,
+    marginVertical: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   infoText: {
-    fontSize: 16,
+    fontSize: 14,
+    color: '#ffffff',
+    marginBottom: 8,
+    letterSpacing: -0.5,
   },
-  contentText: {
-    fontSize: 24,
-    marginTop: 50,
-    marginBottom: 20,
-  },
-
   form: {
     marginTop: 16,
-    marginBottom: 16,
+    marginBottom: 10,
     width: '100%',
-    paddingHorizontal: 32,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   button: {
-    marginTop: 100,
+    // marginTop: 'auto',
+    // marginBottom: 30,
+    marginHorizontal: 15,
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: 50,
+    borderRadius: 99,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(174, 255, 192, 0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+
+    elevation: 18,
+
+    position: 'absolute',
+    bottom: 20,
+  },
+  buttonText: {
+    color: '#1D1E1E',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: -0.01,
   },
   spinnerWrapper: {
     marginTop: 254,
     height: 104,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  padding: {
+    marginBottom: 90,
   },
 });
 

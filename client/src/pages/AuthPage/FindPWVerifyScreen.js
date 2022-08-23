@@ -9,15 +9,15 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
 import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
-import logo from '../../assets/icons/logo.png';
-import GradientButton from '../../components/common/GradientButton';
 import {passwordReset} from '../../lib/Auth';
 import {useToast} from '../../utils/hooks/useToast';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 const FindPWVerifyScreen = ({navigation}) => {
   const {showToast} = useToast();
   const [form, setForm] = useState({
@@ -46,14 +46,17 @@ const FindPWVerifyScreen = ({navigation}) => {
       <KeyboardAvoidingView
         style={styles.KeyboardAvoidingView}
         behavior={Platform.select({ios: 'padding'})}>
-        <SafeAreaView style={styles.fullscreen}>
-          <BackButton />
+        <SafeStatusBar />
+        <BackButton />
+        <View style={styles.fullscreen}>
+          <Text style={styles.title}>내 정보 찾기</Text>
+          <Text style={styles.contentText}>
+            회원가입 시 사용한 이메일을 입력해 주세요.
+          </Text>
           <View style={styles.fullscreenSub}>
-            <Image source={logo} style={styles.logo} />
-            <Text style={styles.contentTextVerify}>
-              회원가입시 사용한 이메일을 입력해주세요
-            </Text>
-            <View style={styles.secondForm} hasMarginBottom>
+            <View style={styles.form}>
+              <Text style={styles.contentText}>이메일</Text>
+
               <BorderedInput
                 size="wide"
                 placeholder="이메일을 입력해주세요"
@@ -69,18 +72,11 @@ const FindPWVerifyScreen = ({navigation}) => {
                 }}
               />
             </View>
-            <GradientButton
-              style={styles.button}
-              width={300}
-              height={40}
-              textSize={17}
-              margin={[0, 5, 5, 5]}
-              text="이메일 보내기"
-              hasMarginBottom
-              onPress={goToNextPage}
-            />
+            <TouchableOpacity style={styles.button} onPress={goToNextPage}>
+              <Text style={styles.buttonText}>이메일 보내기</Text>
+            </TouchableOpacity>
           </View>
-        </SafeAreaView>
+        </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -89,9 +85,10 @@ const FindPWVerifyScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
   },
   fullscreen: {
+    paddingHorizontal: 15,
     flex: 1,
   },
   fullscreenSub: {
@@ -100,18 +97,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'center',
   },
-  logo: {
-    width: 200,
-    height: 160,
-    marginTop: 70,
+  title: {
+    fontWeight: '400',
+    fontSize: 24,
+    marginTop: 20,
+    marginBottom: 15,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   text: {
     fontSize: 32,
     fontWeight: 'bold',
   },
   contentText: {
-    fontSize: 18,
-    marginTop: 64,
+    fontSize: 14,
+    color: '#ffffff',
+    letterSpacing: -0.5,
+    marginBottom: 8,
     // fontWeight: 'bold',
   },
   contentTextSub: {
@@ -125,22 +128,29 @@ const styles = StyleSheet.create({
     // fontWeight: 'bold',
   },
   form: {
-    marginTop: 20,
+    marginTop: 32,
     width: '100%',
-    paddingHorizontal: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  secondForm: {
-    marginTop: 30,
-    marginBottom: 40,
-    width: '100%',
-    paddingHorizontal: 32,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
   },
   button: {
-    margin: 50,
+    marginTop: 'auto',
+    marginBottom: 30,
+    backgroundColor: '#AEFFC1',
+    width: '100%',
+    height: 50,
+    borderRadius: 99,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // position: 'absolute',
+    // bottom: 20,
+  },
+  buttonText: {
+    color: '#1D1E1E',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: -0.01,
   },
 });
 

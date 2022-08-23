@@ -4,7 +4,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import GradientButton from '../../components/common/GradientButton';
 import {signUp, checkUniqueEmail} from '../../lib/Auth';
 import {createUser, getUser} from '../../lib/Users';
 import storage from '@react-native-firebase/storage';
@@ -14,6 +13,7 @@ import {createUserNFT} from '../../lib/Users';
 import {getNFTs, getProfile, getMemin} from '../../lib/NFT';
 import useNftActions from '../../utils/hooks/UseNftActions';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 const SignUpAlarmScreen = ({navigation, route}) => {
   let {userInfo} = route.params || {};
   const [loading, setLoading] = useState();
@@ -117,20 +117,20 @@ const SignUpAlarmScreen = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView style={styles.fullscreen}>
-      <BackButton />
+    <View style={styles.fullscreen}>
+      <SafeStatusBar />
       <View style={styles.fullscreenSub}>
-        <Icon name="notifications-active" size={70} />
+        <Icon name="notifications-active" size={30} color={'#58FF7D'} />
         <Text style={styles.textMain}>
           미팅에 꼭! 필요한 것만 잊지 않도록 알려드려요!
         </Text>
-        <View>
+        <View style={styles.textWrap}>
           <Text style={styles.text}>⏰ 미팅 일정 안내 및 공지</Text>
           <Text style={styles.text}>🎉 혜택 가득 다양한 이벤트 소식</Text>
           <Text style={styles.text}>👨‍👩‍👦‍👦 함께하려는 미팅메이트들의 소식</Text>
           <Text style={styles.contentText}>
-            알림 설정은 [프로필 {'>'} 설정 {'>'} 알림]에서 언제든지 변경할 수
-            있습니다
+            알림 설정은 [프로필 {'>'} 설정 {'>'} 알림]에서 {'\n'}언제든지 변경할
+            수 있습니다
           </Text>
         </View>
         {/* <BasicButton
@@ -143,18 +143,19 @@ const SignUpAlarmScreen = ({navigation, route}) => {
           hasMarginBottom
           onPress={goToNextPage}
         /> */}
-        <GradientButton
+
+        <BasicButton
           style={styles.button}
-          width={300}
-          height={40}
-          textSize={17}
-          margin={[30, 5, 5, 5]}
-          text="필수알림 동의하기"
-          hasMarginBottom
+          width={280}
+          height={50}
+          textSize={18}
+          textColor="#1D1E1E"
+          margin={[15, 5, 5, 5]}
+          text="필수알림 동의"
           onPress={goToNextPage}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -164,14 +165,20 @@ const styles = StyleSheet.create({
   },
   fullscreen: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
+    paddingHorizontal: 15,
+    justifyContent: 'center',
   },
   fullscreenSub: {
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 30,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    borderColor: '#58FF7D',
+    borderWidth: 1,
+    paddingHorizontal: 25,
+    paddingVertical: 34,
   },
   form: {
     width: '100%',
@@ -181,30 +188,16 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-around',
     alignItems: 'center',
   },
-  formAllAgree: {
-    // marginBottom: 16,
-    width: '100%',
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  formText: {
-    width: '100%',
-    paddingHorizontal: 16,
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
   text: {
-    marginBottom: 10,
-    fontSize: 20,
-    paddingHorizontal: 16,
+    fontSize: 14,
+    letterSpacing: -0.5,
+    marginVertical: 4,
   },
   textMain: {
-    paddingHorizontal: 6,
-    marginTop: 50,
-    marginBottom: 70,
-    fontSize: 23,
-    fontWeight: 'bold',
+    fontSize: 16,
+    letterSpacing: -0.5,
+    marginTop: 8,
+    marginBottom: 18,
   },
   textSub: {
     paddingHorizontal: 6,
@@ -215,9 +208,10 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   contentText: {
-    marginTop: 60,
+    marginTop: 25,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 13,
+    color: '#3C3D43',
     // marginHorizontal: 50,
     // paddingHorizontal: 30,
     // marginTop: 30,
@@ -254,6 +248,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 4,
     height: 30,
+  },
+  textWrap: {
+    width: '100%',
   },
 });
 

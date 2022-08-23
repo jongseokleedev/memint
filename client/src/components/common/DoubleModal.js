@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Modal, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Modal,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import BasicButton from './BasicButton';
 
 /*
@@ -32,49 +38,54 @@ function DoubleModal({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <View style={[styles.centeredView, styles.backgroudDim]}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>{text}</Text>
-            {body}
-            <View style={styles.buttonRow}>
-              {nFunction !== undefined ? (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModalVisible(false);
+          }}>
+          <View style={[styles.centeredView, styles.backgroudDim]}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{text}</Text>
+              {body}
+              <View style={styles.buttonRow}>
+                {nFunction !== undefined ? (
+                  <BasicButton
+                    text={nButtonText}
+                    textSize={16}
+                    width={100}
+                    height={45}
+                    backgroundColor="white"
+                    textColor="black"
+                    border={true}
+                    margin={[0, 5, 0, 5]}
+                    onPress={nFunction}
+                  />
+                ) : (
+                  <BasicButton
+                    text={nButtonText}
+                    textSize={16}
+                    width={100}
+                    height={45}
+                    backgroundColor="white"
+                    textColor="black"
+                    border={true}
+                    margin={[0, 5, 0, 5]}
+                    onPress={() => setModalVisible(!modalVisible)}
+                  />
+                )}
                 <BasicButton
-                  text={nButtonText}
+                  text={pButtonText}
                   textSize={16}
                   width={100}
                   height={45}
-                  backgroundColor="white"
-                  textColor="black"
-                  border={true}
                   margin={[0, 5, 0, 5]}
-                  onPress={nFunction}
-                />
-              ) : (
-                <BasicButton
-                  text={nButtonText}
-                  textSize={16}
-                  width={100}
-                  height={45}
-                  backgroundColor="white"
+                  backgroundColor="#AEFFC1"
                   textColor="black"
-                  border={true}
-                  margin={[0, 5, 0, 5]}
-                  onPress={() => setModalVisible(!modalVisible)}
+                  onPress={pFunction}
                 />
-              )}
-              <BasicButton
-                text={pButtonText}
-                textSize={16}
-                width={100}
-                height={45}
-                margin={[0, 5, 0, 5]}
-                backgroundColor="#AEFFC1"
-                textColor="black"
-                onPress={pFunction}
-              />
+              </View>
             </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );

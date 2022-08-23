@@ -9,14 +9,15 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BasicButton from '../../components/common/BasicButton';
 import BorderedInput from '../../components/AuthComponents/BorderedInput';
 import BackButton from '../../components/common/BackButton';
-import memintLogo from '../../assets/icons/logo.png';
 import GradientButton from '../../components/common/GradientButton';
 import {getUserByPhoneNumber} from '../../lib/Users';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 
 const FindIdVerifyMobileScreen = ({navigation}) => {
   const [buttonReady, setButtonReady] = useState(false);
@@ -42,15 +43,15 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
     if (name === 'mobileNumber') {
       if (value.length === 0) {
         setValidNumber('전화번호를 입력해주세요 (11자리 숫자)');
-        setTextColor('gray');
+        setTextColor('#EAFFEF');
       } else if (value.length !== 11 || value.slice(0, 3) !== '010') {
         setButtonReady(false);
         setValidNumber('전화번호가 유효하지 않습니다');
-        setTextColor('red');
+        setTextColor('#FF5029');
       } else if (value.length === 11) {
         setButtonReady(true);
         setValidNumber('유효한 전화번호 입니다.');
-        setTextColor('green');
+        setTextColor('#58FF7D');
       }
     }
   };
@@ -73,7 +74,7 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
       console.log(confirm);
       await confirm.confirm(form.code).then(console.log);
       setVerified(true);
-      setVerifyTextColor('green');
+      setVerifyTextColor('#58FF7D');
       auth().signOut();
       getUserByPhoneNumber(fixedPhoneNumber).then(result => {
         console.log(result);
@@ -87,7 +88,7 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
       console.log(error);
       console.log('Invalid code.');
       setVerified(false);
-      setVerifyTextColor('red');
+      setVerifyTextColor('#FF5029');
     }
   }
 
@@ -99,79 +100,89 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
       <KeyboardAvoidingView
         style={styles.KeyboardAvoidingView}
         behavior={Platform.select({ios: 'padding'})}>
-        <SafeAreaView style={styles.fullscreen}>
-          <BackButton />
+        <SafeStatusBar />
+        <BackButton />
+
+        <View style={styles.fullscreen}>
           <View style={styles.fullscreenSub}>
-            <Image source={memintLogo} style={styles.logo} />
-            <Text style={styles.contentText}>이메일 찾기</Text>
+            <Text style={styles.title}>내 정보로 찾기</Text>
             <Text style={styles.contentTextSub}>
-              회원가입시 사용한 전화번호를 입력해주세요
+              회원가입 시 사용한 휴대폰 번호를 입력해 주세요.
             </Text>
             <View style={styles.form}>
-              <BorderedInput
-                size="large"
-                placeholder="전화번호를 입력해주세요"
-                hasMarginBottom
-                value={form.mobileNumber}
-                onChangeText={createChangeTextHandler('mobileNumber')}
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType={'done'}
-                // onSubmitEditing={() => passwordRef.current.focus()}
-              />
-              <BasicButton
-                style={styles.button}
-                width={70}
-                height={35}
-                textSize={13}
-                margin={[5, 5, 5, 5]}
-                disabled={!buttonReady}
-                border={false}
-                backgroundColor={buttonReady ? 'black' : 'lightgray'}
-                text="인증번호받기"
-                hasMarginBottom
-                onPress={async () =>
-                  verifyPhoneNumber(
-                    `+82 ${form.mobileNumber.slice(
-                      0,
-                      3,
-                    )}-${form.mobileNumber.slice(
-                      3,
-                      7,
-                    )}-${form.mobileNumber.slice(7, 11)}`,
-                  ).then(setValidNumber('인증번호가 발송되었습니다'))
-                }
-              />
+              <Text style={styles.contentText}>휴대폰</Text>
+              <View style={styles.formRow}>
+                <View style={styles.inputWrap}>
+                  <BorderedInput
+                    size="wide"
+                    placeholder="전화번호를 입력해주세요"
+                    value={form.mobileNumber}
+                    onChangeText={createChangeTextHandler('mobileNumber')}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType={'done'}
+                    // onSubmitEditing={() => passwordRef.current.focus()}
+                  />
+                </View>
+                <BasicButton
+                  width={104}
+                  height={42}
+                  textSize={13}
+                  margin={[0, 0, 0, 8]}
+                  disabled={!buttonReady}
+                  textColor={buttonReady ? '#1D1E1E' : '#ffffff'}
+                  backgroundColor={buttonReady ? '#AEFFC1' : 'transparent'}
+                  border={true}
+                  text="인증번호받기"
+                  onPress={async () =>
+                    verifyPhoneNumber(
+                      `+82 ${form.mobileNumber.slice(
+                        0,
+                        3,
+                      )}-${form.mobileNumber.slice(
+                        3,
+                        7,
+                      )}-${form.mobileNumber.slice(7, 11)}`,
+                    ).then(setValidNumber('인증번호가 발송되었습니다'))
+                  }
+                />
+              </View>
+              <Text style={[styles.invalidNumber, {color: textColor}]}>
+                {validNumber}
+              </Text>
             </View>
-            <Text style={[styles.invalidNumber, {color: textColor}]}>
-              {validNumber}
-            </Text>
-            <Text style={styles.contentTextVerify}>인증번호</Text>
-            <View style={styles.secondForm} hasMarginBottom>
-              <BorderedInput
-                size="large"
-                placeholder="인증번호를 입력해주세요"
-                value={form.code}
-                onChangeText={createChangeTextHandler('code')}
-                // secureTextEntry
-                // ref={passwordRef}
-                keyboardType="numeric"
-                // returnKeyType={'done'}
-                onSubmitEditing={() => {
-                  onSubmit();
-                }}
-              />
-              <BasicButton
-                style={styles.button}
-                width={70}
-                height={35}
-                textSize={13}
-                margin={[5, 5, 5, 5]}
-                border={false}
-                text="인증"
-                hasMarginBottom
-                onPress={() => confirmCode()}
-              />
+
+            <View style={styles.form}>
+              <Text style={styles.contentText}>인증번호</Text>
+              <View style={styles.formRow}>
+                <View style={styles.inputWrap}>
+                  <BorderedInput
+                    size="wide"
+                    placeholder="인증번호를 입력해주세요"
+                    value={form.code}
+                    onChangeText={createChangeTextHandler('code')}
+                    // secureTextEntry
+                    // ref={passwordRef}
+                    keyboardType="numeric"
+                    // returnKeyType={'done'}
+                    onSubmitEditing={() => {
+                      onSubmit();
+                    }}
+                  />
+                </View>
+                <BasicButton
+                  textColor={buttonReady ? '#1D1E1E' : '#ffffff'}
+                  backgroundColor={buttonReady ? '#AEFFC1' : 'transparent'}
+                  disabled={!buttonReady}
+                  width={104}
+                  height={42}
+                  textSize={13}
+                  margin={[0, 0, 0, 8]}
+                  border={true}
+                  text="인증하기"
+                  onPress={() => confirmCode()}
+                />
+              </View>
             </View>
             <Text style={[styles.invalidNumber, {color: verifyTextColor}]}>
               {verified === null
@@ -188,7 +199,6 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
                 : null}
             </Text>
             {/* <BasicButton
-            style={styles.button}
             width={300}
             height={40}
             textSize={17}
@@ -200,8 +210,11 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
             hasMarginBottom
             onPress={goToNextPage}
           /> */}
+            <TouchableOpacity style={styles.button} onPress={goToNextPage}>
+              <Text style={styles.buttonText}>로그인</Text>
+            </TouchableOpacity>
           </View>
-        </SafeAreaView>
+        </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -210,15 +223,16 @@ const FindIdVerifyMobileScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
   },
   fullscreen: {
     flex: 1,
+    paddingHorizontal: 15,
   },
   fullscreenSub: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
+
     // justifyContent: 'center',
   },
   logo: {
@@ -229,22 +243,34 @@ const styles = StyleSheet.create({
   },
   invalidNumber: {
     fontSize: 14,
+    marginVertical: 10,
+    letterSpacing: -0.5,
     // marginBottom: 20,
     // marginRight: 100,
   },
   text: {
     marginTop: 50,
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 15,
+    color: '#ffffff',
+  },
+  title: {
+    fontWeight: '400',
+    fontSize: 24,
+    marginTop: 20,
+    marginBottom: 15,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   contentText: {
-    fontSize: 24,
-    marginTop: 2,
-    // fontWeight: 'bold',
+    fontSize: 14,
+    color: '#ffffff',
+    letterSpacing: -0.5,
+    marginBottom: 8,
   },
   contentTextSub: {
-    fontSize: 18,
-    margin: 8,
+    fontSize: 14,
+    color: '#ffffff',
     // fontWeight: 'bold',
   },
   contentTextVerify: {
@@ -256,20 +282,36 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 32,
     width: '100%',
-    paddingHorizontal: 32,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  secondForm: {
-    marginTop: 10,
-    marginBottom: 10,
-    width: '100%',
-    paddingHorizontal: 32,
+  formRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignContent: 'center',
+    width: '100%',
+  },
+  inputWrap: {
+    flex: 1,
   },
   button: {
-    margin: 50,
+    marginTop: 'auto',
+    marginBottom: 30,
+    backgroundColor: '#AEFFC1',
+    width: '100%',
+    height: 50,
+    borderRadius: 99,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // position: 'absolute',
+    // bottom: 20,
+  },
+  buttonText: {
+    color: '#1D1E1E',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: -0.01,
   },
 });
 

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 function TagElement({tag, drinkInfo, setDrinkInfo, type}) {
   const [colored, setColored] = useState(false);
@@ -40,13 +39,9 @@ function TagElement({tag, drinkInfo, setDrinkInfo, type}) {
       // style={[styles.tag, colored ? styles.coloredTag : '']}
       onPress={handleClick}>
       {colored ? (
-        <LinearGradient
-          colors={['#A7BFEB', '#FBC2EA']}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 1}}
-          style={styles.tag}>
+        <View style={[styles.tag, styles.coloredTag]}>
           <Text style={styles.coloredtext}>{tag}</Text>
-        </LinearGradient>
+        </View>
       ) : (
         <View style={styles.tag}>
           <Text style={styles.text}>{tag}</Text>
@@ -58,19 +53,28 @@ function TagElement({tag, drinkInfo, setDrinkInfo, type}) {
 
 const styles = StyleSheet.create({
   tag: {
-    backgroundColor: 'lightgrey',
-    margin: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginHorizontal: 8,
-    borderRadius: 10,
+    backgroundColor: '#3C3D43',
+    paddingVertical: 7,
+    paddingHorizontal: 11,
+    marginVertical: 4,
+    borderRadius: 99,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    marginHorizontal: 4,
   },
   coloredTag: {
-    backgroundColor: 'yellow',
+    borderColor: '#AEFFC1',
+    borderWidth: 1,
   },
   coloredtext: {
-    color: 'white',
-    fontWeight: '700',
+    color: '#AEFFC1',
+    fontSize: 16,
+    letterSpacing: -0.5,
+  },
+  text: {
+    color: '#EAFFEFCC',
+    fontSize: 16,
+    letterSpacing: -0.5,
   },
 });
 

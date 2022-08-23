@@ -1,7 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, StyleSheet, Text, View, Image} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BackButton from '../../components/common/BackButton';
+import LinearGradient from 'react-native-linear-gradient';
+import memintDino from '../../assets/icons/memintDino.png';
 
 import * as Progress from 'react-native-progress';
 
@@ -10,7 +19,7 @@ import useNftActions from '../../utils/hooks/UseNftActions';
 
 import {ActivityIndicator} from 'react-native-paper';
 import {createUserNFT} from '../../lib/Users';
-import GradientButton from '../../components/common/GradientButton';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 let interval = undefined;
 
 const SignUpServeNFTScreen = ({navigation, route}) => {
@@ -73,43 +82,46 @@ const SignUpServeNFTScreen = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView style={styles.fullscreen}>
-      {/* <BackButton /> */}
-      <View style={styles.fullscreenSub}>
-        {progress === 100 ? (
-          <>
-            <Text style={styles.textMain}>
-              {userInfo.nickName}님만을 위한 프로필 입니다.
-            </Text>
-            <Image style={styles.nftImg} source={{uri: profileImg}} />
-            <Text style={styles.textSub}>귀엽네요</Text>
-            <GradientButton
-              style={styles.button}
-              width={300}
-              height={40}
-              textSize={17}
-              margin={[50, 5, 5, 5]}
-              text="다음 단계"
-              onPress={onSubmit}
-            />
-          </>
-        ) : (
-          <>
-            <Text style={styles.textMain}>
-              {userInfo.nickName}님만을 위한 프로필 이미지를 만들고 있습니다.
-            </Text>
-            <Progress.Pie
-              size={100}
-              hidesWhenStopped={true}
-              progress={progress / 100}
-              color={'#A7BFEB'}
-              borderWidth={2}
-            />
-            <Text style={styles.textSub}>두근두근..</Text>
-          </>
-        )}
+    <View style={styles.fullscreen}>
+      <SafeStatusBar />
+      <LinearGradient
+        colors={['#3D3E44', '#5A7064']}
+        start={{x: 0.3, y: 0.3}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientBackground}>
+        {/* <BackButton /> */}
+        <View style={styles.fullscreenSub}>
+          {progress === 100 ? (
+            <View style={styles.progressdoneArea}>
+              <Text style={styles.textMain}>
+                {userInfo.nickName}님을 위한 프로필
+              </Text>
+              <Image style={styles.nftImg} source={{uri: profileImg}} />
+              <Text style={styles.textSub}>잘 부탁드려요!</Text>
+              <TouchableOpacity style={styles.button} onPress={onSubmit}>
+                <Text style={styles.buttonText}>다음</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <Text style={styles.textMain}>
+                {userInfo.nickName}님만을 위한{'\n'} 프로필 이미지를 준비
+                중입니다!
+              </Text>
+              {/* <Progress.Pie
+                size={100}
+                hidesWhenStopped={true}
+                progress={progress / 100}
+                color={'#A7BFEB'}
+                borderWidth={2}
+              /> */}
+              <Image source={memintDino} style={styles.logo} />
 
-        {/* <Progress.Pie
+              <Text style={styles.textSub}>두근두근...</Text>
+            </>
+          )}
+
+          {/* <Progress.Pie
           size={30}
           hidesWhenStopped={true}
           progress={progress / 100}
@@ -121,7 +133,7 @@ const SignUpServeNFTScreen = ({navigation, route}) => {
           <ActivityIndicator sixe="large" color="black" />
         )} */}
 
-        {/* <BasicButton
+          {/* <BasicButton
           style={styles.button}
           width={300}
           height={40}
@@ -131,16 +143,24 @@ const SignUpServeNFTScreen = ({navigation, route}) => {
           hasMarginBottom
           onPress={onSubmit}
         /> */}
-      </View>
-    </SafeAreaView>
+        </View>
+      </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   nftImg: {
-    width: 300,
-    height: 300,
-    borderRadius: 1000,
+    width: 200,
+    height: 200,
+    borderColor: '#AEFFC1',
+    borderWidth: 3,
+    borderRadius: 999,
+    marginBottom: 15,
+  },
+  gradientBackground: {
+    flex: 1,
+    paddingHorizontal: 15,
   },
   KeyboardAvoidingView: {
     flex: 1,
@@ -187,15 +207,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   textMain: {
-    marginBottom: 20,
-    paddingHorizontal: 6,
+    fontWeight: '400',
     fontSize: 18,
-    fontWeight: 'bold',
+    marginVertical: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
+    textAlign: 'center',
+    lineHeight: 26,
   },
   textSub: {
     paddingHorizontal: 6,
+    fontWeight: '400',
     fontSize: 18,
-    fontWeight: 'bold',
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
     margin: 10,
     // alignItems: 'center',
     // justifyContent: 'center',
@@ -227,9 +254,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  button: {
-    margin: 50,
-  },
   dropdown: {
     fontSize: 10,
     width: 130,
@@ -238,6 +262,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 4,
     height: 30,
+  },
+  logo: {
+    width: 101,
+    height: 108.77,
+    marginBottom: 15,
+  },
+  button: {
+    marginTop: 'auto',
+    marginBottom: 30,
+    // marginHorizontal: 15,
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: 50,
+    borderRadius: 99,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(174, 255, 192, 0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+
+    elevation: 18,
+
+    // position: 'absolute',
+    // bottom: 20,
+  },
+  buttonText: {
+    color: '#1D1E1E',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: -0.01,
+  },
+  progressdoneArea: {
+    marginTop: 120,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    flex: 1,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
@@ -7,6 +7,7 @@ import CheckElement from '../../components/AuthComponents/CheckElement';
 import CheckBox from '@react-native-community/checkbox';
 import {signUp} from '../../lib/Auth';
 import GradientButton from '../../components/common/GradientButton';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 
 const SignUpAgreementScreen = ({navigation, route}) => {
   let {userInfo} = route.params || {};
@@ -113,49 +114,55 @@ const SignUpAgreementScreen = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView style={styles.fullscreen}>
+    <View style={styles.fullscreen}>
+      <SafeStatusBar />
       <BackButton />
       <View style={styles.fullscreenSub}>
-        <Text style={styles.textMain}>서비스 약관에 동의해주세요</Text>
+        <Text style={styles.textMain}>서비스 약관</Text>
         <View style={styles.form}>
           <CheckBox
+            style={styles.checkBox}
             value={serviceCheck}
             onChange={serviceBtnEvent}
-            onCheckColor="#B4C0EB"
-            onTintColor="#B4C0EB"
+            onCheckColor="#58FF7D"
+            onTintColor="#58FF7D"
           />
+
           <Text style={styles.text}>서비스 약관에 동의</Text>
-          <Text style={styles.textSub}>(필수)</Text>
+          <Text style={styles.textSub}>필수</Text>
         </View>
         <View style={styles.form}>
           <CheckBox
+            style={styles.checkBox}
             value={useCheck}
             onChange={useBtnEvent}
-            onCheckColor="#B4C0EB"
-            onTintColor="#B4C0EB"
+            onCheckColor="#58FF7D"
+            onTintColor="#58FF7D"
           />
           <Text style={styles.text}>개인정보 수집 및 이용동의</Text>
-          <Text style={styles.textSub}>(필수)</Text>
+          <Text style={styles.textSub}>필수</Text>
         </View>
         <View style={styles.form}>
           <CheckBox
+            style={styles.checkBox}
             value={ageCheck}
             onChange={ageBtnEvent}
-            onCheckColor="#B4C0EB"
-            onTintColor="#B4C0EB"
+            onCheckColor="#58FF7D"
+            onTintColor="#58FF7D"
           />
           <Text style={styles.text}>만 19세 이상</Text>
-          <Text style={styles.textSub}>(필수)</Text>
+          <Text style={styles.textSub}>필수</Text>
         </View>
         <View style={styles.form}>
           <CheckBox
+            style={styles.checkBox}
             value={marketingCheck}
             onChange={marketingBtnEvent}
-            onCheckColor="#B4C0EB"
-            onTintColor="#B4C0EB"
+            onCheckColor="#58FF7D"
+            onTintColor="#58FF7D"
           />
           <Text style={styles.text}>혜택 및 이벤트 알림 수신 동의</Text>
-          <Text style={styles.textSub}>(선택)</Text>
+          <Text style={styles.textSub}>선택</Text>
         </View>
         <Text style={styles.contentText}>
           마케팅 수신 동의를 체크하지 않으면, 추천 모임 알림, 이벤트 소식 등 앱
@@ -163,12 +170,13 @@ const SignUpAgreementScreen = ({navigation, route}) => {
         </Text>
         <View style={styles.formAllAgree}>
           <CheckBox
+            style={styles.checkBox}
             value={allCheck}
             onChange={allBtnEvent}
-            onCheckColor="#B4C0EB"
-            onTintColor="#B4C0EB"
+            onCheckColor="#58FF7D"
+            onTintColor="#58FF7D"
           />
-          <Text style={styles.text}>모두 동의합니다</Text>
+          <Text style={styles.text}>모두 동의합니다.</Text>
         </View>
         {/* <BasicButton
           style={styles.button}
@@ -180,18 +188,11 @@ const SignUpAgreementScreen = ({navigation, route}) => {
           hasMarginBottom
           onPress={onSubmitSignUp}
         /> */}
-        <GradientButton
-          style={styles.button}
-          width={300}
-          height={40}
-          textSize={17}
-          margin={[5, 5, 5, 5]}
-          text="회원가입 완료"
-          hasMarginBottom
-          onPress={onSubmitSignUp}
-        />
+        <TouchableOpacity style={styles.button} onPress={onSubmitSignUp}>
+          <Text style={styles.buttonText}>회원가입 완료</Text>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -201,19 +202,19 @@ const styles = StyleSheet.create({
   },
   fullscreen: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
   },
   fullscreenSub: {
+    paddingHorizontal: 15,
+
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   form: {
     width: '100%',
     // height: '50',
     marginTop: 20,
-    paddingHorizontal: 16,
     flexDirection: 'row',
     // justifyContent: 'space-around',
     alignItems: 'center',
@@ -222,7 +223,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 32,
     width: '100%',
-    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -234,30 +234,43 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 10,
-    fontSize: 20,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#ffffff',
+    letterSpacing: -0.5,
   },
   textAllAgree: {
     fontSize: 40,
     fontWeight: 'bold',
   },
   textMain: {
-    marginBottom: 20,
-    paddingHorizontal: 6,
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: '400',
+    fontSize: 24,
+    marginTop: 40,
+    marginBottom: 30,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
   textSub: {
-    paddingHorizontal: 6,
-    fontSize: 14,
+    color: '#AEFFC1',
+    paddingHorizontal: 10,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: -0.5,
     // fontWeight: 'bold',
     // margin: 10,
     // alignItems: 'center',
     // justifyContent: 'center',
   },
   contentText: {
-    fontSize: 12,
-    marginHorizontal: 50,
-    paddingHorizontal: 30,
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: -0.5,
+    marginHorizontal: 43,
+    marginTop: 8,
+    marginBottom: 20,
+    color: '#EAFFEFCC',
     // marginTop: 30,
   },
   contentTextSub: {
@@ -281,9 +294,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  button: {
-    margin: 50,
-  },
   dropdown: {
     fontSize: 10,
     width: 130,
@@ -292,6 +302,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 4,
     height: 30,
+  },
+  checkBox: {
+    width: 20,
+    height: 20,
+  },
+  button: {
+    // marginTop: 'auto',
+    // marginBottom: 30,
+    marginHorizontal: 15,
+    backgroundColor: '#AEFFC1',
+    width: '100%',
+    height: 50,
+    borderRadius: 99,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    position: 'absolute',
+    bottom: 20,
+  },
+  buttonText: {
+    color: '#1D1E1E',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: -0.01,
   },
 });
 

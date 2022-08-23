@@ -1,38 +1,19 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import BasicButton from '../common/BasicButton';
-import GradientButton from '../common/GradientButton';
 const SignButtons = ({onSubmitSignIn, onSubmitSignUp}) => {
   return (
     <View style={styles.buttons}>
-      <GradientButton
-        width={150}
-        height={50}
-        textSize={15}
-        margin={[5, 5, 5, 5]}
-        text="로그인"
-        onPress={onSubmitSignIn}
-      />
-      <GradientButton
-        width={150}
-        height={50}
-        text="회원가입"
-        textSize={15}
-        margin={[5, 5, 5, 5]}
-        onPress={onSubmitSignUp}
-      />
-
-      {/* <BasicButton
+      <BasicButton
         style={styles.button}
         width={150}
-        height={50}
+        height={42}
         textSize={15}
         margin={[5, 5, 5, 5]}
         text="로그인"
         hasMarginBottom
         onPress={onSubmitSignIn}
         // onPress={onPressLogin}
-        backgroundColor="#FF9999"
       />
       <BasicButton
         style={styles.button}
@@ -40,12 +21,11 @@ const SignButtons = ({onSubmitSignIn, onSubmitSignUp}) => {
         variant="disable"
         text="회원가입"
         width={150}
-        height={50}
+        height={42}
         textSize={15}
         margin={[5, 5, 5, 5]}
-        backgroundColor="#6633ff"
         onPress={onSubmitSignUp}
-      /> */}
+      />
     </View>
   );
 };

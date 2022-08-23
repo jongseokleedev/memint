@@ -55,7 +55,7 @@ function MeetingDetail({route}) {
           textSize={17}
           backgroundColor={'white'}
           textColor={'black'}
-          text="채팅창으로 이동"
+          text="채팅방으로 이동"
           onPress={() => {
             navigation.navigate('ChattingRoom', {data});
           }}

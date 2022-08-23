@@ -67,7 +67,7 @@ const CameraButton = ({response, setResponse, uid}) => {
               source={{uri: response?.assets[0]?.uri}}
             />
           ) : (
-            <Icon name="person-add" color="black" size={48} />
+            <Icon name="person-add" color="#ffffff" size={28} />
           )}
         </Pressable>
       </View>
@@ -77,6 +77,8 @@ const CameraButton = ({response, setResponse, uid}) => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    marginTop: 30,
+    marginBottom: 50,
     borderRadius: 54,
     height: 108,
     width: 108,
@@ -92,12 +94,13 @@ const styles = StyleSheet.create({
   },
   circle: {
     // backgroundColor: '#6200ee',
-    backgroundColor: 'white',
     borderRadius: 54,
-    height: 108,
-    width: 108,
+    height: 100,
+    width: 100,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: '#AEFFC1',
   },
 });
 

@@ -8,6 +8,8 @@ import {
   View,
   Alert,
   TouchableWithoutFeedback,
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BackButton from '../../components/common/BackButton';
@@ -15,7 +17,8 @@ import BasicButton from '../../components/common/BasicButton';
 import SelectDropdown from 'react-native-select-dropdown';
 import TagElement from '../../components/AuthComponents/TagElement';
 import {createProperty} from '../../lib/Users';
-import GradientButton from '../../components/common/GradientButton';
+import LinearGradient from 'react-native-linear-gradient';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 
 const SignUpUserDetailScreen = ({navigation, route}) => {
   let {userInfo} = route.params || {};
@@ -74,59 +77,71 @@ const SignUpUserDetailScreen = ({navigation, route}) => {
       <KeyboardAvoidingView
         style={styles.KeyboardAvoidingView}
         behavior={Platform.select({ios: 'padding'})}>
-        <SafeAreaView style={styles.fullscreen}>
-          <BackButton />
-          <View style={styles.fullscreenSub}>
+        <SafeStatusBar />
+        <BackButton />
+        <LinearGradient
+          colors={['#3D3E44', '#5A7064']}
+          start={{x: 0.3, y: 0.3}}
+          end={{x: 1, y: 1}}
+          style={styles.gradientBackground}>
+          <ScrollView style={styles.fullscreenSub}>
             <View style={styles.form}>
-              <Text style={styles.text}>주량을 선택해주세요</Text>
-              <SelectDropdown
-                data={[
-                  '한 잔만',
-                  '반 병 이하',
-                  '한 병 이하',
-                  '두 병 이하',
-                  '세 병 이하',
-                  '세 병 이상',
-                ]}
-                onSelect={(selectedItem, index) => {
-                  console.log(selectedItem, index);
-                  setDrinkInfo({...drinkInfo, drinkCapa: selectedItem});
-                }}
-                defaultButtonText=" "
-                buttonStyle={styles.dropdown}
-              />
-            </View>
-            <Text style={styles.contentText}>
-              미팅 매칭 필요 정보로 활용합니다.
-            </Text>
-            <Text style={styles.text}>
-              선호하는 주류를 선택해주세요.(중복가능)
-            </Text>
-            <View style={styles.tagsContainer}>
-              {tagData.alcoholType.map((tag, idx) => (
-                <TagElement
-                  key={idx}
-                  tag={tag}
-                  drinkInfo={drinkInfo}
-                  setDrinkInfo={setDrinkInfo}
-                  type="alcoholType"
+              <Text style={styles.text}>나의 주량은?</Text>
+              <View style={styles.selectWrap}>
+                <SelectDropdown
+                  data={[
+                    '한 잔만',
+                    '반 병 이하',
+                    '한 병 이하',
+                    '두 병 이하',
+                    '세 병 이하',
+                    '세 병 이상',
+                  ]}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index);
+                    setDrinkInfo({...drinkInfo, drinkCapa: selectedItem});
+                  }}
+                  defaultButtonText=" "
+                  buttonStyle={styles.dropdown}
+                  dropdownStyle={styles.dropdownStyle}
+                  rowTextStyle={styles.dropdownTextStyle}
+                  buttonTextStyle={styles.buttonTextStyle}
                 />
-              ))}
+              </View>
             </View>
-            <Text style={styles.text}>
-              당신의 음주 스타일을 알려주세요.(중복 가능)
-            </Text>
-            <View style={styles.tagsContainer}>
-              {tagData.drinkStyle.map((tag, idx) => (
-                <TagElement
-                  key={idx}
-                  tag={tag}
-                  drinkInfo={drinkInfo}
-                  setDrinkInfo={setDrinkInfo}
-                  type="drinkStyle"
-                />
-              ))}
+            <View>
+              <Text style={styles.contentText}>
+                선호하는 주류를 선택해주세요.(중복가능)
+              </Text>
+              <View style={styles.tagsContainer}>
+                {tagData.alcoholType.map((tag, idx) => (
+                  <TagElement
+                    key={idx}
+                    tag={tag}
+                    drinkInfo={drinkInfo}
+                    setDrinkInfo={setDrinkInfo}
+                    type="alcoholType"
+                  />
+                ))}
+              </View>
             </View>
+            <View style={styles.marginBottom}>
+              <Text style={styles.contentText}>
+                당신의 음주 스타일을 알려주세요.(중복 가능)
+              </Text>
+              <View style={styles.tagsContainer}>
+                {tagData.drinkStyle.map((tag, idx) => (
+                  <TagElement
+                    key={idx}
+                    tag={tag}
+                    drinkInfo={drinkInfo}
+                    setDrinkInfo={setDrinkInfo}
+                    type="drinkStyle"
+                  />
+                ))}
+              </View>
+            </View>
+
             {/* <BasicButton
             style={styles.button}
             width={300}
@@ -137,17 +152,11 @@ const SignUpUserDetailScreen = ({navigation, route}) => {
             hasMarginBottom
             onPress={goToNextPage}
           /> */}
-            <GradientButton
-              style={styles.button}
-              width={300}
-              height={40}
-              textSize={17}
-              margin={[30, 5, 5, 5]}
-              text="다음 단계"
-              onPress={goToNextPage}
-            />
-          </View>
-        </SafeAreaView>
+          </ScrollView>
+          <TouchableOpacity style={styles.button} onPress={goToNextPage}>
+            <Text style={styles.buttonText}>다음</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -156,74 +165,108 @@ const SignUpUserDetailScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
   KeyboardAvoidingView: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
   },
-  fullscreen: {
+  gradientBackground: {
     flex: 1,
+    paddingHorizontal: 15,
   },
   fullscreenSub: {
+    width: '100%',
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   form: {
     marginTop: 16,
     marginBottom: 16,
     width: '100%',
-    paddingHorizontal: 32,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   text: {
-    paddingHorizontal: 6,
-    fontSize: 20,
-    fontWeight: 'bold',
-    margin: 10,
+    fontWeight: '400',
+    fontSize: 24,
+    marginVertical: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
+    marginRight: 15,
   },
   contentText: {
+    color: '#ffffff',
     fontSize: 16,
     marginTop: 30,
+    marginBottom: 15,
   },
-  contentTextSub: {
-    fontSize: 18,
-    margin: 8,
-  },
-  contentTextVerify: {
-    fontSize: 18,
-    marginTop: 20,
-  },
+
   tagsContainer: {
     flexWrap: 'wrap',
     marginBottom: 10,
     flexDirection: 'row',
-    paddingHorizontal: 14,
-  },
-  secondForm: {
-    marginTop: 10,
-    width: '100%',
-    paddingHorizontal: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    margin: 50,
-  },
-  dropdown: {
-    fontSize: 10,
-    width: 130,
-    borderColor: '#bdbdbd',
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    borderRadius: 4,
-    height: 30,
   },
   spinnerWrapper: {
     marginTop: 64,
     height: 104,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  dropdown: {
+    width: '100%',
+    borderColor: '#EAFFEF',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    borderRadius: 99,
+    height: 36,
+    backgroundColor: '#EAFFEF',
+  },
+  dropdownStyle: {
+    backgroundColor: '#3C3D43',
+    borderRadius: 10,
+  },
+  dropdownTextStyle: {
+    color: '#ffffff',
+    fontSize: 14,
+  },
+  buttonTextStyle: {
+    color: '#1D1E1E',
+    fontSize: 16,
+  },
+  selectWrap: {
+    flex: 1,
+  },
+  button: {
+    // marginTop: 'auto',
+    // marginBottom: 30,
+    marginHorizontal: 15,
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: 50,
+    borderRadius: 99,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(174, 255, 192, 0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+
+    elevation: 18,
+
+    position: 'absolute',
+    bottom: 20,
+  },
+  buttonText: {
+    color: '#1D1E1E',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: -0.01,
+  },
+  marginBottom: {
+    marginBottom: 90,
   },
 });
 

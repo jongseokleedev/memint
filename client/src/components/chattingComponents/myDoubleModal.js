@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, StyleSheet} from 'react-native';
+import {View, Modal, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import BasicButton from '../common/BasicButton';
 import {changeJoinerState} from '../../lib/Chatting';
 import {useToast} from '../../utils/hooks/useToast';
@@ -33,29 +33,36 @@ function MyDoubleModal({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <View style={[styles.centeredView, styles.backgroudDim]}>
-          <View style={styles.modalView}>
-            {body}
-            <View style={styles.buttonRow}>
-              <BasicButton
-                text={nButtonText}
-                size="small"
-                variant="disable"
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-              <BasicButton
-                text={pButtonText}
-                size="small"
-                onPress={() => {
-                  changeJoinerState(id, user, setModalVisible).then(result => {
-                    result === 'runModal' &&
-                      showToast('basic', '미팅 참가가 확정되었습니다!');
-                  });
-                }}
-              />
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModalVisible(false);
+          }}>
+          <View style={[styles.centeredView, styles.backgroudDim]}>
+            <View style={styles.modalView}>
+              {body}
+              <View style={styles.buttonRow}>
+                <BasicButton
+                  text={nButtonText}
+                  size="small"
+                  variant="disable"
+                  onPress={() => setModalVisible(!modalVisible)}
+                />
+                <BasicButton
+                  text={pButtonText}
+                  size="small"
+                  onPress={() => {
+                    changeJoinerState(id, user, setModalVisible).then(
+                      result => {
+                        result === 'runModal' &&
+                          showToast('basic', '미팅 참가가 확정되었습니다!');
+                      },
+                    );
+                  }}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
