@@ -23,7 +23,6 @@ import {
   handleISOtoLocale,
 } from '../../utils/common/Functions';
 import crown from '../../assets/icons/crown.png';
-import GradientButton from '../../components/common/GradientButton';
 import WalletButton from '../../components/common/WalletButton';
 import LinearGradient from 'react-native-linear-gradient';
 import MeetingLikes from '../../components/meetingComponents/MeetingLikes';

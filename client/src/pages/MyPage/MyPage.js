@@ -7,78 +7,53 @@ import {
   Alert,
   Text,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
-import BasicButton from '../../components/common/BasicButton';
-import MyMeetingList from '../../components/myPageComponent/MyMeetingList';
-import ParticipatedMeetingList from '../../components/myPageComponent/ParticipatedMeetingList';
 import MyProfile from '../../components/myPageComponent/MyProfle';
 import useUser from '../../utils/hooks/UseUser';
 import WalletButton from '../../components/common/WalletButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 function MyPage({navigation}) {
   const user = useUser();
+  const {top} = useSafeAreaInsets();
 
-  const [meetingRoom, setMeetingRoom] = useState(0);
-  const room = [{name: '내가 만든 방'}, {name: '참여 중인 방'}];
-  const selecteMenuHandler = index => {
-    setMeetingRoom(index);
-  };
-  const handleNavigate = () => {
-    navigation.navigate('MyLikesRooms');
-  };
   return (
-    <SafeAreaView style={styles.view}>
-      <ScrollView>
-        {/* 유저 프로필 */}
-        <MyProfile User={user} navigation={navigation} />
-        <View style={styles.mymeetings}>
-          {/*찜한 미팅방*/}
-          <View style={styles.mylikes}>
-            <TouchableOpacity
-              style={styles.mylikesButton}
-              onPress={handleNavigate}>
-              <Icon name="star" size={15} />
-              <Text style={styles.mylikesText}> 찜한 미팅방</Text>
-            </TouchableOpacity>
-          </View>
-          {/* 탭 선택 버튼 */}
-          <View style={styles.meetingButton}>
-            {room.map((ele, index, key) => {
-              return (
-                <BasicButton
-                  text={ele.name}
-                  width={160}
-                  height={40}
-                  textSize={14}
-                  backgroundColor={meetingRoom === index ? 'black' : 'white'}
-                  textColor={meetingRoom === index ? 'white' : 'black'}
-                  borderRadius={30}
-                  margin={[10, 3, 3, 3]}
-                  onPress={() => selecteMenuHandler(index)}
-                  key={index}
-                />
-              );
-            })}
-          </View>
-          {/* 탭 선택에 따른 미팅 리스트 */}
+    <View style={styles.view}>
+      <StatusBar barStyle="dark-content" />
 
-          {meetingRoom === 0 ? (
-            <MyMeetingList navigation={navigation} user={user} />
-          ) : (
-            <ParticipatedMeetingList user={user} />
-          )}
-        </View>
-      </ScrollView>
+      <View style={{backgroundColor: '#82EFC1', height: top}} />
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.pop()}>
+          <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
+          {/* <Text style={styles.buttonText}>Back</Text> */}
+        </TouchableOpacity>
+        <Icon name="menu" size={25} color="#1D1E1E" style={{marginRight: 10}} />
+      </View>
+      {/* 유저 프로필 */}
+      <MyProfile User={user} navigation={navigation} />
       <WalletButton />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#82EFC1',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 5,
+  },
+  backButton: {
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 5,
   },
   meetingButton: {
     marginTop: 10,
@@ -102,6 +77,9 @@ const styles = StyleSheet.create({
   },
   mylikesText: {
     textDecorationLine: 'underline',
+  },
+  marginBottom: {
+    marginBottom: 100,
   },
 });
 export default MyPage;

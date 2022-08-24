@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    margin: 5,
-    marginLeft: 15,
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 5,
   },
   buttonText: {
     fontSize: 18,

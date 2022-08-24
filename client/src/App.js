@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, StatusBar, Text} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
@@ -274,8 +273,6 @@ function App() {
   // }
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="light-content" />
-
       <NavigationContainer>
         <ToastProvider>
           <ChatContextProvider>

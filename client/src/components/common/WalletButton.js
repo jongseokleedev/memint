@@ -1,8 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import LinearGradient from 'react-native-linear-gradient';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, TouchableOpacity, View, Image, Text} from 'react-native';
+import wallet from '../../assets/icons/wallet.png';
+import useUser from '../../utils/hooks/UseUser';
 
 /*
 props 필요 없음.
@@ -11,18 +11,16 @@ props 필요 없음.
 
 function WalletButton() {
   const navigation = useNavigation();
+  const userInfo = useUser();
   return (
     <TouchableOpacity
       // style={styles.walletButton}
       onPress={() => navigation.navigate('Wallet')}>
       {/* <Text style={styles.buttonText}>Wallet</Text> */}
-      <LinearGradient
-        colors={['#A7BFEB', '#FBC2EA']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
-        style={styles.walletButton}>
-        <Icon name="account-balance-wallet" size={27} color={'white'} />
-      </LinearGradient>
+      <View style={styles.walletButton}>
+        <Image source={wallet} style={styles.image} />
+        <Text style={styles.buttonText}>{userInfo?.tokenAmount}</Text>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -30,18 +28,26 @@ function WalletButton() {
 const styles = StyleSheet.create({
   walletButton: {
     position: 'absolute',
-    width: 70,
-    height: 45,
+    width: 103,
+    height: 60,
     right: 20,
-    bottom: 20,
-    backgroundColor: 'black',
-    borderRadius: 20,
+    bottom: 100,
+    backgroundColor: '#3C3D43',
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    borderColor: '#58FF7D',
+    borderWidth: 1,
+    flexDirection: 'row',
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#58FF7D',
+    fontSize: 20,
+    marginLeft: 8,
+  },
+  image: {
+    width: 24,
+    height: 24,
   },
 });
 
