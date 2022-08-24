@@ -48,11 +48,11 @@ function WalletCustomModal({
           <View style={[styles.centeredView, styles.backgroudDim]}>
             <View style={styles.modalView}>
               <TouchableOpacity style={styles.tokenWrapper} onPress={nFunction}>
-                <Image source={klayIcon} style={styles.icon} />
+                {/* <Image source={klayIcon} style={styles.icon} /> */}
                 <Text style={styles.contentText}>KLAY</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.tokenWrapper} onPress={pFunction}>
-                <Image source={lcnIcon} style={styles.icon} />
+                {/* <Image source={lcnIcon} style={styles.icon} /> */}
                 <Text style={styles.contentText}>LCN</Text>
               </TouchableOpacity>
             </View>
@@ -78,16 +78,18 @@ const styles = StyleSheet.create({
     height: 200,
     backgroundColor: 'white',
     borderRadius: 30,
+    borderColor: '#AEFFC1',
+    borderWidth: 1,
     padding: 30,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
   },
   icon: {
     width: 35,
@@ -103,13 +105,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     width: 250,
-    height: 60,
+    height: 52,
     marginTop: 10,
   },
   contentText: {
-    marginLeft: 10,
-    fontSize: 20,
-    fontWeight: 'bold',
+    marginLeft: 20,
+    fontSize: 18,
+    fontWeight: '600',
   },
   backgroudDim: {
     flex: 1,

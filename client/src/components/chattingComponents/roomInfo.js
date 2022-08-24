@@ -161,16 +161,22 @@ function Joiner({nickName, state, img, isHost, id, setModalVisible, chatInfo}) {
     <View style={styles.person}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image style={styles.personImage} source={{uri: img}} />
+
+        <Text style={styles.personName}>{nickName}</Text>
         {isHost && (
           <View style={{height: 28}}>
             <Image
               source={likesActive}
-              style={{width: 30, height: 30, tintColor: '#33ED96'}}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#33ED96',
+                marginLeft: 10,
+              }}
               resizeMode="contain"
             />
           </View>
         )}
-        <Text style={styles.personName}>{nickName}</Text>
       </View>
       <Pressable
         style={

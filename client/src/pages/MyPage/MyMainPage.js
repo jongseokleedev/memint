@@ -8,6 +8,9 @@ import {
   TouchableOpacity,
   Animated,
   ScrollView,
+  Modal,
+  TouchableWithoutFeedback,
+  Pressable,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -23,9 +26,10 @@ import eggS from '../../assets/icons/eggS.png';
 import eggD from '../../assets/icons/eggD.png';
 import eggB from '../../assets/icons/eggB.png';
 import MyEggModal from './MyEggModal';
-import useUser from '../../utils/hooks/UseAuth';
+import useUser from '../../utils/hooks/UseUser';
 
 function MyMainPage({navigation}) {
+  // const user = useUser();
   const userInfo = useUser();
   const {top} = useSafeAreaInsets();
   const animation = useRef(new Animated.Value(1)).current;
@@ -136,47 +140,70 @@ function MyMainPage({navigation}) {
       </ScrollView>
       <Animated.View
         style={[
-          styles.mymeetingTab,
-          {translateY: animation},
-          tabActive ? {height: '70%'} : null,
+          {
+            backgroundColor: '#3C3D43',
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '18%',
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+          },
+          tabActive ? {height: '80%'} : null,
+          {transform: [{translateY: animation}]},
         ]}>
-        <View style={styles.mymeetings}>
-          {/* 찜한 미팅방 */}
-          <View style={styles.mylikes}>
-            <TouchableOpacity
-              style={styles.mylikesButton}
-              onPress={handleLikesNavigate}>
-              <Icon name="star" size={15} />
-              <Text style={styles.mylikesText}> 찜한 미팅방</Text>
-            </TouchableOpacity>
-          </View>
-          {/* 탭 선택 버튼 */}
-          <View style={styles.meetingButton}>
-            {room.map((ele, index, key) => {
-              return (
-                <BasicButton
-                  text={ele.name}
-                  width={160}
-                  height={40}
-                  textSize={14}
-                  backgroundColor={meetingRoom === index ? 'black' : 'white'}
-                  textColor={meetingRoom === index ? 'white' : 'black'}
-                  borderRadius={30}
-                  margin={[10, 3, 3, 3]}
-                  onPress={() => selecteMenuHandler(index)}
-                  key={index}
-                />
-              );
-            })}
-          </View>
-          {/* 탭 선택에 따른 미팅 리스트 */}
-
-          {meetingRoom === 0 ? (
-            <MyMeetingList navigation={navigation} user={userInfo} />
-          ) : (
-            <ParticipatedMeetingList user={userInfo} />
-          )}
+        <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+          <Pressable
+            onPress={() => {
+              setTabActive(!tabActive);
+            }}>
+            <View style={styles.bar}></View>
+          </Pressable>
         </View>
+        {/* 찜한 미팅방 */}
+        <View style={styles.mylikes}>
+          <TouchableOpacity
+            style={styles.mylikesButton}
+            onPress={handleLikesNavigate}>
+            <Text style={styles.mylikesText}>내가 찜한 미팅</Text>
+            <Image source={likesActive} style={styles.likesfootImage} />
+          </TouchableOpacity>
+        </View>
+        {!tabActive ? (
+          <></>
+        ) : (
+          <>
+            {/* 탭 선택 버튼 */}
+            <View style={styles.meetingButton}>
+              {room.map((ele, index, key) => {
+                return (
+                  <BasicButton
+                    text={ele.name}
+                    width={160}
+                    height={40}
+                    textSize={16}
+                    backgroundColor={
+                      meetingRoom === index ? '#AEFFC0' : 'transparent'
+                    }
+                    textColor={meetingRoom === index ? 'black' : 'white'}
+                    borderRadius={30}
+                    border={meetingRoom === index ? true : false}
+                    margin={[10, 3, 3, 3]}
+                    onPress={() => selecteMenuHandler(index)}
+                    key={index}
+                  />
+                );
+              })}
+            </View>
+            {/* 탭 선택에 따른 미팅 리스트 */}
+
+            {meetingRoom === 0 ? (
+              <MyMeetingList navigation={navigation} user={userInfo} />
+            ) : (
+              <ParticipatedMeetingList user={userInfo} />
+            )}
+          </>
+        )}
       </Animated.View>
       <WalletButton />
     </View>
@@ -265,6 +292,7 @@ const styles = StyleSheet.create({
   },
   status: {
     flexDirection: 'row',
+    alignItems: 'center',
     width: '100%',
     marginVertical: 6,
   },
@@ -297,7 +325,76 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: -0.5,
   },
-  paddingBottom: 80,
+  paddingBottom: {
+    paddingBottom: 150,
+  },
+  centeredView: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  tabView: {
+    width: '100%',
+    backgroundColor: 'white',
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    padding: 25,
+    alignItems: 'center',
+    borderColor: '#AEFFC1',
+    borderWidth: 1,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
+  },
+  bar: {
+    backgroundColor: '#33ED96',
+    width: 100,
+    height: 5,
+    borderRadius: 999,
+    marginTop: 3,
+    marginBottom: 5,
+    marginHorizontal: 3,
+  },
+  mylikesButton: {
+    flexDirection: 'row',
+    width: 118,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  mylikesText: {
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: -0.5,
+    color: '#ffffff',
+  },
+  mylikes: {
+    marginTop: 23,
+    justifyContent: 'flex-start',
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  meetingButton: {
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  likesfootImage: {
+    width: 30,
+    height: 30,
+    tintColor: '#33ED96',
+    marginLeft: 5,
+  },
 });
 
 export default MyMainPage;

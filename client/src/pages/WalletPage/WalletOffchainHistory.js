@@ -136,7 +136,7 @@ function WalletOffchainHistory({navigation}) {
 
 const styles = StyleSheet.create({
   view: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   container: {
     flex: 1,
@@ -158,11 +158,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   accountText: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 20,
     marginBottom: 10,
+    letterSpacing: -0.5,
+    fontWeight: '500',
+    color: '#1D1E1E',
   },
   historyText: {
     textAlign: 'center',

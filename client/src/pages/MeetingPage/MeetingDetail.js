@@ -26,6 +26,7 @@ import crown from '../../assets/icons/crown.png';
 import WalletButton from '../../components/common/WalletButton';
 import LinearGradient from 'react-native-linear-gradient';
 import MeetingLikes from '../../components/meetingComponents/MeetingLikes';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 
 function MeetingDetail({route}) {
   const userInfo = useUser();
@@ -146,9 +147,12 @@ function MeetingDetail({route}) {
     getMembersInfo();
   }, [getMembersInfo]);
   return (
-    <SafeAreaView style={styles.view}>
+    <View style={styles.view}>
+      <SafeStatusBar />
       <BackButton />
-      <ScrollView>
+      <ScrollView
+        style={styles.scrollview}
+        contentContainerStyle={styles.paddingBottom}>
         <View style={styles.container}>
           <View style={styles.hostArea}>
             <View style={styles.titleRow}>
@@ -160,7 +164,6 @@ function MeetingDetail({route}) {
                   ? data.title.slice(12)
                   : data.title.slice(11)}
               </Text>
-              <MeetingLikes meetingId={data.id} />
             </View>
             <View style={styles.hostInfo}>
               <View style={styles.hostImageWithCrown}>
@@ -182,6 +185,7 @@ function MeetingDetail({route}) {
               </Text>
             </View>
           </View>
+          <MeetingLikes meetingId={data.id} />
 
           <View style={styles.descriptionRow}>
             <Text style={styles.description}>{data.description}</Text>
@@ -189,16 +193,9 @@ function MeetingDetail({route}) {
           <View style={styles.meetingTags}>
             {data.meetingTags.map((tag, idx) => {
               return (
-                <LinearGradient
-                  colors={['#A7BFEB', '#FBC2EA']}
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 1}}
-                  style={styles.tag}
-                  key={idx}>
-                  {/* <View key={idx} style={styles.tag}> */}
-                  <Text style={styles.tagText}>{'#' + tag}</Text>
-                  {/* </View> */}
-                </LinearGradient>
+                <View style={styles.tag} key={idx}>
+                  <Text style={styles.tagText}>{tag}</Text>
+                </View>
               );
             })}
           </View>
@@ -257,17 +254,17 @@ function MeetingDetail({route}) {
         />
       </ScrollView>
       <WalletButton />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   view: {
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
     flex: 1,
   },
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     marginBottom: 20,
   },
   hostArea: {
@@ -307,39 +304,49 @@ const styles = StyleSheet.create({
   hostnickName: {
     fontSize: 10,
     fontWeight: '500',
+    color: '#ffffff',
   },
   titleRow: {
     marginBottom: 25,
     marginTop: 60,
   },
   title: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: '500',
+    color: '#ffffff',
+    width: 250,
   },
   titleFirstRow: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: '500',
+    color: '#ffffff',
   },
   description: {
     fontSize: 15,
     fontWeight: '500',
     width: 305,
+    color: '#ffffff',
   },
   meetingTags: {
     marginVertical: 10,
     flexDirection: 'row',
+    width: '100%',
+    flexWrap: 'wrap',
   },
   tag: {
-    backgroundColor: 'black',
-    marginRight: 5,
+    backgroundColor: '#3C3D43',
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderRadius: 10,
+    borderRadius: 99,
+    borderColor: '#EAFFEF',
+    borderWidth: 1,
+    marginHorizontal: 5,
+    marginVertical: 3,
   },
   tagText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '400',
+    color: '#EAFFEF',
   },
   descriptionRow: {
     marginVertical: 20,
@@ -351,13 +358,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoEl: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
+    fontSize: 22,
+    fontWeight: '600',
     marginHorizontal: 10,
+    color: '#ffffff',
   },
   bar: {
-    backgroundColor: 'black',
+    backgroundColor: '#ffffff',
     width: 3,
     height: 20,
   },
@@ -374,6 +381,9 @@ const styles = StyleSheet.create({
     height: 80,
     marginBottom: 5,
     padding: 5,
+  },
+  paddingBottom: {
+    paddingBottom: 105,
   },
 });
 

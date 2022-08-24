@@ -53,7 +53,10 @@ function MeetingLikes({meetingId}) {
   return (
     <TouchableOpacity onPress={handleLikes}>
       {likes ? (
-        <Image source={likesActive} style={styles.image} />
+        <Image
+          source={likesActive}
+          style={[styles.image, {tintColor: '#58FF7D'}]}
+        />
       ) : (
         <Image source={likesInactive} style={styles.image} />
       )}

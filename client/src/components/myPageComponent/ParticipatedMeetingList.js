@@ -42,7 +42,7 @@ function ParticipatedMeetingList({user}) {
   const isFocused = useIsFocused();
 
   const getJoinedRoom = useCallback(async () => {
-    const userData = await getUser(user.id);
+    const userData = await getUser(user?.id);
 
     const data = await Promise.all(
       userData.joinedroomId.map(async el => {

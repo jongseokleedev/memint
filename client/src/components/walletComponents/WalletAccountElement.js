@@ -9,7 +9,7 @@ function WalletAccountElement({onPress, balance, content}) {
     <TouchableOpacity onPress={() => onPress(content)}>
       <View style={[styles.button]}>
         <View style={styles.tokenWrapper}>
-          <Image source={imgSrc} style={styles.icon} />
+          {/* <Image source={imgSrc} style={styles.icon} /> */}
           <Text style={styles.contentText}>{content}</Text>
         </View>
 
@@ -38,28 +38,29 @@ const styles = StyleSheet.create({
   tokenWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingLeft: 10,
   },
   contentText: {
     marginLeft: 10,
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '600',
   },
   balanceText: {
     marginRight: 30,
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '600',
   },
   button: {
     flexDirection: 'row',
     // paddingHorizontal: 16,
     width: 330,
-    height: 60,
+    height: 52,
     justifyContent: 'space-between',
     alignItems: 'center',
     borderColor: 'black',
     backgroundColor: 'white',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 12,
     margin: 1,
   },
 });

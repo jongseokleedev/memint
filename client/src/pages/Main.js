@@ -42,6 +42,7 @@ function Main() {
           marginHorizontal: 15,
           marginBottom: 15,
           position: 'absolute',
+          zIndex: 10,
         }}
         // style={{backgroundColor: 'rgba(0,0,0,0.0)'}}
       >
@@ -49,7 +50,7 @@ function Main() {
           name="mymainpage"
           component={MyPageScreen}
           options={{
-            tabBarLabel: '마이페이지',
+            tabBarLabel: 'MY',
             tabBarIcon: ({color}) => (
               <Icon name="person" color={color} size={24} />
             ),

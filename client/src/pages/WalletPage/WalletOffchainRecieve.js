@@ -25,6 +25,7 @@ import {getOffchainTokenLog} from '../../lib/OffchianTokenLog';
 import useOnchainActions from '../../utils/hooks/UseOnchainActions';
 import useOffchainActions from '../../utils/hooks/UseOffchainActions';
 import {createEarnOffTxLg} from '../../lib/OffchianTokenLog';
+
 const WalletOffchainRecieve = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const {showToast} = useToast();
@@ -59,7 +60,7 @@ const WalletOffchainRecieve = ({navigation}) => {
             text={'From'}
             amount={amount}
             setAmount={setAmount}
-            backgroundColor={'lightblue'}
+            backgroundColor={'white'}
           />
           <Icon name="arrow-downward" size={50} />
           <SmallLcnButton
@@ -68,11 +69,14 @@ const WalletOffchainRecieve = ({navigation}) => {
             margin={[10, 0, 0, 0]}
             text={'To'}
             amount={amount}
+            backgroundColor="#EAFFEFCC"
           />
           <BasicButton
             margin={[40, 0, 0, 0]}
             width={330}
             height={45}
+            backgroundColor="#ffffff"
+            border={false}
             text={'가져오기'}
             textSize={18}
             onPress={() => {

@@ -31,24 +31,36 @@ function LargeLcnButton({
           marginLeft: marginLeft,
         },
       ]}>
-      <View style={styles.leftWrapper}>
-        <Text style={styles.textFromTo}>{text}</Text>
-        <TextInput
-          style={styles.textInput}
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="numeric"
-        />
+      <View
+        style={{
+          flexDirection: 'column',
+          width: '100%',
+          justifyContent: 'space-between',
+          height: '100%',
+        }}>
+        <View style={styles.leftWrapper}>
+          <Text style={styles.textFromTo}>{text}</Text>
+          <Text style={[styles.textLight]}>
+            Balance : {Math.round((balance + Number.EPSILON) * 10000) / 10000}
+          </Text>
+        </View>
+        <View style={[styles.leftWrapper, {alignItems: 'flex-start'}]}>
+          <TextInput
+            style={styles.textInput}
+            value={amount}
+            onChangeText={setAmount}
+            keyboardType="numeric"
+          />
+          <Text>{content}</Text>
+        </View>
       </View>
-      <View style={styles.rightWrapper}>
-        <Text style={[styles.textLight]}>
-          Balance : {Math.round((balance + Number.EPSILON) * 10000) / 10000}
-        </Text>
+
+      {/* <View style={styles.rightWrapper}>
         <View style={styles.lcnWrapper}>
           <Image source={imgSrc} style={styles.icon} />
           <Text style={styles.textLcn}>{content}</Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -71,14 +83,13 @@ const styles = StyleSheet.create({
     height: 35,
   },
   textInput: {
-    width: 150,
-    height: 30,
     fontWeight: 'bold',
     fontSize: 25,
+    width: 200,
   },
   leftWrapper: {
-    marginLeft: 20,
-    flexDirection: 'column',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   rightWrapper: {
     marginRight: 20,
@@ -96,14 +107,16 @@ const styles = StyleSheet.create({
     width: 330,
     height: 130,
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     borderColor: 'black',
     backgroundColor: 'lightblue',
     borderWidth: 1,
     borderRadius: 10,
     margin: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 14,
   },
-  textFromTo: {fontSize: 18, fontWeight: 'bold', marginBottom: 15},
+  textFromTo: {fontSize: 15, fontWeight: '600'},
   textLight: {fontSize: 15, fontWeight: '200', marginBottom: 0},
   textLcn: {
     marginLeft: 5,

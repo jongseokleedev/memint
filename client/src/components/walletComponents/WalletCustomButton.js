@@ -37,8 +37,8 @@ function WalletCustomButton({
   selected,
 }) {
   const [marginTop, marginRight, marginBottom, marginLeft] = margin;
-  const backgroundColor = selected ? 'black' : 'white';
-  const textColor = selected ? 'white' : 'black';
+  const backgroundColor = selected ? '#AAD1C1' : 'transparent';
+  const textColor = selected ? 'black' : 'white';
   return (
     <TouchableOpacity onPress={onPress}>
       <View
@@ -77,15 +77,18 @@ WalletCustomButton.defaultProps = {
 const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
-    borderColor: 'black',
-    borderWidth: 1,
+    // borderColor: 'black',
+    // borderWidth: 1,
     borderRadius: 30,
     margin: 5,
+    alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: 2,
   },
 });
 

@@ -9,6 +9,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Keyboard,
+  StatusBar,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import LargeLcnButton from '../../components/walletComponents/LargeLcnButton';
@@ -24,6 +25,9 @@ import useAuthActions from '../../utils/hooks/UseAuthActions';
 import {getOnchainKlayLog} from '../../lib/OnchainKlayLog';
 import {getOnchainTokenLog} from '../../lib/OnchainTokenLog';
 import useOnchainActions from '../../utils/hooks/UseOnchainActions';
+import {useNavigation} from '@react-navigation/native';
+import trade from '../../assets/icons/trade.png';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const WalletOnchainTrade = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,6 +36,8 @@ const WalletOnchainTrade = () => {
   const userInfo = useUser();
   const {addKlayLog, addLcnLog} = useOnchainActions();
   const {updateTokenInfo} = useAuthActions();
+  const {top} = useSafeAreaInsets();
+  const navigation = useNavigation();
   const [amount, setAmount] = useState({
     fromAmount: '',
     toAmount: '',
@@ -69,8 +75,16 @@ const WalletOnchainTrade = () => {
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView style={styles.view}>
-        <BackButton />
+      <View style={styles.view}>
+        <StatusBar barStyle="dark-content" />
+
+        <View style={{backgroundColor: '#AAD1C1', height: top}} />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.pop()}>
+          <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
+          {/* <Text style={styles.buttonText}>Back</Text> */}
+        </TouchableOpacity>
 
         <Text style={styles.tradeText}>Trade</Text>
         <View style={styles.buttonContainer}>
@@ -88,7 +102,8 @@ const WalletOnchainTrade = () => {
             //   backgroundColor={'lightblue'}
           />
           <TouchableOpacity onPress={() => setFromKlay(!fromKlay)}>
-            <Icon name="autorenew" size={50} />
+            {/* <Icon name="autorenew" size={50} /> */}
+            <Image source={trade} style={styles.tradeImage} />
           </TouchableOpacity>
           <SmallLcnButton
             amount={amount.toAmount}
@@ -104,6 +119,8 @@ const WalletOnchainTrade = () => {
             height={50}
             text={'교환하기'}
             textSize={18}
+            backgroundColor="#ffffff"
+            border={false}
             onPress={() => {
               setModalVisible(true);
             }}
@@ -178,7 +195,7 @@ const WalletOnchainTrade = () => {
           }}
         />
         {/* </TouchableWithoutFeedback> */}
-      </SafeAreaView>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -186,7 +203,7 @@ const WalletOnchainTrade = () => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#AAD1C1',
   },
   container: {
     flex: 1,
@@ -219,6 +236,15 @@ const styles = StyleSheet.create({
     fontSize: 40,
     marginTop: 40,
     marginBottom: 50,
+  },
+  backButton: {
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 5,
+  },
+  tradeImage: {
+    width: 30,
+    height: 30,
   },
 });
 export default WalletOnchainTrade;

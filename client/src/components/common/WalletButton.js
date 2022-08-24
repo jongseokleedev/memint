@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
   walletButton: {
     position: 'absolute',
     width: 103,
-    height: 60,
+    height: 55,
     right: 20,
-    bottom: 100,
+    bottom: 90,
     backgroundColor: '#3C3D43',
     borderRadius: 30,
     justifyContent: 'center',

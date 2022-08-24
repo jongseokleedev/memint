@@ -25,7 +25,7 @@ function MyMeetingList({navigation, user}) {
   let {rooms} = useMeeting(); //redux crete, join에 있는 모든 미팅 정보들
   // const {createdrooms} = rooms;
   const getCreatedRoom = useCallback(async () => {
-    const userData = await getUser(user.id);
+    const userData = await getUser(user?.id);
 
     const data = await Promise.all(
       userData.createdroomId.map(async el => {
@@ -43,7 +43,7 @@ function MyMeetingList({navigation, user}) {
 
   useEffect(() => {
     getCreatedRoom();
-  }, [isFocused]);
+  }, [isFocused, getCreatedRoom]);
 
   return (
     <>

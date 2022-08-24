@@ -7,7 +7,7 @@ function WalletLcnHistory({navigation}) {
 
   return (
     <View style={styles.view}>
-      <Text style={styles.historyText}>LCN Transaction History</Text>
+      <Text style={styles.historyText}>TING Transaction History</Text>
       <ScrollView>
         {onLCNTxLogs ? (
           onLCNTxLogs.map((log, idx) => {

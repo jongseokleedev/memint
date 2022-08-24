@@ -83,15 +83,15 @@ function MyProfile({User, navigation}) {
       <View style={styles.userTags}>
         <Text style={styles.plainText}>{User.nickName}님의 미팅 스타일은?</Text>
         <View style={styles.userTag}>
-          {/* <Text style={styles.tagText}>주량은 </Text> */}
-          <Icon name="circle" size={9} color={'#3C3D43'} />
+          <Icon name="circle" size={9} color={'#4E00F5'} />
+          <Text style={styles.tagText}>주량 </Text>
           <View style={styles.tag}>
             <Text style={styles.tagFont}>{User.property.drinkCapa}</Text>
           </View>
         </View>
         <View style={styles.userTag}>
-          {/* <Text style={styles.tagText}>선호하는 주종은 </Text> */}
-          <Icon name="circle" size={9} color={'#3C3D43'} />
+          <Icon name="circle" size={9} color={'#4E00F5'} />
+          <Text style={styles.tagText}>주종 </Text>
           {User.property.alcoholType.map((el, index) => (
             <View style={styles.tag} key={index}>
               <Text style={styles.tagFont}>{el}</Text>
@@ -99,7 +99,8 @@ function MyProfile({User, navigation}) {
           ))}
         </View>
         <View style={styles.userTag}>
-          <Icon name="circle" size={9} color={'#3C3D43'} />
+          <Icon name="circle" size={9} color={'#4E00F5'} />
+          <Text style={styles.tagText}>스타일 </Text>
           {User.property.drinkStyle.map((el, index) => (
             <View style={styles.tag} key={index}>
               <Text style={styles.tagFont}>{el}</Text>
@@ -181,8 +182,8 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   userTags: {
-    marginHorizontal: 30,
     marginVertical: 20,
+    marginHorizontal: 15,
   },
   userTag: {
     flexDirection: 'row',
@@ -190,10 +191,11 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   tagText: {
+    marginLeft: 5,
     fontWeight: '500',
     fontSize: 15,
     marginVertical: 3,
-    color: '#787878',
+    color: '#4E00F5',
   },
 
   mintButton: {
@@ -231,6 +233,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
     fontWeight: '500',
     marginBottom: 8,
+    color: '#4E00F5',
   },
   marginBottom: {
     paddingBottom: 140,

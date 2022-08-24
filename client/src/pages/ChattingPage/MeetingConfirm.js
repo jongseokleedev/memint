@@ -281,6 +281,7 @@ function MeetingConfirm({route}) {
         style={styles.gradientBackground}>
         <BackButton />
         <ScrollView
+          contentContainerStyle={{paddingBottom: 30}}
           style={styles.wrapper}
           refreshControl={
             <RefreshControl

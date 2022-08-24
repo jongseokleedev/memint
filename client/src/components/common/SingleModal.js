@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
-    zIndex: -1,
+    zIndex: -100,
   },
   modalView: {
     width: 290,
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#AEFFC1',
     borderWidth: 1,
+    zIndex: -1,
     // shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,

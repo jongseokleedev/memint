@@ -66,18 +66,6 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     marginTop: 20,
   },
-  mylikes: {
-    marginRight: 20,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  mylikesButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  mylikesText: {
-    textDecorationLine: 'underline',
-  },
   marginBottom: {
     marginBottom: 100,
   },

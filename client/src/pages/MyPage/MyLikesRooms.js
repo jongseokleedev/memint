@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import BackButton from '../../components/common/BackButton';
+import SafeStatusBar from '../../components/common/SafeStatusBar';
 import MyLikesElement from '../../components/myPageComponent/MyLikesElement';
 import {getMeeting} from '../../lib/Meeting';
 import {getUser} from '../../lib/Users';
@@ -37,30 +38,35 @@ function MyLikesRooms() {
   }, [userInfo.likesroomId]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <BackButton />
+    <View style={styles.container}>
+      <SafeStatusBar />
+      <BackButton />
+      <View style={styles.wrap}>
         <Text style={styles.title}>찜한 미팅방</Text>
+        <View style={styles.meetingList}>
+          {likesRooms.length === 0 ? (
+            <Text style={styles.emptyText}>찜한 미팅방이 없습니다</Text>
+          ) : (
+            <ScrollView>
+              {likesRooms.map((el, idx) => {
+                return <MyLikesElement key={idx} item={el} />;
+              })}
+            </ScrollView>
+          )}
+        </View>
       </View>
-      <View style={styles.meetingList}>
-        {likesRooms.length === 0 ? (
-          <Text style={styles.emptyText}>찜한 미팅방이 없습니다</Text>
-        ) : (
-          <ScrollView>
-            {likesRooms.map((el, idx) => {
-              return <MyLikesElement key={idx} item={el} />;
-            })}
-          </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#3C3D43',
+  },
+  wrap: {
+    flex: 1,
+    paddingHorizontal: 15,
   },
   header: {
     flexDirection: 'row',
@@ -68,11 +74,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
     paddingVertical: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginLeft: 20,
   },
   meetingList: {
     marginTop: 10,
@@ -82,6 +83,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#787878',
     marginTop: 80,
+  },
+  title: {
+    fontWeight: '400',
+    fontSize: 24,
+    marginTop: 30,
+    marginBottom: 20,
+    color: '#ffffff',
+    fontFamily: 'NeoDunggeunmoPro-Regular',
+    letterSpacing: -0.5,
   },
 });
 export default MyLikesRooms;

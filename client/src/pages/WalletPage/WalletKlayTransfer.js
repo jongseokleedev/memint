@@ -10,6 +10,8 @@ import {
   Keyboard,
   Platform,
   TouchableWithoutFeedback,
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
@@ -21,14 +23,19 @@ import useUser from '../../utils/hooks/UseUser';
 import {getUser} from '../../lib/Users';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
 import {getOnchainKlayLog} from '../../lib/OnchainKlayLog';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import useOnchainActions from '../../utils/hooks/UseOnchainActions';
+import {useNavigation} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const WalletKlayTransfer = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const {showToast} = useToast();
   const userInfo = useUser();
   const {updateTokenInfo} = useAuthActions();
+  const {top} = useSafeAreaInsets();
   const {addKlayLog} = useOnchainActions();
+  const navigation = useNavigation();
   const [form, setForm] = useState({
     address: '',
     amount: '',
@@ -57,8 +64,18 @@ const WalletKlayTransfer = () => {
       <KeyboardAvoidingView
         style={styles.KeyboardAvoidingView}
         behavior={Platform.select({ios: 'padding'})}>
-        <SafeAreaView style={styles.fullscreen}>
-          <BackButton />
+        <View style={styles.fullscreen}>
+          <StatusBar barStyle="dark-content" />
+
+          <View style={{backgroundColor: '#AAD1C1', height: top}} />
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.pop()}>
+            <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
+            {/* <Text style={styles.buttonText}>Back</Text> */}
+          </TouchableOpacity>
+
+          <View style={{backgroundColor: '#AAD1C1', height: top}} />
           <View style={styles.container}>
             <Text style={styles.transferText}>Transfer</Text>
             <View style={styles.imageContainer}>
@@ -88,6 +105,8 @@ const WalletKlayTransfer = () => {
                 height={50}
                 text={'보내기'}
                 textSize={18}
+                backgroundColor="#ffffff"
+                border={false}
                 onPress={() => {
                   setModalVisible(true);
                 }}
@@ -130,7 +149,7 @@ const WalletKlayTransfer = () => {
               }}
             />
           </View>
-        </SafeAreaView>
+        </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -143,6 +162,7 @@ const styles = StyleSheet.create({
   },
   fullscreen: {
     flex: 1,
+    backgroundColor: '#AAD1C1',
   },
   container: {
     flex: 1,
@@ -184,5 +204,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   text: {fontWeight: 'bold', fontSize: 16, marginTop: 20, marginLeft: 25},
+  backButton: {
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 5,
+  },
 });
 export default WalletKlayTransfer;

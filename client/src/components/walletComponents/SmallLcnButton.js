@@ -33,12 +33,12 @@ function SmallLcnButton({
         <Text style={styles.textFromTo}>{text}</Text>
         <Text style={styles.text}>{amount}</Text>
       </View>
-      <View style={styles.rightWrapper}>
+      {/* <View style={styles.rightWrapper}>
         <View style={styles.lcnWrapper}>
           <Image source={imgSrc} style={styles.icon} />
           <Text style={styles.textLcn}>{content}</Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -46,7 +46,7 @@ function SmallLcnButton({
 SmallLcnButton.defaultProps = {
   width: 330,
   height: 60,
-  borderColor: '#bdbddd',
+  // borderColor: '#bdbddd',
   backgroundColor: 'white',
   text: 'From',
   margin: [5, 5, 5, 5],
@@ -66,9 +66,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   leftWrapper: {
-    marginLeft: 20,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    height: '100%',
   },
   rightWrapper: {
     marginRight: 20,
@@ -80,21 +80,23 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    // paddingHorizontal: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 14,
     width: 330,
     height: 60,
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderColor: 'black',
-    borderWidth: 1,
+    // borderColor: 'black',
+    // borderWidth: 1,
     borderRadius: 10,
     margin: 5,
   },
   textFromTo: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 10,
+    fontSize: 15,
+    fontWeight: '600',
+    // marginTop: 10,
+    // marginBottom: 10,
+    letterSpacing: -0.5,
   },
   textLcn: {
     marginLeft: 5,

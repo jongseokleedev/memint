@@ -5,11 +5,14 @@ function TotalAccountButton({amount, onPress, backgroundColor}) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.button]}>
-        <Image
-          source={require('../../assets/icons/lovechain.png')}
-          style={styles.icon}
-        />
-        <Text style={[styles.text]}>LCN</Text>
+        <View style={styles.coinwrap}>
+          {/* <Image
+            source={require('../../assets/icons/lovechain.png')}
+            style={styles.icon}
+          /> */}
+          <Text style={[styles.text]}>TING</Text>
+        </View>
+
         <Text style={[styles.textAmount]}>{amount}</Text>
       </View>
     </TouchableOpacity>
@@ -34,7 +37,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 16,
     width: 330,
     height: 60,
-    // justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderColor: 'black',
     backgroundColor: 'white',
@@ -45,19 +48,25 @@ const styles = StyleSheet.create({
   text: {
     marginHorizontal: 20,
     textSize: 20,
-    fontSize: 20,
+    fontSize: 15,
     color: 'black',
     // textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    letterSpacing: -0.5,
   },
   textAmount: {
     justifyContent: 'flex-end',
-    marginLeft: 150,
     textSize: 20,
-    fontSize: 20,
+    fontSize: 15,
     color: 'black',
     // textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    letterSpacing: -0.5,
+    marginRight: 20,
+  },
+  coinwrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

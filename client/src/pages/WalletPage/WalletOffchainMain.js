@@ -1,5 +1,13 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {SafeAreaView, Text, View, StyleSheet, ScrollView} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
 import WalletCustomButton from '../../components/walletComponents/WalletCustomButton';
@@ -9,12 +17,15 @@ import WalletOffchainHistory from './WalletOffchainHistory';
 import WalletOnchainMain from './WalletOnchainMain';
 import {subscribeAuth, signOut} from '../../lib/Auth';
 import useAuthActions from '../../utils/hooks/UseAuthActions';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import useUser from '../../utils/hooks/UseUser';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 function WalletOffchainMain({navigation}) {
   const [walletSelected, setWalletSelected] = useState(false);
   const [spendingSelected, setSpendingSelected] = useState(true);
   const user = useUser();
   const {logout} = useAuthActions();
+  const {top} = useSafeAreaInsets();
 
   const handleWalletSelect = () => {
     setWalletSelected(true);
@@ -41,17 +52,25 @@ function WalletOffchainMain({navigation}) {
   }, [navigation, logout]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <BackButton />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+
+      <View style={{backgroundColor: '#AAD1C1', height: top}} />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.pop()}>
+        <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
+        {/* <Text style={styles.buttonText}>Back</Text> */}
+      </TouchableOpacity>
       <View style={styles.contentContainer}>
         <View style={styles.buttonWrapper}>
           <WalletCustomButton
             style={styles.buttonWrapper}
             width={140}
-            height={50}
-            textSize={17}
+            height={38}
+            textSize={18}
             margin={[5, 0, 5, 5]}
-            text="Spending"
+            text="SPENDING"
             hasMarginBottom
             onPress={handleSpendingSelect}
             selected={spendingSelected}
@@ -59,10 +78,10 @@ function WalletOffchainMain({navigation}) {
           <WalletCustomButton
             style={styles.buttonWrapper}
             width={140}
-            height={50}
-            textSize={17}
+            height={38}
+            textSize={18}
             margin={[5, 5, 5, 0]}
-            text="Wallet"
+            text="WALLET"
             hasMarginBottom
             onPress={handleWalletSelect}
             selected={walletSelected}
@@ -74,14 +93,14 @@ function WalletOffchainMain({navigation}) {
           <WalletOnchainMain navigation={navigation} />
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#AAD1C1',
   },
   contentContainer: {
     flex: 1,
@@ -93,11 +112,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 0,
+    backgroundColor: '#3C3D43',
+    borderRadius: 999,
+    height: 50,
+    alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  backButton: {
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 5,
   },
 });
 
