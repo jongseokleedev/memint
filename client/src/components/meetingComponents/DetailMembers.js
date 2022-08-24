@@ -33,7 +33,9 @@ function DetailMembers({membersInfo, peopleNum, hostId}) {
       <View style={styles.memberBoxInfo}>
         <Text style={styles.title}>현재 모인 멤버</Text>
         <View style={styles.memberBoxInfopeopleNum}>
-          <Text style={styles.currentPeopleNum}>{currentPeopleNum()}</Text>
+          <Text style={styles.currentPeopleNum}>
+            {membersInfo.length}/{peopleNum * 2}
+          </Text>
           <Text style={styles.peopleNum}>{`(${peopleNum}:${peopleNum})`}</Text>
         </View>
       </View>

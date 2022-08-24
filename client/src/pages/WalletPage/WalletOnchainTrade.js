@@ -10,6 +10,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   StatusBar,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import LargeLcnButton from '../../components/walletComponents/LargeLcnButton';
@@ -75,7 +77,7 @@ const WalletOnchainTrade = () => {
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.view}>
+      <KeyboardAvoidingView style={styles.view} behavior={'padding'}>
         <StatusBar barStyle="dark-content" />
 
         <View style={{backgroundColor: '#AAD1C1', height: top}} />
@@ -85,117 +87,121 @@ const WalletOnchainTrade = () => {
           <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
           {/* <Text style={styles.buttonText}>Back</Text> */}
         </TouchableOpacity>
-
-        <Text style={styles.tradeText}>Trade</Text>
-        <View style={styles.buttonContainer}>
-          <LargeLcnButton
-            amount={amount.fromAmount}
-            setAmount={createChangeAmountHandler('fromAmount')}
-            balance={
-              fromKlay ? userInfo.klayAmount : userInfo.onChainTokenAmount
-            }
-            width={330}
-            height={110}
-            margin={[30, 0, 30, 0]}
-            text="From"
-            content={fromKlay ? 'KLAY' : 'LCN'}
-            //   backgroundColor={'lightblue'}
-          />
-          <TouchableOpacity onPress={() => setFromKlay(!fromKlay)}>
-            {/* <Icon name="autorenew" size={50} /> */}
-            <Image source={trade} style={styles.tradeImage} />
-          </TouchableOpacity>
-          <SmallLcnButton
-            amount={amount.toAmount}
-            width={330}
-            height={110}
-            margin={[30, 0, 0, 0]}
-            text="To (Estimated)"
-            content={fromKlay ? 'LCN' : 'KLAY'}
-          />
-          <BasicButton
-            margin={[80, 0, 0, 0]}
-            width={330}
-            height={50}
-            text={'교환하기'}
-            textSize={18}
-            backgroundColor="#ffffff"
-            border={false}
-            onPress={() => {
-              setModalVisible(true);
+        <ScrollView
+          style={styles.subscreen}
+          contentContainerStyle={styles.paddingBottom}>
+          <Text style={styles.tradeText}>Trade</Text>
+          <View style={styles.buttonContainer}>
+            <LargeLcnButton
+              amount={amount.fromAmount}
+              setAmount={createChangeAmountHandler('fromAmount')}
+              balance={
+                fromKlay ? userInfo.klayAmount : userInfo.onChainTokenAmount
+              }
+              width={330}
+              height={110}
+              margin={[30, 0, 30, 0]}
+              text="From"
+              content={fromKlay ? 'KLAY' : 'LCN'}
+              //   backgroundColor={'lightblue'}
+            />
+            <TouchableOpacity onPress={() => setFromKlay(!fromKlay)}>
+              {/* <Icon name="autorenew" size={50} /> */}
+              <Image source={trade} style={styles.tradeImage} />
+            </TouchableOpacity>
+            <SmallLcnButton
+              amount={amount.toAmount}
+              width={330}
+              height={110}
+              margin={[30, 0, 0, 0]}
+              text="To (Estimated)"
+              content={fromKlay ? 'LCN' : 'KLAY'}
+            />
+            <BasicButton
+              margin={[80, 0, 0, 0]}
+              width={330}
+              height={50}
+              text={'교환하기'}
+              textSize={18}
+              backgroundColor="#ffffff"
+              border={false}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            />
+          </View>
+          <DoubleModal
+            text="교환하시겠습니까?"
+            nButtonText="아니요"
+            pButtonText="네"
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            nFunction={() => {
+              setModalVisible(false);
+            }}
+            pFunction={() => {
+              fromKlay
+                ? transferKlayToLCN().then(result => {
+                    console.log(result.data);
+                    if (result.data.message === 'success') {
+                      showToast('success', '토큰 교환이 완료되었습니다!');
+                      getUser(userInfo.id).then(userDetail => {
+                        updateTokenInfo({
+                          tokenAmount: Number(userDetail.tokenAmount),
+                          klayAmount: Number(result.data.KlayBalance),
+                          onChainTokenAmount: Number(result.data.LCNBalance),
+                        });
+                        getOnchainKlayLog(userInfo.id).then(res => {
+                          console.log({res});
+                          const logs = res.docs.map(el => {
+                            return {...el.data()};
+                          });
+                          addKlayLog(logs);
+                        });
+                        getOnchainTokenLog(userInfo.id).then(res => {
+                          console.log({res});
+                          const logs = res.docs.map(el => {
+                            return {...el.data()};
+                          });
+                          addLcnLog(logs);
+                        });
+                      });
+                    }
+                  })
+                : transferLCNToKlay().then(result => {
+                    console.log(result.data);
+                    if (result.data.message === 'success') {
+                      showToast('success', '토큰 교환이 완료되었습니다!');
+                      getUser(userInfo.id).then(userDetail => {
+                        updateTokenInfo({
+                          tokenAmount: Number(userDetail.tokenAmount),
+                          klayAmount: Number(result.data.KlayBalance),
+                          onChainTokenAmount: Number(result.data.LCNBalance),
+                        });
+                        getOnchainKlayLog(userInfo.id).then(res => {
+                          console.log({res});
+                          const logs = res.docs.map(el => {
+                            return {...el.data()};
+                          });
+                          addKlayLog(logs);
+                        });
+                        getOnchainTokenLog(userInfo.id).then(res => {
+                          console.log({res});
+                          const logs = res.docs.map(el => {
+                            return {...el.data()};
+                          });
+                          addLcnLog(logs);
+                        });
+                      });
+                    }
+                  });
+              setModalVisible(false);
             }}
           />
-        </View>
-        <DoubleModal
-          text="교환하시겠습니까?"
-          nButtonText="아니요"
-          pButtonText="네"
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          nFunction={() => {
-            setModalVisible(false);
-          }}
-          pFunction={() => {
-            fromKlay
-              ? transferKlayToLCN().then(result => {
-                  console.log(result.data);
-                  if (result.data.message === 'success') {
-                    showToast('success', '토큰 교환이 완료되었습니다!');
-                    getUser(userInfo.id).then(userDetail => {
-                      updateTokenInfo({
-                        tokenAmount: Number(userDetail.tokenAmount),
-                        klayAmount: Number(result.data.KlayBalance),
-                        onChainTokenAmount: Number(result.data.LCNBalance),
-                      });
-                      getOnchainKlayLog(userInfo.id).then(res => {
-                        console.log({res});
-                        const logs = res.docs.map(el => {
-                          return {...el.data()};
-                        });
-                        addKlayLog(logs);
-                      });
-                      getOnchainTokenLog(userInfo.id).then(res => {
-                        console.log({res});
-                        const logs = res.docs.map(el => {
-                          return {...el.data()};
-                        });
-                        addLcnLog(logs);
-                      });
-                    });
-                  }
-                })
-              : transferLCNToKlay().then(result => {
-                  console.log(result.data);
-                  if (result.data.message === 'success') {
-                    showToast('success', '토큰 교환이 완료되었습니다!');
-                    getUser(userInfo.id).then(userDetail => {
-                      updateTokenInfo({
-                        tokenAmount: Number(userDetail.tokenAmount),
-                        klayAmount: Number(result.data.KlayBalance),
-                        onChainTokenAmount: Number(result.data.LCNBalance),
-                      });
-                      getOnchainKlayLog(userInfo.id).then(res => {
-                        console.log({res});
-                        const logs = res.docs.map(el => {
-                          return {...el.data()};
-                        });
-                        addKlayLog(logs);
-                      });
-                      getOnchainTokenLog(userInfo.id).then(res => {
-                        console.log({res});
-                        const logs = res.docs.map(el => {
-                          return {...el.data()};
-                        });
-                        addLcnLog(logs);
-                      });
-                    });
-                  }
-                });
-            setModalVisible(false);
-          }}
-        />
+        </ScrollView>
+
         {/* </TouchableWithoutFeedback> */}
-      </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -208,6 +214,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 60,
+  },
+  subscreen: {
+    flex: 1,
   },
   contentContainer: {
     flex: 1,
@@ -245,6 +254,9 @@ const styles = StyleSheet.create({
   tradeImage: {
     width: 30,
     height: 30,
+  },
+  paddingBottom: {
+    paddingBottom: 30,
   },
 });
 export default WalletOnchainTrade;

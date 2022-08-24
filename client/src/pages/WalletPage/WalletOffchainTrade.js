@@ -9,6 +9,8 @@ import {
   Keyboard,
   StatusBar,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import WalletCustomButton from '../../components/walletComponents/WalletCustomButton';
@@ -38,7 +40,7 @@ const WalletOffchainTrade = ({navigation}) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.view}>
+      <KeyboardAvoidingView style={styles.view} behavior={'padding'}>
         <StatusBar barStyle="dark-content" />
 
         <View style={{backgroundColor: '#AAD1C1', height: top}} />
@@ -48,48 +50,50 @@ const WalletOffchainTrade = ({navigation}) => {
           <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
           {/* <Text style={styles.buttonText}>Back</Text> */}
         </TouchableOpacity>
-        <View style={styles.accountWrapper}>
-          {/* <Image
+        <ScrollView contentContainerStyle={styles.padddingBottom}>
+          <View style={styles.accountWrapper}>
+            {/* <Image
             source={require('../../assets/icons/lovechain.png')}
             style={styles.icon}
           /> */}
-          <View style={styles.accountTextWrapper}>
-            <Text style={styles.balanceText}>{user.tokenAmount}</Text>
-            <Text style={styles.lcnText}> TING</Text>
+            <View style={styles.accountTextWrapper}>
+              <Text style={styles.balanceText}>{user.tokenAmount}</Text>
+              <Text style={styles.lcnText}> TING</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <View style={styles.buttonWrapper}>
-            <WalletCustomButton
-              style={styles.buttonWrapper}
-              width={140}
-              height={38}
-              textSize={17}
-              margin={[5, 0, 5, 5]}
-              text="가져오기"
-              hasMarginBottom
-              onPress={handleRecieveSelect}
-              selected={recieveSelected}
-            />
-            <WalletCustomButton
-              style={styles.buttonWrapper}
-              width={140}
-              height={38}
-              textSize={17}
-              margin={[5, 5, 5, 0]}
-              text="내보내기"
-              hasMarginBottom
-              onPress={handleTransferSelect}
-              selected={transferSelected}
-            />
+          <View style={styles.buttonContainer}>
+            <View style={styles.buttonWrapper}>
+              <WalletCustomButton
+                style={styles.buttonWrapper}
+                width={140}
+                height={38}
+                textSize={17}
+                margin={[5, 0, 5, 5]}
+                text="가져오기"
+                hasMarginBottom
+                onPress={handleRecieveSelect}
+                selected={recieveSelected}
+              />
+              <WalletCustomButton
+                style={styles.buttonWrapper}
+                width={140}
+                height={38}
+                textSize={17}
+                margin={[5, 5, 5, 0]}
+                text="내보내기"
+                hasMarginBottom
+                onPress={handleTransferSelect}
+                selected={transferSelected}
+              />
+            </View>
+            {recieveSelected ? (
+              <WalletOffchainRecieve />
+            ) : (
+              <WalletOffchainTransfer />
+            )}
           </View>
-          {recieveSelected ? (
-            <WalletOffchainRecieve />
-          ) : (
-            <WalletOffchainTransfer />
-          )}
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -155,6 +159,9 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 10,
     paddingTop: 5,
+  },
+  padddingBottom: {
+    paddingBottom: 30,
   },
 });
 export default WalletOffchainTrade;

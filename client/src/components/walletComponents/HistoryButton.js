@@ -5,8 +5,10 @@ function HistoryButton({onPress, time, balanceChange, balance, content}) {
   return (
     <View style={[styles.button]}>
       <View style={styles.contentWrapper}>
+        <View style={styles.contentRow}>
+          <Text style={styles.contentText}>{content}</Text>
+        </View>
         <Text style={styles.timeText}>{time}</Text>
-        <Text style={styles.contentText}>{content}</Text>
       </View>
       <View style={styles.balanceWrapper}>
         <View style={styles.balanceChange}>
@@ -33,15 +35,14 @@ HistoryButton.defaultProps = {
 const styles = StyleSheet.create({
   timeText: {
     fontSize: 12,
-    marginBottom: 3,
   },
   contentText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '600',
   },
   balanceChangeText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '600',
   },
   lcnText: {
     fontSize: 12,
@@ -56,20 +57,23 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderColor: 'black',
-    backgroundColor: 'white',
-    borderWidth: 1,
+    backgroundColor: '#EAFFEFCC',
     borderRadius: 10,
     margin: 3,
+    paddingVertical: 10,
   },
   contentWrapper: {
     flexDirection: 'column',
-    marginLeft: '2%',
+    marginLeft: '4%',
+    justifyContent: 'space-between',
+    height: '100%',
   },
   balanceWrapper: {
     flexDirection: 'column',
     marginLeft: '25%',
-    marginRight: '5%',
+    marginRight: '4%',
+    justifyContent: 'space-between',
+    height: '100%',
   },
   balanceChange: {
     flexDirection: 'row',
@@ -92,6 +96,15 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
     fontWeight: 'bold',
     backgroundColor: 'yellow',
+  },
+  linkImage: {
+    width: 20,
+    height: 10,
+    marginRight: 5,
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

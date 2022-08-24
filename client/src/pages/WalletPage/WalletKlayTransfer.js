@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   StatusBar,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
@@ -75,8 +76,7 @@ const WalletKlayTransfer = () => {
             {/* <Text style={styles.buttonText}>Back</Text> */}
           </TouchableOpacity>
 
-          <View style={{backgroundColor: '#AAD1C1', height: top}} />
-          <View style={styles.container}>
+          <ScrollView style={styles.container}>
             <Text style={styles.transferText}>Transfer</Text>
             <View style={styles.imageContainer}>
               <Image source={klayIcon} style={styles.icon} />
@@ -148,7 +148,7 @@ const WalletKlayTransfer = () => {
                 setModalVisible(false);
               }}
             />
-          </View>
+          </ScrollView>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

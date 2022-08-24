@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   StatusBar,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import BackButton from '../../components/common/BackButton';
 import BasicButton from '../../components/common/BasicButton';
@@ -74,7 +75,7 @@ const WalletLcnTransfer = () => {
             <Icon name="arrow-back-ios" size={20} color={'#1D1E1E'} />
             {/* <Text style={styles.buttonText}>Back</Text> */}
           </TouchableOpacity>
-          <View style={styles.container}>
+          <ScrollView style={styles.container}>
             <Text style={styles.transferText}>Transfer</Text>
             <View style={styles.imageContainer}>
               <Image source={lcnIcon} style={styles.icon} />
@@ -143,7 +144,7 @@ const WalletLcnTransfer = () => {
                 setModalVisible(false);
               }}
             />
-          </View>
+          </ScrollView>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
